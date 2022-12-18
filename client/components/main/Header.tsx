@@ -19,12 +19,12 @@ const Header = () => {
   const {data: session} = useSession();
   console.log(router.asPath);
   return (
-    <>
+    <div className="relative h-[107px] w-full ">
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
-        className='absolute flex justify-between items-center w-full px-40 lg:px-9 pt-12 lg:py-7 text-white lg:text-black z-[1000]'>
+        className='absolute top-[31px] flex justify-between items-center xxl:left-16 xl:left-14 lg:left-6 left-[160px] text-white lg:text-black z-[1000]'>
         <Link href={"/"}>
-          <div className='flex justify-center items-center gap-6 lg:gap-4'>
+          <div className='flex justify-center items-center gap-6 lg:gap-4 w-1/3'>
             {router.asPath === "/" ? (
               <Image
                 src={"/assets/icons/logo.png"}
@@ -96,7 +96,7 @@ const Header = () => {
         loginHandler={() => setMode("login")}
         signUpHandler={() => setMode("signup")}
       />
-    </>
+    </div>
   );
 };
 

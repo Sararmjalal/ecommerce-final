@@ -1,27 +1,28 @@
 import React from "react";
-import Footer from "../components/general/Footer";
-import Header from "../components/general/Header";
-import NewsLetter from "../components/general/NewsLetter";
-import Panel from "./Panel";
-import AdminLogin from "./AdminLogin";
+import Footer from "../components/main/Footer";
+import Header from "../components/main/Header";
+import NewsLetter from "../components/main/NewsLetter";
+import AdminPanel from "./AdminPanel";
+import UserPanel from "./UserPanel";
 import {useRouter} from "next/router";
 
-const StateProvider = ({children}: any) => {
+const StateProvider = ({children} : { children: JSX.Element|JSX.Element[] }) => {
   const router = useRouter();
 
-  if (router.asPath.includes("admin-login"))
+  if (router.asPath === '/admin/login')
+    return <main>{children}</main>
+  if (router.asPath.includes("admin"))
     return (
-      <AdminLogin>
-        <main>{children}</main>
-      </AdminLogin>
+      <AdminPanel>
+        {children}
+      </AdminPanel>
     );
-
-  if (router.asPath.includes("panel"))
+  if (router.asPath.includes('user'))
     return (
-      <Panel>
-        <main>{children}</main>
-      </Panel>
-    );
+      <UserPanel>
+        {children}
+      </UserPanel>
+    )
   return (
     <>
       <Header />
