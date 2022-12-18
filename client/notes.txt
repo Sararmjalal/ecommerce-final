@@ -1,0 +1,2 @@
+for next auth google client and secret ids: https://console.cloud.google.com/
+random jwt token: opnessl rand -base64 32 
