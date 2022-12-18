@@ -4,7 +4,7 @@ import {bannersProps} from "../../lib/staticData";
 
 const Banners = () => {
   return (
-    <div className='main-container py-20'>
+    <div className='main-container xl:flex-col gap-[34px]'>
       {bannersProps.map((banner) => (
         <BannerCard
           key={banner.id}

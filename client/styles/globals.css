@@ -7,7 +7,7 @@
     @apply bg-primary flex justify-center items-center h-12 px-6 rounded-full hover:bg-white hover:border-[1px] border-grayish transition-all;
   }
   .btn-secondary {
-    @apply text-[10px] font-semibold p-1 rounded-full bg-white text-black hover:bg-primary hover:text-white transition-all
+    @apply text-sm font-semibold p-1 rounded-[50px] bg-white text-black hover:bg-primary hover:text-white transition-all py-[15px] px-[32px]
   }
   .btn-blue {
     @apply bg-blueish py-4 px-11 flex justify-center items-center gap-4 rounded-full text-white hover:bg-blue-700 transition-all;
@@ -19,7 +19,7 @@
     @apply w-full h-12 rounded-full px-9 outline-none border-[1px] border-grayish lg:text-sm lg:px-3 md:text-center;
   }
   .badge-red {
-    @apply  top-6 left-6  text-white bg-reddish w-9 h-8 flex justify-center items-center rounded-full text-[10px] font-bold
+    @apply text-white bg-reddish px-3 py-2 rounded-full text-xs font-semibold
   }
   .modal-container {
     @apply fixed flex flex-col justify-start items-center w-[33%] lg:w-[60%] md:w-[70%] h-[90%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[1000] p-9 bg-white
@@ -31,7 +31,7 @@
     @apply relative w-11 h-11 border-[1px] border-grayish flex justify-center items-center hover:scale-125 transition-all cursor-pointer
   }
   .main-container {
-    @apply px-40 lg:px-10 pb-20 flex gap-16 w-full bg-white
+    @apply xxl:px-16 xl:px-14 lg:px-6 px-[160px] xxl:py-10 xl:py-8 py-[46px] flex w-full bg-white
   }
 }
 

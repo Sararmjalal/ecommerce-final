@@ -11,7 +11,8 @@ const AdminLogin = () => {
 
   const verifyAdminPhone = async () => {
     try {
-      await postRequest("admin/login-step-one", phone);
+      await postRequest("admin/login-step-one", {phone});
+      toast.success("welcome");
     } catch (error: any) {
       console.log(phone);
       console.log(error);

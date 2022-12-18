@@ -6,24 +6,24 @@ const SelectedProductCard = (props: SelectedProduct) => {
   return (
     <>
       <div className='flex flex-col justify-start items-start w-full '>
-        <div className='relative h-[50vh] w-full bg-black'>
+        <div className='relative h-[385px] w-full bg-black'>
           <Image
             src={props.img}
             alt={props.title}
             fill
-            className='absolute object-cover'
+            className='absolute object-cover object-top'
           />
-          {props.badge ? <div className='badge-red absolute'>30%</div> : null}
+          {props.badge && <div className='badge-red absolute m-6'>30%</div>}
         </div>
-        <p className='text-xs md:text-base mt-7 md:mt-2'>{props.title}</p>
-        <div className='flex justify-start items-center gap-6'>
+        <p className='mt-7 md:mt-2'>{props.title}</p>
+        <div className='flex justify-start items-center gap-9'>
           <p
-            className='text-sm md:text-lg'
+            className='text-xl'
             style={props.badge ? {color: "#FF0000"} : {color: "black"}}>
             ${props.price}
           </p>
-          <p className='text-sm text-grayish'>
-            {props.lastPrice ? props.lastPrice : ""}
+          <p className='text-xl text-grayish'>
+            {props.lastPrice && props.lastPrice}
           </p>
         </div>
       </div>

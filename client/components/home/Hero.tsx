@@ -11,7 +11,7 @@ const Hero = () => {
           fill
           src={"/assets/site_images/hero.png"}
           alt='hero'
-          className=' opacity-70 object-top'
+          className='opacity-70 object-top object-cover'
         />
         <div className='h-screen px-72 lg:px-9 absolute flex flex-col justify-center items-start gap-16 w-full'>
           <h1 className='md:text-4xl text-6xl font-bold text-white w-[30%]'>

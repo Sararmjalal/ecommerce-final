@@ -5,13 +5,13 @@ import SelectedProductCard from "./SelectedProductCard";
 const Selected = () => {
   return (
     <div className='main-container flex-col'>
-      <div className='flex justify-between items-center'>
-        <p className='text-2xl md:text-xl sm:text-lg'>Selected just for you</p>
-        <button className='text-[10px] font-semibold px-8 py-4 md:px-4 md:py-4 border-[1px] border-grayish rounded-full bg-white text-black hover:bg-primary hover:text-white transition-all'>
+      <div className='flex justify-between items-center sm:justify-center mb-16 sm:mb-8'>
+        <p className='text-2xl'>Selected just for you</p>
+        <button className='btn-secondary border-[1px] border-grayish hover:border-primary sm:hidden'>
           SHOW MORE
         </button>
       </div>
-      <div className='flex md:flex-col justify-between items-center gap-9'>
+      <div className='grid grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 items-center gap-16 sm:gap-8'>
         {homeProductsProps.map((product) => (
           <SelectedProductCard
             key={product.id}
@@ -23,6 +23,9 @@ const Selected = () => {
           />
         ))}
       </div>
+      <button className='btn-secondary border-[1px] border-grayish hover:border-primary hidden sm:block sm:mt-8'>
+        SHOW MORE
+      </button>
     </div>
   );
 };

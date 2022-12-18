@@ -5,22 +5,20 @@ import {Banner} from "../../lib/interfaces";
 const BannerCard = (props: Banner) => {
   return (
     <div
-      className='relative h-[30vh] object-cover bg-black'
-      style={
-        props.img.includes("banner-1") ? {width: "280px"} : {width: "200px"}
-      }>
+      className={`relative h-[373px] object-cover bg-black ${
+        props.img.includes("banner-1") ? "w-1/2 xl:w-full" : "w-1/4 xl:w-full"
+      }`}>
       <Image
         src={props.img}
         alt={props.title}
         fill
-        objectFit='cover'
-        className='opacity-70'
+        className='opacity-70 object-cover object-top'
       />
-      <div className='absolute flex flex-col justify-start gap-5 text-white text-md left-8 top-20 w-[50%]'>
+      <div className='absolute flex flex-col justify-start text-white text-md left-14 bottom-20'>
         {props.badge ? (
-          <div className='badge-red top-[-40%] absolute'>50%</div>
+          <div className='badge-red w-max mb-[15px]'>50%</div>
         ) : null}
-        <p>{props.title}</p>
+        <p className='text-2xl max-w-[139px] mb-[41px]'>{props.title}</p>
         <button className='btn-secondary'>{props.button}</button>
       </div>
     </div>
