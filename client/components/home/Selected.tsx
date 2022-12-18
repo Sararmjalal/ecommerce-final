@@ -23,7 +23,7 @@ const Selected = () => {
           />
         ))}
       </div>
-      <button className='btn-secondary border-[1px] border-grayish hover:border-primary hidden sm:block sm:mt-8'>
+      <button className='btn-secondary border-[1px] border-grayish hover:border-primary hidden sm:block mt-8 w-max m-auto'>
         SHOW MORE
       </button>
     </div>
