@@ -24,9 +24,9 @@ const Header = () => {
     <>
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
-        className='absolute top-[31px] flex justify-between items-center xxl:left-16 xl:left-14 lg:left-6 left-[160px] text-white lg:text-black z-[1000]'>
+        className='absolute top-0 pt-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px] grid grid-cols-3 lg:grid-cols-2 items-start w-full text-white lg:text-black z-[1000]'>
         <Link href={"/"}>
-          <div className='flex justify-center items-center gap-6 lg:gap-4 w-1/3'>
+          <div className='flex justify-start gap-6 lg:gap-4'>
             {router.asPath === "/" ? (
               <Image
                 src={"/assets/icons/logo.png"}
@@ -66,7 +66,7 @@ const Header = () => {
           </p>
         </div>
 
-        <div className='flex justify-center items-center gap-9 lg:gap-7'>
+        <div className='flex justify-end gap-9 lg:gap-7'>
           <AiOutlineSearch size={22} cursor={"pointer"} />
           <AiOutlineShoppingCart size={22} cursor={"pointer"} />
           <AiOutlineUser size={22} cursor={"pointer"} className='lg:hidden' />
