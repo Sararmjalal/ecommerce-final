@@ -11,7 +11,7 @@ import {
 const Footer = () => {
   return (
     <div>
-      <div className='grid grid-cols-10 md:grid-cols-4 gap-11 w-full min-h-80 px-40 lg:px-10 py-20 sm:text-center bg-white border-b-[1px] border-grayish'>
+      <div className='main-container grid grid-cols-10 md:grid-cols-4 gap-11 w-full min-h-80 sm:text-center bg-white border-b-[1px] border-grayish'>
         <div className='col-span-4 md:col-span-4 '>
           <div className='flex flex-col justify-start gap-7'>
             <div className='flex items-center gap-6'>
@@ -25,7 +25,7 @@ const Footer = () => {
                 <span className='text-primary'>E-</span>Shop
               </p>
             </div>
-            <p className='text-grayish text-justify text-sm'>
+            <p className='text-grayish text-sm leading-7 mb-4'>
               House My Brand designs clothing for the young, the old & everyone
               in between - but most importantly, for the fashionable
             </p>
@@ -68,7 +68,7 @@ const Footer = () => {
       </div>
       <div className='w-full py-8 bg-white text-grayish text-xs text-center'>
         <p>
-          DESIGN BY ICEO.CO & IMPLEMENTED BY HAMIDREZA WITH NEXT JS - © 2022.
+          DESIGN BY ICEO.CO & DEVELOPED BY HAMIDREZA & JALAL WITH NEXT JS - © 2022.
           ALL RIGHTS RESERVED.
         </p>
       </div>

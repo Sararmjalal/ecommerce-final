@@ -19,7 +19,7 @@ const BannerCard = (props: Banner) => {
           <div className='badge-red w-max mb-[15px]'>50%</div>
         ) : null}
         <p className='text-2xl max-w-[139px] mb-[41px]'>{props.title}</p>
-        <button className='btn-secondary'>{props.button}</button>
+        <button className='btn-secondary bg-white'>{props.button}</button>
       </div>
     </div>
   );

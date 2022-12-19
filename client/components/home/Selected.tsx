@@ -5,7 +5,7 @@ import SelectedProductCard from "./SelectedProductCard";
 const Selected = () => {
   return (
     <div className='main-container flex-col'>
-      <div className='flex justify-between items-center sm:justify-center mb-16 sm:mb-8'>
+      <div className='flex justify-between items-center sm:justify-center mb-16 sm:mb-10'>
         <p className='text-2xl'>Selected just for you</p>
         <button className='btn-secondary border-[1px] border-grayish hover:border-primary sm:hidden'>
           SHOW MORE
