@@ -11,15 +11,22 @@ import {
 } from "react-icons/ai";
 import Login from "../modals/SignIn";
 import {useSession, signOut} from "next-auth/react";
+import Menu from "./Menu";
 
 const Header = () => {
-  const [openLogin, setOpenLogin] = useState<boolean>(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [mode, setMode] = useState("login");
   const router = useRouter();
   const {data: session} = useSession();
   console.log(router.asPath);
   return (
+<<<<<<< Updated upstream:client/components/main/Header.tsx
     <div className="relative h-[107px] w-full ">
+=======
+    <>
+      {menu && <Menu />}
+>>>>>>> Stashed changes:client/components/general/Header.tsx
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
         className='absolute top-[31px] flex justify-between items-center xxl:left-16 xl:left-14 lg:left-6 left-[160px] text-white lg:text-black z-[1000]'>
@@ -53,10 +60,17 @@ const Header = () => {
           </div>
         </Link>
         <div className='lg:hidden flex justify-center items-center gap-20'>
-          <p className='text-lg cursor-pointer'>Men</p>
-          <p className='text-lg cursor-pointer'>Women</p>
-          <p className='text-lg cursor-pointer'>Kids</p>
+          <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
+            Men
+          </p>
+          <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
+            Women
+          </p>
+          <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
+            Kids
+          </p>
         </div>
+
         <div className='flex justify-center items-center gap-9 lg:gap-7'>
           <AiOutlineSearch size={22} cursor={"pointer"} />
           <AiOutlineShoppingCart size={22} cursor={"pointer"} />
@@ -83,6 +97,7 @@ const Header = () => {
             size={22}
             cursor={"pointer"}
             className='hidden lg:block'
+            onClick={() => setMenu(!menu)}
           />
         </div>
       </div>

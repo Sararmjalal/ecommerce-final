@@ -157,10 +157,57 @@ const commentData = [
   },
 ];
 
+const menuItems = [
+  {id: 1, title: " ", items: ["Sales", "Bestsellers", "Latest Arrivals"]},
+  {
+    id: 2,
+    title: "SHOES",
+    items: [
+      "Lifestyle",
+      "Running",
+      "Soccer",
+      "Basketball",
+      "Football",
+      "Golf",
+      "Baseball",
+    ],
+  },
+  {
+    id: 3,
+    title: "CLOTHING",
+    items: [
+      "Pants",
+      "Hoodies & Sweatshirts",
+      "Jackets & Vests",
+      "Track Suits",
+      "Short Sleeve Shirts",
+      "T-Shirts",
+      "Jerseys",
+      "Shorts",
+      "Jeans",
+    ],
+  },
+  {
+    id: 4,
+    title: "ACCESSORIES",
+    items: [
+      "Backpacks",
+      "Caps & Hats",
+      "Watches",
+      "Belts",
+      "Bags",
+      "Wallets & Cases",
+      "Scarves",
+      "Glasses",
+    ],
+  },
+];
+
 export {
   bannersProps,
   pillsProps,
   homeProductsProps,
   whyChooseUsProps,
   commentData,
+  menuItems,
 };
