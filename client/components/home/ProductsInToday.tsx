@@ -5,7 +5,7 @@ import SelectedProductCard from "./SelectedProductCard";
 const ProductsInToday = () => {
   return (
     <div className='main-container flex-col'>
-      <p className='text-2xl md:text-xl sm:text-lg text-center lg:text-left'>
+      <p className='head-text text-center'>
         Products in today
       </p>
       <div className='flex md:flex-col justify-between items-center gap-9'>

@@ -3,7 +3,7 @@ import {Pill} from "../../lib/interfaces";
 
 const WhyChooseUsCard = (props: Pill) => {
   return (
-    <div className='flex flex-col justify-start '>
+    <div className='flex flex-col justify-start gap-6'>
       <div
         className='w-16 h-16 rounded-lg flex justify-center items-center'
         style={
@@ -13,8 +13,8 @@ const WhyChooseUsCard = (props: Pill) => {
         }>
         {props.icon}
       </div>
-      <p className='font-semibold mt-8 lg:mt-3'>{props.title}</p>
-      <p className='text-xs text-grayish mt-5 lg:mt-2 lg:w-[70%] text-justify'>
+      <p className='font-semibold'>{props.title}</p>
+      <p className='text-grayish text-sm max-w-[212px] sm:max-w-full'>
         {props.desc}
       </p>
     </div>
