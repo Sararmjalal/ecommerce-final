@@ -21,12 +21,7 @@ const Header = () => {
   const {data: session} = useSession();
   console.log(router.asPath);
   return (
-<<<<<<< Updated upstream:client/components/main/Header.tsx
-    <div className="relative h-[107px] w-full ">
-=======
     <>
-      {menu && <Menu />}
->>>>>>> Stashed changes:client/components/general/Header.tsx
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
         className='absolute top-[31px] flex justify-between items-center xxl:left-16 xl:left-14 lg:left-6 left-[160px] text-white lg:text-black z-[1000]'>
@@ -111,7 +106,7 @@ const Header = () => {
         loginHandler={() => setMode("login")}
         signUpHandler={() => setMode("signup")}
       />
-    </div>
+    </>
   );
 };
 
