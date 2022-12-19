@@ -26,7 +26,7 @@ const StateProvider = ({children} : { children: JSX.Element|JSX.Element[] }) => 
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <div className={`${router.asPath !== '/' && 'page'}`}>{children}</div>
       <NewsLetter />
       <Footer />
     </>
