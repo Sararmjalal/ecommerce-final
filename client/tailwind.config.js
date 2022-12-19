@@ -27,6 +27,7 @@ module.exports = {
       emerald: colors.emerald,
       indigo: colors.indigo,
       yellow: colors.yellow,
+      grayborder: '#E5E5E5'
     },
     fontFamily: {
       Poppins: ["Poppins", "Sans-serif"],
