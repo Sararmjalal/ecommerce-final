@@ -29,3 +29,15 @@ export interface CommentShape {
   rate: any;
   text: string;
 }
+
+export interface DynamicLink {
+  pathname: string
+  query?: {
+    [key: string]: string
+  }
+}
+
+export interface GuideLinkArg {
+  name: string
+  href: DynamicLink
+}
