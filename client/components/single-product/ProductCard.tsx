@@ -1,31 +1,37 @@
-import React from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
 
 const ProductCard = () => {
+  const isAvailable = false;
   const colors = ["black", "#FFE3B7", "#2900FF", "white"];
+  const imgs = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
-    <div className='grid grid-cols-12 w-full h-screen gap-5 '>
-      <div className='relative col-span-2 md:col-span-3 h-[40%] md:h-[60%] sm:h-[30%] cursor-pointer'>
+    <div className='grid grid-cols-2 md:grid-cols-1 gap-40 md:gap-8'>
+      <div>
         <Image
           src={"/assets/products/product-1.png"}
           alt='product-img'
-          fill
-          className='object-cover'
+          width={505}
+          height={505}
+          className='object-cover aspect-square object-top mb-2'
         />
+        <div className='grid grid-cols-4 w-full gap-2'>
+          {imgs.map((img) => (
+            <Image
+              src={"/assets/products/product-1.png"}
+              alt='product-img'
+              width={120}
+              height={120}
+              className='object-cover aspect-square object-top'
+            />
+          ))}
+        </div>
       </div>
-      <div className='relative col-span-4 md:col-span-9 h-[80%] md:w-full'>
-        <Image
-          src={"/assets/products/product-1.png"}
-          alt='product-img'
-          fill
-          className='object-cover'
-        />
-      </div>
-      <div className='col-span-6 md:col-span-10 ml-10 '>
+      <div>
         <div className='relative flex flex-col w-full'>
-          <div className='badge-red'>SALE</div>
+          <div className='badge-red w-max'>SALE</div>
           <p className='mt-4 text-3xl font-light md:text-lg'>
             T-Shirt Summer Vibes
           </p>
@@ -56,12 +62,20 @@ const ProductCard = () => {
             <div className='flex flex-col justify-start mt-8 text-sm font-light'>
               <p className=' mb-2'>Quantity:</p>
               <div className='flex justify-start items-center gap-4 w-full'>
-                <div className='relative flex justify-between items-center px-7 py-3 w-32 h-12 border-[1px] border-grayish rounded-full'>
+                <div className='flex justify-between items-center px-7 md:px-2 py-3 w-32 md:w-20 h-12 border-[1px] border-grayish rounded-full'>
                   <AiOutlineMinus cursor={"pointer"} />
                   <p className='font-bold'>1</p>
                   <AiOutlinePlus cursor={"pointer"} />
                 </div>
-                <button className='btn-primary'>Add to cart</button>
+                {isAvailable ? (
+                  <button className='btn-secondary border-[1px] border-grayish hover:border-primary md:px-2 xs:text-[10px]'>
+                    Add to cart
+                  </button>
+                ) : (
+                  <button disabled className='text-grayish line-through'>
+                    Out of stock
+                  </button>
+                )}
                 <div className='flex justify-center items-center border-[1px] border-grayish w-12 h-12 rounded-full cursor-pointer bg-white hover:bg-reddish hover:text-white hover:scale-110 transition-all'>
                   <AiOutlineHeart size={18} />
                 </div>
