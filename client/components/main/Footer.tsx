@@ -10,7 +10,7 @@ import {
 
 const Footer = () => {
   return (
-    <>
+    <div>
       <div className='grid grid-cols-10 md:grid-cols-4 gap-11 w-full min-h-80 px-40 lg:px-10 py-20 sm:text-center bg-white border-b-[1px] border-grayish'>
         <div className='col-span-4 md:col-span-4 '>
           <div className='flex flex-col justify-start gap-7'>
@@ -72,7 +72,7 @@ const Footer = () => {
           ALL RIGHTS RESERVED.
         </p>
       </div>
-    </>
+    </div>
   );
 };
 

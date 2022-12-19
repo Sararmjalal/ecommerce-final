@@ -3,8 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   env: {
-    SERVER: "http://localhost:4313",
-    TITLE: "E-Commerce!",
+    GOOGLE_CLIENT_ID:"152887091072-gesg86dl1vmfh7a0gdli99nl7nq2h9q8.apps.googleusercontent.com",
+    GOOGLE_CLIENT_SECRET:"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",
+    NEXTAUTH_URL:"http://localhost:3000",
+    JWT_SECRET:"rzi2CaP85bJ87IAg31lxLf7RrVUmTZSczavcjefRMS45",
+    SERVER:"http://localhost:4313",
+    TITLE:"E-Commerce!"
   },
   images: {
     remotePatterns: [

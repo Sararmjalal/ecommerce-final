@@ -1,7 +1,7 @@
 import React from "react";
 import {createPortal} from "react-dom";
-import Login from "../general/Login";
-import Signup from "../general/Signup";
+import Login from "../main/Login";
+import Signup from "../main/Signup";
 
 const SignIn = ({
   open,

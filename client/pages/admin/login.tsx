@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import OtpInput from "../../components/adminPanel/OtpInput";
-import {postRequest} from "../../lib/axiosInstance/axiosBaseConfig";
+import OtpInput from "../../components/admin-panel/OtpInput";
+import {postRequest} from "../../apis/axiosBaseConfig";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,8 +11,9 @@ const AdminLogin = () => {
 
   const verifyAdminPhone = async () => {
     try {
-      await postRequest("admin/login-step-one", {phone});
+      const res = await postRequest("admin/login-step-one", {phone});
       toast.success("welcome");
+      console.log(res)
     } catch (error: any) {
       console.log(phone);
       console.log(error);

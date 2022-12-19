@@ -1,7 +1,7 @@
 import React from "react";
-import Sidebar from "../components/panel/Sidebar";
+import Sidebar from "../components/user-panel/Sidebar";
 
-const Panel = ({children}: any) => {
+const AdminPanel = ({children}: any) => {
   return (
     <>
       <div className='flex flex-auto'>
@@ -14,4 +14,4 @@ const Panel = ({children}: any) => {
   );
 };
 
-export default Panel;
+export default AdminPanel;

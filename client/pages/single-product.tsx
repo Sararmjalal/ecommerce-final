@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import Description from "../components/singleProduct/Description";
-import Header from "../components/singleProduct/Header";
-import ProductCard from "../components/singleProduct/ProductCard";
-import Reviews from "../components/singleProduct/Reviews";
+import Description from "../components/single-product/Description";
+import Header from "../components/single-product/Header";
+import ProductCard from "../components/single-product/ProductCard";
+import Reviews from "../components/single-product/Reviews";
 
 const SingleProduct = () => {
   const [secMode, setSecMode] = useState("description");
