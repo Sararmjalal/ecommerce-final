@@ -5,57 +5,7 @@ import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import FilterPlaceholders from "./FilterPlaceholders";
 
-const FiltersSidebar = () => {
-  
-  const categories = [
-    {
-      name: "T-shirts",
-    },
-    {
-      name: "Sweatshirts",
-    },
-    {
-      name: "Tank Tops",
-    },
-    {
-      name: "Dress Shirts",
-    },
-    {
-      name: "Dalam",
-    },
-    {
-      name: "bazam dalam",
-    },
-  ];
-
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-
-  const colors = ["black", "#FFE3B7", "#2900FF", "white"];
-
-  const prices = [50, 100, 200, 500, 400, 387, 2000]
-  
-  const [data, setData] = useState({
-    selectedCategory: categories[0].name,
-    catFilterOpen: false,
-    selectedSize: sizes[0],
-    sizeFilterOpen: false,
-    selectedColor: colors[0],
-    colorFilterOpen: false,
-    priceRange: [prices.reduce((acc, cur) => acc > cur ? cur : acc),
-      prices.reduce((acc, cur) => acc > cur ? acc : cur)],
-    priceFilterOpen: false,
-  })
-
-  useLayoutEffect(() => {
-    setData({
-      ...data,
-      catFilterOpen: screen.width > 1023, 
-      sizeFilterOpen: screen.width > 1023,
-      colorFilterOpen: screen.width > 1023,
-      priceFilterOpen: screen.width > 1023
-    })
-  }, [])
-
+const FiltersSidebar = ({data, setData, categories, sizes, prices, colors}) => {
   return (
     <div className='flex flex-col items-start gap-3 w-full'>
       <div className='w-full bg-black text-white p-4'>

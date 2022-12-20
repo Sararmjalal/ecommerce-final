@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface Pill {
   id?: number;
   icon: JSX.Element;
@@ -13,7 +15,7 @@ export interface Banner {
   badge: boolean;
 }
 
-export interface SelectedProduct {
+export interface ProductCards {
   id?: number;
   img: string;
   title: string;
@@ -40,4 +42,10 @@ export interface DynamicLink {
 export interface GuideLinkArg {
   name: string
   href: DynamicLink
+}
+
+export interface SortingListProps {
+  sortItem: string
+  setSelected: Dispatch<SetStateAction<string>>
+  setOpenSorting: Dispatch<SetStateAction<boolean>>
 }

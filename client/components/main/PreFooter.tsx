@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const PreFooter = () => {
   return (
-    <div className='main-container flex-col justify-center items-center mt-auto'>
+    <div className='w-full flex-col justify-center items-center mt-auto'>
       <div className='relative w-full h-60 lg:h-[27rem] bg-black'>
         <Image
           src={"/assets/site_images/newsletter-img.png"}

@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import {SelectedProduct} from "../../lib/interfaces";
+import {ProductCards} from "../../lib/interfaces";
 
-const SelectedProductCard = (props: SelectedProduct) => {
-  return (
+const ProductCard = (props: ProductCards) => {
+  return ( 
     <>
       <div className='flex flex-col justify-start items-start w-full '>
         <div className='relative h-[385px] w-full bg-black'>
@@ -31,4 +31,4 @@ const SelectedProductCard = (props: SelectedProduct) => {
   );
 };
 
-export default SelectedProductCard;
+export default ProductCard;
