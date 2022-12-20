@@ -69,6 +69,14 @@ a:hover {
   border: 2px solid black;
 }
 
+.thisRange .range-slider .range-slider__thumb:hover{
+  background: black;
+}
+
+.thisRange .range-slider .range-slider__thumb:active{
+  background: black;
+}
+
 .thisRange .range-slider .range-slider__range {
   background: black;
   height: 3px;
