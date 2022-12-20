@@ -1,7 +1,6 @@
 import React from "react";
 import Footer from "../components/main/Footer";
 import Header from "../components/main/Header";
-import PreFooter from "../components/main/PreFooter";
 import AdminPanel from "./AdminPanel";
 import UserPanel from "./UserPanel";
 import {useRouter} from "next/router";

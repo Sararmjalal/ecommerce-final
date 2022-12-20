@@ -31,7 +31,7 @@
     @apply relative w-11 h-11 border-[1px] border-grayborder flex justify-center items-center hover:scale-125 transition-all cursor-pointer
   }
   .main-container {
-    @apply xxl:px-16 xl:px-14 lg:px-6 px-[160px] xxl:py-10 xl:py-8 py-[46px]  w-full
+    @apply xxl:px-16 xl:px-14 lg:px-6 px-[160px] xxl:py-10 xl:py-8 py-[46px] flex w-full 
   }
   .page {
     @apply xxl:px-16 xl:px-14 lg:px-6 px-[160px] my-[107px] pt-[52px] w-full border-t-[1px] border-grayborder
@@ -52,10 +52,6 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-a:hover {
-  color:black
 }
 
 * {
