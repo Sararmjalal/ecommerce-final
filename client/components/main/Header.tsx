@@ -24,7 +24,8 @@ const Header = () => {
     <>
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
-        className='absolute top-0 pt-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px] grid grid-cols-3 lg:grid-cols-2 items-start w-full text-white lg:text-black z-[1000]'>
+        className='absolute top-0 pt-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px]
+        grid grid-cols-3 lg:grid-cols-2 items-start w-full text-white lg:text-black z-[1000]'>
         <Link href={"/"}>
           <div className='flex justify-start gap-6 lg:gap-4'>
             {router.asPath === "/" ? (

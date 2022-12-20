@@ -7,11 +7,15 @@ import {
   FaInstagram,
   FaYoutube,
 } from "react-icons/fa";
+import PreFooter from "./PreFooter";
 
 const Footer = () => {
   return (
-    <div>
-      <div className='main-container grid grid-cols-10 md:grid-cols-4 gap-11 w-full min-h-80 sm:text-center bg-white border-b-[1px] border-grayish'>
+    <>
+      <PreFooter />
+      <div
+        className='main-container grid grid-cols-10 md:grid-cols-4 gap-11 w-full sm:text-center
+       bg-white border-b-[1px] border-grayborder mt-auto'>
         <div className='col-span-4 md:col-span-4 '>
           <div className='flex flex-col justify-start gap-7'>
             <div className='flex items-center gap-6'>
@@ -68,11 +72,11 @@ const Footer = () => {
       </div>
       <div className='w-full py-8 bg-white text-grayish text-xs text-center'>
         <p>
-          DESIGN BY ICEO.CO & DEVELOPED BY HAMIDREZA & JALAL WITH NEXT JS - © 2022.
-          ALL RIGHTS RESERVED.
+          DESIGN BY ICEO.CO & DEVELOPED BY HAMIDREZA & JALAL WITH NEXT JS - ©
+          2022. ALL RIGHTS RESERVED.
         </p>
       </div>
-    </div>
+    </>
   );
 };
 

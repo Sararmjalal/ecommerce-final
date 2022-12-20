@@ -4,6 +4,27 @@ import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
 
 const ProductCard = () => {
+  const sizes = [
+    {
+      size: "XS",
+    },
+    {
+      size: "S",
+    },
+    {
+      size: "M",
+    },
+    {
+      size: "L",
+    },
+    {
+      size: "XL",
+    },
+    {
+      size: "XXL",
+    },
+  ];
+  const [selectedSize, setSelectedSize] = useState(sizes[0]["size"]);
   const isAvailable = false;
   const colors = ["black", "#FFE3B7", "#2900FF", "white"];
   const imgs = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -39,26 +60,36 @@ const ProductCard = () => {
             <p className=' text-reddish '>$89.99</p>
             <p className=' text-grayish line-through '>$119.99</p>
           </div>
-          <div className='flex flex-col justify-start mt-8 text-sm font-light'>
-            <p className=' mb-2'>Color:</p>
-            <div className='flex justify-start items-center gap-4 md:gap-1 lg:gap-2 w-[80%]'>
-              {colors.map((color: string) => (
-                <ColorCard color={color} />
-              ))}
+          <div className='w-full border-[1px] border-grayborder p-6 mt-8'>
+            <p className='font-semibold text-sm mb-6'>COLOR</p>
+            <div className='flex flex-col gap-5'>
+              <div className='flex justify-center gap-3 items-center'>
+                {colors.map((color: string) => (
+                  <ColorCard color={color} />
+                ))}
+              </div>
             </div>
           </div>
           <div className='flex flex-col justify-start mt-8 text-sm font-light'>
-            <div className='flex justify-start items-center gap-10  mb-2'>
-              <p>Size:</p>
-              <p>See size table</p>
+            <div className='w-full border-[1px] border-grayborder p-6'>
+              <p className='font-semibold text-sm mb-6'>SIZE</p>
+              <div className='flex flex-col gap-5'>
+                <div className='flex justify-center items-center overflow-y-auto'>
+                  {sizes.map(({size}) => (
+                    <div
+                      className={`w-10 h-10 flex flex-col items-center justify-center cursor-pointer
+                    ${
+                      selectedSize === size
+                        ? "bg-black text-white"
+                        : "bg-white border-[1px] border-grayborder"
+                    }`}
+                      onClick={() => setSelectedSize(size)}>
+                      <p>{size}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-            <select className='input-primary w-[70%]'>
-              <option className='select-none'>CHOOSE SIZE</option>
-              <option>XL</option>
-              <option>L</option>
-              <option>M</option>
-              <option>S</option>
-            </select>
             <div className='flex flex-col justify-start mt-8 text-sm font-light'>
               <p className=' mb-2'>Quantity:</p>
               <div className='flex justify-start items-center gap-4 w-full'>

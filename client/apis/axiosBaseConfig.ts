@@ -6,6 +6,7 @@ const axiosClient = axios.create(config);
 
 const getRequest = async(url:string) => await axiosClient.get(url)
 
-const postRequest = async(url:string, payload: any) => await axiosClient.post(url, payload) 
+const postRequest = async (url: string, payload: Object) =>
+  await axiosClient.post(url, payload); 
 
 export { getRequest, postRequest }
