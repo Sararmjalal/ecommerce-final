@@ -1,6 +1,6 @@
 import React from "react";
 import {homeProductsProps} from "../../lib/staticData";
-import SelectedProductCard from "./SelectedProductCard";
+import SelectedProductCard from "./ProductCard";
 
 const Selected = () => {
   return (
