@@ -56,14 +56,14 @@ const Header = () => {
           </div>
         </Link>
         <div className='lg:hidden flex justify-center items-center gap-20'>
+          <Link href={"/"}>
+            <p className='text-lg cursor-pointer'>Home</p>
+          </Link>
+          <Link href={"/shop"}>
+            <p className='text-lg cursor-pointer'>Shop</p>
+          </Link>
           <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
-            Men
-          </p>
-          <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
-            Women
-          </p>
-          <p onClick={() => setMenu(!menu)} className='text-lg cursor-pointer'>
-            Kids
+            Products
           </p>
         </div>
 
@@ -107,6 +107,15 @@ const Header = () => {
         loginHandler={() => setMode("login")}
         signUpHandler={() => setMode("signup")}
       />
+
+      {menu && (
+        <>
+          <div
+            onClick={() => setMenu(!menu)}
+            className='modal-backdrop top-32'></div>
+          <Menu />
+        </>
+      )}
     </>
   );
 };

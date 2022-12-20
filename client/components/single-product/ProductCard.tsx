@@ -25,7 +25,7 @@ const ProductCard = () => {
     },
   ];
   const [selectedSize, setSelectedSize] = useState(sizes[0]["size"]);
-  const isAvailable = false;
+  const isAvailable = true;
   const colors = ["black", "#FFE3B7", "#2900FF", "white"];
   const imgs = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
@@ -103,7 +103,7 @@ const ProductCard = () => {
                     Add to cart
                   </button>
                 ) : (
-                  <button disabled className='text-grayish line-through'>
+                  <button disabled className='text-reddish font-semibold'>
                     Out of stock
                   </button>
                 )}
