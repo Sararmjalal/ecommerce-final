@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import GuideLink from "../components/main/GuideLink";
 import FiltersSidebar from "../components/shop/Filters";
 
 const Shop = () => {
-
   return (
     <div>
       <GuideLink
