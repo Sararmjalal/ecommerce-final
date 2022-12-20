@@ -1,6 +1,6 @@
 import React from "react";
 import GuideLink from "../components/main/GuideLink";
-import FiltersSidebar from "../components/shop/Fillters";
+import FiltersSidebar from "../components/shop/Filters";
 
 const Shop = () => {
 

@@ -268,6 +268,11 @@
   "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.5.0.tgz"
   "version" "0.5.0"
 
+"core-js@^3.22.4":
+  "integrity" "sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA=="
+  "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.26.1.tgz"
+  "version" "3.26.1"
+
 "cssesc@^3.0.0":
   "integrity" "sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg=="
   "resolved" "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz"
@@ -753,6 +758,14 @@
   "integrity" "sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   "version" "18.2.0"
+
+"react-range-slider-input@^3.0.6":
+  "integrity" "sha512-DxmwY6tFhvrGZYKCr0D3enSkzmTwKOTEUAPn9EJW9mCGrURg8Y/XgNBm+1LW5mBh2MIfnwcWK4Jl76MJ6gZiBw=="
+  "resolved" "https://registry.npmjs.org/react-range-slider-input/-/react-range-slider-input-3.0.6.tgz"
+  "version" "3.0.6"
+  dependencies:
+    "clsx" "^1.1.1"
+    "core-js" "^3.22.4"
 
 "react-redux@^7.2.1 || ^8.0.2", "react-redux@^8.0.5":
   "integrity" "sha512-Q2f6fCKxPFpkXt1qNRZdEDLlScsDWyrgSj0mliK59qU6W5gvBiKkdMEG2lJzhd1rCctf0hb6EtePPLZ2e0m1uw=="

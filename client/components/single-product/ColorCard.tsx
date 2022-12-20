@@ -1,11 +1,14 @@
 import React from "react";
 
-const ColorCard = ({color}: any) => {
+const ColorCard = (props: { color: string, handleSelect: (selectedColor: string) => void, selectedColor: string}) => {
   return (
-    <div className='color-badge '>
+    <div className={`color-badge ${props.selectedColor === props.color && "bg-black"}`}>
       <div
         className='absolute  w-[70%] border-[1px] border-grayish h-[70%]'
-        style={{backgroundColor: color}}></div>
+        style={{ backgroundColor: props.color }}
+        onClick={() => props.handleSelect(props.color)}
+      >
+      </div>
     </div>
   );
 };
