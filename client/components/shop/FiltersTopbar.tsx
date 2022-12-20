@@ -23,19 +23,25 @@ const FiltersTopbar = ({selectedCategory}: {selectedCategory: string}) => {
         </div>
           <div className="relative w-full">
           {
-            openSorting && 
-            <ul className="absolute bg-white z-50 w-full top-4 rounded-2xl overflow-hidden text-center cursor-pointer">
-                {
-                  sortings.map(sortItem => (
-                    <SortingList
-                      key={sortItem.trim()}
-                      sortItem={sortItem}
-                      setSelected={setSelected}
-                      setOpenSorting={setOpenSorting}
-                    />
-                  ))
-                }
-            </ul>
+              openSorting && 
+              <>
+                <div
+                  className="fixed top-0 left-0 w-screen h-screen z-[999]"
+                  onClick={() => setOpenSorting(false)}
+                />
+                <ul className="absolute bg-white z-[1000] w-full top-4 rounded-2xl overflow-hidden text-center cursor-pointer">
+                    {
+                      sortings.map(sortItem => (
+                        <SortingList
+                          key={sortItem.trim()}
+                          sortItem={sortItem}
+                          setSelected={setSelected}
+                          setOpenSorting={setOpenSorting}
+                        />
+                      ))
+                    }
+                </ul>
+              </>
           }
           </div>
         </div>
