@@ -17,6 +17,7 @@ const Header = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const [menu, setMenu] = useState(false);
   const [mode, setMode] = useState("login");
+  const [searchMode, setSearchMode] = useState(false);
   const router = useRouter();
   const {data: session} = useSession();
   console.log(router.asPath);
@@ -68,7 +69,11 @@ const Header = () => {
         </div>
 
         <div className='flex justify-end gap-9 lg:gap-7'>
-          <AiOutlineSearch size={22} cursor={"pointer"} />
+          <AiOutlineSearch
+            onClick={() => setSearchMode(!searchMode)}
+            size={22}
+            cursor={"pointer"}
+          />
           <AiOutlineShoppingCart size={22} cursor={"pointer"} />
           <AiOutlineUser size={22} cursor={"pointer"} className='lg:hidden' />
           {session ? (
@@ -112,9 +117,16 @@ const Header = () => {
         <>
           <div
             onClick={() => setMenu(!menu)}
-            className='modal-backdrop top-32'></div>
+            className='modal-backdrop sticky top-32'></div>
           <Menu />
         </>
+      )}
+      {searchMode && (
+        <input
+          type={"text"}
+          className='outline-none rounded-md px-2 text-black'
+          placeholder='search ...'
+        />
       )}
     </>
   );

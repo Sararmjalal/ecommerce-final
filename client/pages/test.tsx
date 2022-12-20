@@ -5,31 +5,33 @@ const Test = () => {
   return (
     <div>
       <GuideLink
-        args={[{
-        name: "dalam",
-          href: {
-          pathname: "/test"
-        }
-        },
+        args={[
+          {
+            name: "dalam",
+            href: {
+              pathname: "/test",
+            },
+          },
           {
             name: "geee",
             href: {
-              pathname: "/about"
-            }
+              pathname: "/about",
+            },
           },
           {
             name: "Its product",
             href: {
               pathname: "/product/[_id]",
               query: {
-                _id: "geeee"
-              }
-            }
-          }
+                _id: "geeee",
+              },
+            },
+          },
         ]}
       />
+      <div>salam</div>
     </div>
-  )
+  );
 }
 
 export default Test
