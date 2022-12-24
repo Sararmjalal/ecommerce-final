@@ -41,7 +41,7 @@ const submitComment = async (productId: string, text: string) => await postReque
 
 const submitRate = async (productId: string, score: number) => await postRequest('/rate/submit', { productId, score }, 'user')
 
-export default {
+export {
   createAdmin, adminLoginOne, adminLoginTwo, adminInfo, addressByUser, allUsers,
   userSignupOne, userSignupTwo, userLoginOne, userLoginTwo,
   userInfo, createAddress, editAddress, deleteAddress,
