@@ -80,3 +80,10 @@ export interface User {
 export interface GlobalState {
   [key: string]: null | User
 }
+
+export interface Form {
+  [key: string]: {
+    value: string
+    msg: string
+  }
+}

@@ -16,4 +16,4 @@ const topProducts = async () => await getRequest('/product/top-products')
 
 const singleProduct = async (productId: string) => await getRequest(`/product/${productId}`)
 
-export default {myAddresses, myOrders, myCart, categories, comments, allProducts, topProducts, singleProduct}
+export {myAddresses, myOrders, myCart, categories, comments, allProducts, topProducts, singleProduct}

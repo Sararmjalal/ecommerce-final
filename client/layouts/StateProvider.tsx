@@ -8,7 +8,7 @@ import {useRouter} from "next/router";
 const StateProvider = ({children}: {children: JSX.Element | JSX.Element[]}) => {
   const router = useRouter();
 
-  if (router.asPath === "/admin/login") return <main>{children}</main>;
+  if (router.asPath === "/admin/login" || router.asPath === "/admin/create") return <main>{children}</main>;
   if (router.asPath.includes("admin"))
     return <AdminPanel>{children}</AdminPanel>;
   if (router.asPath.includes("user")) return <UserPanel>{children}</UserPanel>;
