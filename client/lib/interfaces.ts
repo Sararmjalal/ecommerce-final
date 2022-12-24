@@ -49,3 +49,22 @@ export interface SortingListProps {
   setSelected: Dispatch<SetStateAction<string>>
   setOpenSorting: Dispatch<SetStateAction<boolean>>
 }
+
+export interface Location {
+  address: string
+  postalcode: string
+  geo: {
+    lat: string
+    lon: string
+  }
+}
+
+export interface Receiver {
+  name: string
+  phone: string
+}
+
+export interface AddressData {
+  location: Location
+  receiver: Receiver
+}

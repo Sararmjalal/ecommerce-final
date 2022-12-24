@@ -1,5 +1,5 @@
 import GuideLink from "../components/main/GuideLink"
-
+import { createAdmin } from "../apis";
 const Test = () => {
 
   

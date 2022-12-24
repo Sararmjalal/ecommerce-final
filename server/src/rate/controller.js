@@ -1,14 +1,13 @@
 import Rate from "./model"
-import Product from "../product/model";
-import UID from "lib/utils/UID";
+import UserModel from "user/model"
 
 export default {
   sumbitRate: async (req, res) => {
     try {
-  
-      await Rate.rateBlog({
+      const thisUser = await UserModel.authorizeUser(req.user)
+      await Rate.rateProduct({
         productId: req.body.productId,
-        userId: UID(),
+        userId: thisUser._id,
         score: req.body.score
       })
       
