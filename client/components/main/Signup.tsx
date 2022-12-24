@@ -23,36 +23,9 @@ const Signup = ({closeHandler, loginHandler}: any) => {
         </p>
         <div className='relative w-full'>
           <input
-            type='text'
+            type='phone'
             className='input-primary mt-6'
-            placeholder='First Name'
-          />
-        </div>
-        <div className='relative w-full'>
-          <input
-            type='text'
-            className='input-primary mt-3 '
-            placeholder='Last Name'
-          />
-        </div>
-        <div className='relative w-full'>
-          <input
-            autoComplete='off'
-            type='text'
-            className='input-primary mt-3 '
-            placeholder='E-mail'
-          />
-        </div>
-        <div className='relative w-full'>
-          <input
-            autoComplete='off'
-            type='password'
-            className='input-primary mt-3'
-            placeholder='Password'
-          />
-          <FaRegEyeSlash
-            cursor={"pointer"}
-            className='absolute right-5 top-[50%] hover:text-grayish transition-all'
+            placeholder='Phone Number'
           />
         </div>
         <div className='flex justify-start items-center gap-4 mt-2'>

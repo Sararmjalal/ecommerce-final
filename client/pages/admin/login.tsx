@@ -5,17 +5,19 @@ import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AdminLogin = () => {
-  const [phone, setPhone] = useState("");
+  const [adminPhone, setAdminPhone] = useState("");
 
-  const onChangeHandler = (value: string) => setPhone(value);
+  const onChangeHandler = (value: string) => setAdminPhone(value);
 
   const verifyAdminPhone = async () => {
     try {
-      const res = await postRequest("admin/login-step-one", {phone});
+      const res = await postRequest("admin/login-step-one", {
+        phone: adminPhone,
+      });
       toast.success("welcome");
-      console.log(res)
+      console.log(res);
     } catch (error: any) {
-      console.log(phone);
+      console.log(adminPhone);
       console.log(error);
       if (error.response.data.msg === "bad request: bad input")
         return toast.error("Please enter your phone number!");
@@ -42,7 +44,7 @@ const AdminLogin = () => {
           </p>
           <div className='w-full max-w-[800px] mx-auto my-0 px-5 py-4'>
             <OtpInput
-              value={phone}
+              value={adminPhone}
               valueLength={11}
               onChangeHandler={onChangeHandler}
             />

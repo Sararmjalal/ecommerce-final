@@ -1,8 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {useLayoutEffect, useState} from "react";
 import GuideLink from "../components/main/GuideLink";
 import FiltersSidebar from "../components/shop/FiltersSidebar";
 import ProductCard from "../components/home/ProductCard";
-import { homeProductsProps } from "../lib/staticData";
+import {homeProductsProps} from "../lib/staticData";
 import FiltersTopbar from "../components/shop/FiltersTopbar";
 
 const Shop = () => {
@@ -91,6 +91,7 @@ const Shop = () => {
             filteredData={filteredData}
             setFilteredData={setFilteredData}
           />
+
           <div className='grid grid-cols-3 gap-16 sm:gap-8 sm:grid-cols-1 md:grid-cols-2'>
             {filteredData.products.map((product) => {
               return (
@@ -111,4 +112,4 @@ const Shop = () => {
   );
 };
 
-export default Shop
+export default Shop;
