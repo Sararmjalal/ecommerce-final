@@ -36,8 +36,10 @@ class RateSchema {
     }
   }
 
-  async rateBlog({ productId, userId, score }) {
+  async rateProduct({ productId, userId, score }) {
     try {
+
+      if(!userId) throw new Error("Unauthorized")
 
       if (!productId || !score) throw new Error('bad request: bad input')
       
@@ -45,7 +47,7 @@ class RateSchema {
 
       if (!thisProduct || !thisProduct._id) throw new Error('bad request: no such product exists')
 
-      thisProduct.scores[UID()] = score
+      thisProduct.scores[userId] = score
       const arr = Object.entries(thisProduct.scores)
       const averageScore = arr.reduce((acc, [_, value]) => {
         return acc + value

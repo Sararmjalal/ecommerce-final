@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import OtpInput from "../../components/admin-panel/OtpInput";
-import {postRequest} from "../../apis/axiosBaseConfig";
+import OtpInput from "../../components/main/OtpInput";
+import {postRequest} from "../../apis/baseConfig";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

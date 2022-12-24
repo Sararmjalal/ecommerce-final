@@ -1,5 +1,4 @@
 import React, {useMemo} from "react";
-import {RE_DIGIT} from "../../lib/constants";
 
 export type Props = {
   value: string;
@@ -7,7 +6,8 @@ export type Props = {
   onChangeHandler: (value: string) => void;
 };
 
-const OtpInput = ({value, valueLength, onChangeHandler}: Props) => {
+const OtpInput = ({ value, valueLength, onChangeHandler }: Props) => {
+  const RE_DIGIT = new RegExp(/^\d+$/);
   const valueItems = useMemo(() => {
     const valueArray = value.split("");
     const items: Array<string> = [];
