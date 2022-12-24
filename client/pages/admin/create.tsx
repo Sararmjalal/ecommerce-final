@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectAdmin } from '../../global-state/slice'
 import { useMutation } from '@tanstack/react-query'
@@ -24,10 +24,10 @@ const CreateAdmin = () => {
     },
   })
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    thisAdmin ? setLoading(false) : router.push('/')
+  useLayoutEffect(() => {
+    !thisAdmin ? router.push('/') : setLoading(false)
   }, [])
 
   const mutation = useMutation({
