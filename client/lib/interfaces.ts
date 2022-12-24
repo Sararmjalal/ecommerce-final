@@ -68,3 +68,15 @@ export interface AddressData {
   location: Location
   receiver: Receiver
 }
+
+export interface User {
+  _id: string
+  name: string
+  phone: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface GlobalState {
+  [key: string]: null | User
+}
