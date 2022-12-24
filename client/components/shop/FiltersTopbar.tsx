@@ -1,5 +1,5 @@
-import { useState } from "react"
-import SortingList from "./SortingList"
+import {useEffect, useState} from "react";
+import SortingList from "./SortingList";
 
 const FiltersTopbar = ({
   selectedCategory,
@@ -10,10 +10,16 @@ const FiltersTopbar = ({
   filteredData: any;
   setFilteredData: any;
 }) => {
-  const sortByLowestPrice = () => {
-    const clone = [...filteredData.homeProductsProps];
-    clone.sort((a, b) => (a.price - b.price > 0 ? -1 : 1));
-    console.log("Clone", clone);
+  const sort = () => {
+    const clone = [...filteredData.products];
+    if (selected === "Heighest Price") {
+      clone.sort((a, b) => (a.price - b.price > 0 ? -1 : 1));
+      setFilteredData({...filteredData, products: clone});
+    }
+    if (selected === "Lowest Price") {
+      clone.sort((a, b) => (a.price - b.price < 0 ? -1 : 1));
+      setFilteredData({...filteredData, products: clone});
+    }
   };
 
   const sortings = ["Popular", "Lowest Price", "Heighest Price"];
@@ -21,6 +27,12 @@ const FiltersTopbar = ({
   const [selected, setSelected] = useState(sortings[0]);
 
   const [openSorting, setOpenSorting] = useState(false);
+
+  useEffect(() => {
+    sort();
+  }, [selected]);
+
+  // console.log(selectedCategory);
 
   return (
     <div className='flex justify-between items-center mb-8'>
@@ -59,4 +71,4 @@ const FiltersTopbar = ({
   );
 };
 
-export default FiltersTopbar
+export default FiltersTopbar;

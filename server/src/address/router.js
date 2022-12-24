@@ -15,5 +15,5 @@ router.get('/list', asyncHandler(controller.user_mylist))
 router.post('/userlist', adminAuth, asyncHandler(controller.adming_hislist))
 
 router.post('/delete', asyncHandler(controller.delete))
-
+ 
 export default router
