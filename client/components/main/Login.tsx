@@ -3,7 +3,7 @@ import {FaFacebookF} from "react-icons/fa";
 import {SiGmail} from "react-icons/si";
 import {signIn} from "next-auth/react";
 import {useState} from "react";
-import {postRequest} from "../../apis/axiosBaseConfig";
+import {postRequest} from "../../apis/baseConfig";
 import {toast} from "react-toastify";
 
 export default function Login({closeHandler, signUpHandler}: any) {
