@@ -163,7 +163,7 @@ class ProductSchema {
     } catch (error) {
       throw error;
     }
-  }
+  } 
 
   async getTopProducts(number) {
     try {

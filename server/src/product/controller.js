@@ -23,7 +23,7 @@ export default {
         msg: "successfully created this product",
         _id: thisProduct._id,
       });
-    } catch (error) {
+    } catch (error) { 
       printError(error)
       return res.status(500).json({ msg: error.message });
     }

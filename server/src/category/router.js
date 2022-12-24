@@ -13,4 +13,4 @@ router.get('/', CategoryController.getCategories)
 
 // router.post('/edit', adminAuth, Cate)
 
-export default router;
+export default router; 

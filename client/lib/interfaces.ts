@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import {Dispatch, SetStateAction} from "react";
 
 export interface Pill {
   id?: number;
@@ -33,57 +33,69 @@ export interface CommentShape {
 }
 
 export interface DynamicLink {
-  pathname: string
+  pathname: string;
   query?: {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
 }
 
 export interface GuideLinkArg {
-  name: string
-  href: DynamicLink
+  name: string;
+  href: DynamicLink;
 }
 
 export interface SortingListProps {
-  sortItem: string
-  setSelected: Dispatch<SetStateAction<string>>
-  setOpenSorting: Dispatch<SetStateAction<boolean>>
+  sortItem: string;
+  setSelected: Dispatch<SetStateAction<string>>;
+  setOpenSorting: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface Location {
-  address: string
-  postalcode: string
+  address: string;
+  postalcode: string;
   geo: {
-    lat: string
-    lon: string
-  }
+    lat: string;
+    lon: string;
+  };
 }
 
 export interface Receiver {
-  name: string
-  phone: string
+  name: string;
+  phone: string;
 }
 
 export interface AddressData {
-  location: Location
-  receiver: Receiver
+  location: Location;
+  receiver: Receiver;
 }
 
 export interface User {
-  _id: string
-  name: string
-  phone: string
-  createdAt: string
-  updatedAt: string
+  _id: string;
+  name: string;
+  phone: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface GlobalState {
-  [key: string]: null | User
+  [key: string]: null | User;
 }
 
-export interface Form {
-  [key: string]: {
-    value: string
-    msg: string
-  }
+export interface ProductBody {
+  title: string;
+  price: string;
+  quantity: string;
+  description: string;
+  isAvalible: boolean;
+  images: string[];
+  categoryId?: string;
+  variables?: Object;
+}
+
+export interface Product extends ProductBody {
+  _id: string;
+  averageScore: number;
+  scores: Object;
+  createdAt: string;
+  updatedAt: string;
 }

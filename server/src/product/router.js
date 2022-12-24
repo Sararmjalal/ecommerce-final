@@ -15,4 +15,5 @@ router.get("/top-products", ProductController.getTopProducts);
 
 router.get("/:_id", ProductController.getSingleProduct);
 
-export default router;
+export default router; 
+  

@@ -35,7 +35,7 @@ class UserSchema {
     if (doesExist) throw new Error('bad request: this phonenumber already exists in the database')
       
     const thisUser = {
-      _id: UID('ecu'),
+      _id: UID('ecu'), 
       ...data,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
