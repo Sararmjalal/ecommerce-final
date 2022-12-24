@@ -12,12 +12,14 @@ import {
 import Login from "../modals/SignIn";
 import {useSession, signOut} from "next-auth/react";
 import Menu from "./Menu";
+import CartModal from "../cart/CartModal";
 
 const Header = () => {
   const [openLogin, setOpenLogin] = useState(false);
   const [menu, setMenu] = useState(false);
   const [mode, setMode] = useState("login");
   const [searchMode, setSearchMode] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
   const router = useRouter();
   const {data: session} = useSession();
   console.log(router.asPath);
@@ -74,7 +76,11 @@ const Header = () => {
             size={22}
             cursor={"pointer"}
           />
-          <AiOutlineShoppingCart size={22} cursor={"pointer"} />
+          <AiOutlineShoppingCart
+            size={22}
+            cursor={"pointer"}
+            onClick={() => setOpenCart(!openCart)}
+          />
           <AiOutlineUser size={22} cursor={"pointer"} className='lg:hidden' />
           {session ? (
             <div className='flex flex-col items-center'>
@@ -121,6 +127,7 @@ const Header = () => {
           <Menu />
         </>
       )}
+
       {searchMode && (
         <input
           type={"text"}
@@ -128,6 +135,8 @@ const Header = () => {
           placeholder='search ...'
         />
       )}
+
+      {openCart && <CartModal />}
     </>
   );
 };

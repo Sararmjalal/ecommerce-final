@@ -4,6 +4,8 @@ import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
 
 const ProductCard = () => {
+  const [selectedImg, setSelectedImg] = useState(0);
+  const [qty, setQty] = useState(0);
   const sizes = [
     {
       size: "XS",
@@ -27,25 +29,31 @@ const ProductCard = () => {
   const [selectedSize, setSelectedSize] = useState(sizes[0]["size"]);
   const isAvailable = true;
   const colors = ["black", "#FFE3B7", "#2900FF", "white"];
-  const imgs = [1, 2, 3, 4, 5, 6, 7, 8];
+  const imgs = [
+    "/assets/products/product-1.png",
+    "/assets/products/product-2.png",
+    "/assets/products/product-3.png",
+    "/assets/products/product-4.png",
+  ];
   return (
     <div className='grid grid-cols-2 md:grid-cols-1 gap-40 md:gap-8'>
       <div>
         <Image
-          src={"/assets/products/product-1.png"}
+          src={imgs[selectedImg]}
           alt='product-img'
           width={505}
           height={505}
           className='object-cover aspect-square object-top mb-2'
         />
         <div className='grid grid-cols-4 w-full gap-2'>
-          {imgs.map((img) => (
+          {imgs.map((img, i) => (
             <Image
-              src={"/assets/products/product-1.png"}
+              onClick={() => setSelectedImg(i)}
+              src={img}
               alt='product-img'
               width={120}
               height={120}
-              className='object-cover aspect-square object-top'
+              className='object-cover aspect-square object-top cursor-pointer'
             />
           ))}
         </div>
@@ -94,9 +102,17 @@ const ProductCard = () => {
               <p className=' mb-2'>Quantity:</p>
               <div className='flex justify-start items-center gap-4 w-full'>
                 <div className='flex justify-between items-center px-7 md:px-2 py-3 w-32 md:w-20 h-12 border-[1px] border-grayish rounded-full'>
-                  <AiOutlineMinus cursor={"pointer"} />
-                  <p className='font-bold'>1</p>
-                  <AiOutlinePlus cursor={"pointer"} />
+                  <AiOutlineMinus
+                    cursor={"pointer"}
+                    onClick={() =>
+                      setQty((prev) => (prev === 1 ? 1 : prev - 1))
+                    }
+                  />
+                  <p className='font-bold'>{qty}</p>
+                  <AiOutlinePlus
+                    cursor={"pointer"}
+                    onClick={() => setQty((prev) => prev + 1)}
+                  />
                 </div>
                 {isAvailable ? (
                   <button className='btn-secondary border-[1px] border-grayish hover:border-primary md:px-2 xs:text-[10px]'>

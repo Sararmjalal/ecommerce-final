@@ -13,7 +13,7 @@ const dbDirectory = path.join(process.cwd(), "/src/rate/db");
 const productDbDirectory = path.join(process.cwd(), "/src/product/db");
 
 
-class RateSchema {
+class RateSchema { 
   constructor() {
     this.cache = null;
     this.doesCacheneedsUpdate = true;
