@@ -2,19 +2,16 @@ import {AiOutlineClose} from "react-icons/ai";
 import {FaFacebookF} from "react-icons/fa";
 import {SiGmail} from "react-icons/si";
 import {signIn} from "next-auth/react";
-import {useState, useLayoutEffect} from "react";
+import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
 import {userLoginOne} from "../../apis";
-import {useRouter} from "next/router";
 import {useMutation} from "@tanstack/react-query";
 import {Form} from "../../lib/interfaces";
 import {handleEmptyFields} from "../../lib";
 
 export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
   const thisUser = useSelector(selectUser);
-  const [loading, setLoading] = useState(false);
-  const {push} = useRouter();
   const dispatch = useDispatch();
 
   const [data, setData] = useState<Form>({
@@ -22,27 +19,34 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
       msg: "",
       value: "",
     },
+    code: {
+      msg: "",
+      value: "",
+    },
   });
 
-  useLayoutEffect(() => {
-    thisUser ? push("/") : setLoading(false);
-  }, []);
-
-  const mutation = useMutation({
+  const getLoginCode = useMutation({
     mutationFn: async () => await userLoginOne(data.phone.value),
     onSuccess: () => console.log("Hoooora!"),
   });
 
   const userLogin = () => {
-    const isEmpty = Object.values(data).some((val) => !val.value);
-    if (!isEmpty) return mutation.mutate();
+    const isEmpty = Object.entries(data).some(([key, val]) => {
+      if (key !== "code") return !val.value;
+    });
+    if (!isEmpty) return getLoginCode.mutate();
     const clone = {...data};
-    setData(handleEmptyFields(clone));
+    setData({
+      code: {
+        value: "",
+        msg: "",
+      },
+      phone: handleEmptyFields(clone)["phone"],
+    });
   };
 
   console.log(data);
 
-  if (loading) return <h1>Loading....</h1>;
   return (
     <>
       <div onClick={closeHandler} className='modal-backdrop'></div>
@@ -84,13 +88,6 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
             }}
             onKeyDown={(e) => e.key === "Enter" && userLogin()}
           />
-        </div>
-        <div className='flex md:flex-col md:items-start md:gap-3 justify-between items-center w-full mt-5'>
-          <div className='flex justify-center items-center gap-4'>
-            <input type='checkbox' />
-            <p>Keep me signed in</p>
-          </div>
-          <p className='text-grayish'>Forgot Password?</p>
         </div>
         <div className='flex justify-center items-center mt-8 gap-3 w-full'>
           <button className='btn-blue w-[50%]'>

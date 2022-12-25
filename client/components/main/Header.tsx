@@ -19,21 +19,20 @@ import ConfirmModal from "../modals/Confirm";
 import UserMenu from "./UserMenu";
 
 const Header = ({ userMenu }: { userMenu: Object[]}) => {
-
   const router = useRouter();
   const [headerHandler, setHeaderHandler] = useState({
     openLogin: false,
     openMenu: false,
-    mode: 'login',
+    mode: "login",
     openSearch: false,
     openCart: false,
     openConfirm: false,
-    openUserMenu: false
-  })
-  const thisUser = useSelector(selectUser)
-  const dispatch = useDispatch()
+    openUserMenu: false,
+  });
+  const thisUser = useSelector(selectUser);
+  const dispatch = useDispatch();
 
-  console.log(headerHandler)
+  // console.log(headerHandler)
 
   return (
     <>
