@@ -1,7 +1,11 @@
 import GuideLink from "../components/main/GuideLink"
 import { createAdmin } from "../apis";
+import {useState} from 'react'
+import ConfirmModal from "../components/modals/Confirm";
+
 const Test = () => {
 
+  const [open, setOpen] = useState(false)
   
   const thisProduct = {
     _id: 1,
@@ -26,32 +30,13 @@ const Test = () => {
 
   return (
     <div>
-      <GuideLink
-        args={[
-          {
-            name: "dalam",
-            href: {
-              pathname: "/test",
-            },
-          },
-          {
-            name: "geee",
-            href: {
-              pathname: "/about",
-            },
-          },
-          {
-            name: "Its product",
-            href: {
-              pathname: "/product/[_id]",
-              query: {
-                _id: "geeee",
-              },
-            },
-          },
-        ]}
-      />
-      <div>salam</div>
+      <button onClick={() => setOpen(true)}>Mno baz kon</button>
+      {
+        open && <ConfirmModal
+          mode="logout"
+          closeHandler={() => setOpen(false)}
+        />
+      }
     </div>
   );
 }

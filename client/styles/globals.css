@@ -4,10 +4,11 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary flex justify-center items-center h-12 px-6 rounded-full hover:bg-white  transition-all focus:outline-none;
+    @apply bg-primary flex justify-center items-center h-12 px-6 rounded-full hover:bg-white  transition-all focus:outline-none border-[1px] border-primary hover:border-grayish;
   }
   .btn-secondary {
-    @apply text-sm font-semibold p-1 rounded-[50px] text-black hover:bg-primary hover:text-white transition-all py-[15px] px-[32px] focus:outline-none
+    @apply text-sm font-semibold rounded-[50px] text-black hover:bg-primary transition-all
+    focus:outline-none border-[1px] border-grayish hover:border-primary px-6;
   }
   .btn-blue {
     @apply bg-blueish py-4 px-11 flex justify-center items-center gap-4 rounded-full text-white hover:bg-blue-700 transition-all focus:outline-none;
@@ -22,7 +23,7 @@
     @apply text-white bg-reddish px-3 py-2 rounded-full text-xs font-semibold
   }
   .modal-container {
-    @apply fixed flex flex-col justify-start items-center w-[33%] lg:w-[60%] md:w-[70%] h-[90%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[1000] p-9 bg-white
+    @apply fixed flex flex-col justify-start items-center w-[33%] lg:w-[70%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[1000] p-9 pb-14 bg-white
   }
   .modal-backdrop {
     @apply fixed top-0 left-0 bottom-0 right-0 bg-black bg-opacity-70 z-[1000]

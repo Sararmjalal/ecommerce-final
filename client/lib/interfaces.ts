@@ -106,3 +106,9 @@ export interface Form {
     msg: string
   }
 }
+
+export interface ConfirmModalProps {
+  mode: string
+  closeHandler: () => void
+  okHandler: () => void
+}
