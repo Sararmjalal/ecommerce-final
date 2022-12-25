@@ -70,7 +70,7 @@ const submitComment = async (productId: string, text: string) =>
 const submitRate = async (productId: string, score: number) =>
   await postRequest("/rate/submit", {productId, score}, "user");
 
-export default {
+export {
   createAdmin,
   adminLoginOne,
   adminLoginTwo,
