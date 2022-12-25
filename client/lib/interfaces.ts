@@ -102,13 +102,15 @@ export interface Product extends ProductBody {
 
 export interface Form {
   [key: string]: {
-    value: string
-    msg: string
-  }
+    value: string;
+    msg: string;
+  };
 }
 
 export interface ConfirmModalProps {
-  mode: string
-  closeHandler: () => void
-  okHandler: () => void
+  mode: string;
+  closeHandler: () => void;
+  okHandler: () => void;
+  value: string;
+  msg: string;
 }

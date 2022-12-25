@@ -33,36 +33,43 @@ const CartModal = () => {
   );
 
   return (
-    <div className='absolute right-5 top-20 z-[1000] bg-white p-5 '>
-      <p className='mb-7 text-grayish font-light text-2xl'>
-        Products in your cart
-      </p>
-      {cartItems ? (
-        cartItems.map((item) => (
-          <div key={item.id} className='flex items-center gap-5 mb-7'>
-            <img src={item.image} alt='' className='w-20 h-24 object-cover ' />
-            <div>
-              <p className='text-lg '>{item.title}</p>
-              <p className='text-grayish mb-2 text-xs'>
-                {item.description.substring(0, 80)}
-              </p>
-              <p className='text-blueish'>
-                {item.ammount} * ${item.price}
-              </p>
+    <>
+      <div className='modal-backdrop opacity-0'></div>
+      <div className='absolute right-5 top-20 z-[1000] bg-white p-5 '>
+        <p className='mb-7 text-grayish font-light text-2xl'>
+          Products in your cart
+        </p>
+        {cartItems ? (
+          cartItems.map((item) => (
+            <div key={item.id} className='flex items-center gap-5 mb-7'>
+              <img
+                src={item.image}
+                alt=''
+                className='w-20 h-24 object-cover '
+              />
+              <div>
+                <p className='text-lg '>{item.title}</p>
+                <p className='text-grayish mb-2 text-xs'>
+                  {item.description.substring(0, 80)}
+                </p>
+                <p className='text-blueish'>
+                  {item.ammount} * ${item.price}
+                </p>
+              </div>
+              <AiFillDelete className='hover:text-reddish transition-all text-2xl cursor-pointer' />
             </div>
-            <AiFillDelete className='hover:text-reddish transition-all text-2xl cursor-pointer' />
-          </div>
-        ))
-      ) : (
-        <p>There is no item in your cart.</p>
-      )}
-      <div className='flex justify-between text-lg mb-5'>
-        <span>SUBTOTAL</span>
-        <span>${calcTotalPrice.toFixed(2)}</span>
+          ))
+        ) : (
+          <p>There is no item in your cart.</p>
+        )}
+        <div className='flex justify-between text-lg mb-5'>
+          <span>SUBTOTAL</span>
+          <span>${calcTotalPrice.toFixed(2)}</span>
+        </div>
+        <button className='btn-primary'>PROCEED TO CHECKOUT</button>
+        <span className='text-reddish text-xs cursor-pointer'>Reset Cart</span>
       </div>
-      <button className='btn-primary'>PROCEED TO CHECKOUT</button>
-      <span className='text-reddish text-xs cursor-pointer'>Reset Cart</span>
-    </div>
+    </>
   );
 };
 
