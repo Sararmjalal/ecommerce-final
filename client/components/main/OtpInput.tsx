@@ -4,9 +4,10 @@ export type Props = {
   value: string;
   valueLength: number;
   onChangeHandler: (value: string) => void;
+  onKeyDownFunction: () => void
 };
 
-const OtpInput = ({ value, valueLength, onChangeHandler }: Props) => {
+const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Props) => {
   const RE_DIGIT = new RegExp(/^\d+$/);
   const valueItems = useMemo(() => {
     const valueArray = value.split("");
@@ -75,6 +76,9 @@ const OtpInput = ({ value, valueLength, onChangeHandler }: Props) => {
   const inputOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const {key} = e;
     const target = e.target as HTMLInputElement;
+
+    if (key === "Enter") return onKeyDownFunction()
+    
     if (key === "ArrowRight" || key === "ArrowDown") {
       e.preventDefault();
       return focusToNextInput(target);
@@ -134,16 +138,19 @@ const OtpInput = ({ value, valueLength, onChangeHandler }: Props) => {
   };
 
   return (
-    <div className='w-full max-w-full flex justify-center gap-3 sm:gap-1'>
+    <div className='w-full max-w-full flex justify-center items-end gap-3 sm:gap-1'>
+      <p className="w-1/5 text-gray-400 text-sm ml-3">Enter code:</p>
       {valueItems.map((digit, idx) => (
         <input
+          
+          autoFocus
           type='text'
           key={idx}
           inputMode='numeric'
           autoComplete='one-time-code'
           pattern='\d{1}'
           maxLength={valueLength}
-          className='w-8 h-8 sm:w-4 sm:h-4 xs:w-3 xs:h-3 border-[1px] border-grayish outline-none rounded-md text-center text-xl sm:text-sm xs:text-xs font-semibold'
+          className='w-1/5 h-8 border-b-[1px] border-grayborder focus:border-black focus:border-b-2 outline-none text-center text-lg'
           value={digit}
           onChange={(e) => inputOnChange(e, idx)}
           onKeyDown={inputOnKeyDown}
