@@ -99,3 +99,10 @@ export interface Product extends ProductBody {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Form {
+  [key: string]: {
+    value: string
+    msg: string
+  }
+}
