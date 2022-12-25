@@ -3,22 +3,26 @@ import {AiOutlineClose} from "react-icons/ai";
 import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
 import {useMutation} from "@tanstack/react-query";
-import {userSignupOne, userSignupTwo} from "../../apis";
+import {userSignupOne, userSignupTwo, userInfo} from "../../apis";
 import {useRouter} from "next/router";
 import {Form} from "../../lib/interfaces";
 import {handleEmptyFields} from "../../lib";
+import OtpInput from "./OtpInput";
 
 const Signup = ({closeHandler, loginHandler}: any) => {
   const thisUser = useSelector(selectUser);
   const [loading, setLoading] = useState(true);
+  const [step, setStep] = useState(1);
   const {push} = useRouter();
   const dispatch = useDispatch();
+  const [code, setCode] = useState("");
+  const onChangeHandler = (value: string) => setCode(value);
 
   const [data, setData] = useState<Form>({
     phone: {
       msg: "",
       value: "",
-    }, 
+    },
     name: {
       msg: "",
       value: "",
@@ -33,20 +37,32 @@ const Signup = ({closeHandler, loginHandler}: any) => {
     thisUser ? push("/") : setLoading(false);
   }, []);
 
-  const mutation = useMutation({
+  const signUpOne = useMutation({
     mutationFn: async () =>
       await userSignupOne(data.phone.value, data.name.value),
-    onSuccess: () =>
-    {
-      useMutation({
-        mutationFn: async () => await userSignupTwo(data.phone.value, data.code.value),
-      }),
-     }
+    onSuccess: () => setStep(step + 1),
+  });
+
+  const signUpTwo = useMutation({
+    mutationFn: async () =>
+      await userSignupTwo(data.phone.value, data.code.value),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
+  const getUserInfo = useMutation({
+    mutationFn: async () => await userInfo(),
+    onSuccess: (data) => {
+      console.log(data);
+      // dispatch(setCurrentUser(data))
+      // push('/')
+    },
   });
 
   const register = () => {
     const isEmpty = Object.values(data).some((val) => !val.value);
-    if (!isEmpty) return mutation.mutate();
+    if (!isEmpty) return signUpOne.mutate();
     const clone = {...data};
     setData(handleEmptyFields(clone));
   };
@@ -77,6 +93,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
           <input
             type='text'
             name='name'
+            disabled={step === 2}
             value={data.name.value}
             className={`input-primary ${
               data.name.msg
@@ -104,6 +121,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
           <input
             type='text'
             name='phone'
+            disabled={step === 2}
             value={data.phone.value}
             className={`input-primary ${
               data.phone.msg
@@ -124,19 +142,43 @@ const Signup = ({closeHandler, loginHandler}: any) => {
             onKeyDown={(e) => e.key === "Enter" && register()}
           />
         </div>
-        <div className='flex justify-start items-center gap-4 mt-2'>
-          <input type='checkbox' />
-          <p>I agree to the Google Terms of Service and Privacy Policy</p>
-        </div>
-        <button className='btn-primary w-full mt-3 py-4' onClick={register}>
-          Sign up
-        </button>
-        <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-4'>
-          <p>Already a member?</p>
-          <p className='cursor-pointer hover:underline' onClick={loginHandler}>
-            Log in
-          </p>
-        </div>
+        {step === 1 ? (
+          <div>
+            <div className='flex justify-start items-center gap-4 mt-2'>
+              <input type='checkbox' />
+              <p>I agree to the Google Terms of Service and Privacy Policy</p>
+            </div>
+            <button
+              className='btn-primary w-full mt-3 py-4'
+              onClick={() => setStep(2)}>
+              Get Code
+            </button>
+            <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-4'>
+              <p>Already a member?</p>
+              <p
+                className='cursor-pointer hover:underline'
+                onClick={loginHandler}>
+                Log in
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <OtpInput
+              value={code}
+              valueLength={4}
+              onChangeHandler={onChangeHandler}
+            />
+            <button
+              className='btn-primary w-full mt-3 py-4'
+              onClick={() => setStep(2)}>
+              Sign up
+            </button>
+            <button className='text-reddish text-xs cursor-pointer flex justify-center mt-4'>
+              Try Again...
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

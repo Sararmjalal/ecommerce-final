@@ -15,9 +15,9 @@ const SignIn = ({
   return createPortal(
     mode === "login" ? (
       <Login closeHandler={closeHandler} signUpHandler={signUpHandler} />
-    )   mode === "signup" ?: (
+    ) : (
       <Signup closeHandler={closeHandler} loginHandler={loginHandler} />
-    ) : null,
+    ),
     document.querySelector("#signin-portal") as HTMLElement
   );
 };

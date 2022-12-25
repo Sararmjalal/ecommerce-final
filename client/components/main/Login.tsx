@@ -11,7 +11,7 @@ import {useMutation} from "@tanstack/react-query";
 import {Form} from "../../lib/interfaces";
 import {handleEmptyFields} from "../../lib";
 
-export default function Login({closeHandler, signUpHandler}: any) {
+export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
   const thisUser = useSelector(selectUser);
   const [loading, setLoading] = useState(false);
   const {push} = useRouter();
@@ -102,8 +102,13 @@ export default function Login({closeHandler, signUpHandler}: any) {
             Gmail
           </button>
         </div>
-        <button className='btn-primary w-full mt-5 py-4' onClick={userLogin}>
-          Sign in
+        <button
+          className='btn-primary w-full mt-5 py-4'
+          onClick={() => {
+            userLogin();
+            codeHandler();
+          }}>
+          Get Code
         </button>
         <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-8'>
           <p>Not a member yet?</p>

@@ -5,8 +5,8 @@ import { GlobalState } from "../lib/interfaces";
 
 const initialState: GlobalState = {
   currentUser: null,
-  currentAdmin: null
-}
+  currentAdmin: null,
+};
 
 export const thisSlice = createSlice({
   name: 'user slice',

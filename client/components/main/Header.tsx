@@ -82,13 +82,15 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
             onMouseEnter={() =>
               setHeaderHandler({
                 ...headerHandler,
-                openMenu: true
-              })}
+                openMenu: true,
+              })
+            }
             onMouseLeave={() =>
               setHeaderHandler({
                 ...headerHandler,
-                openMenu: false
-              })}>
+                openMenu: false,
+              })
+            }>
             Products
           </p>
         </div>
@@ -96,75 +98,85 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
           <AiOutlineSearch
             onClick={() =>
               setHeaderHandler({
-              ...headerHandler,
-              openSearch: !headerHandler.openSearch
-            })}
+                ...headerHandler,
+                openSearch: !headerHandler.openSearch,
+              })
+            }
             className='xs:text-lg text-2xl'
             cursor={"pointer"}
           />
           <AiOutlineShoppingCart
             className='xs:text-lg text-2xl'
             cursor={"pointer"}
-            onClick={() => 
+            onClick={() =>
               setHeaderHandler({
                 ...headerHandler,
-                openCart: !headerHandler.openCart
+                openCart: !headerHandler.openCart,
               })
             }
           />
           {thisUser ? (
-            <div className="relative flex gap-9 lg:gap-7">
+            <div className='relative flex gap-9 lg:gap-7'>
               <AiOutlineUser
                 cursor={"pointer"}
                 className='xs:text-lg text-2xl'
                 onClick={() =>
                   setHeaderHandler({
-                  ...headerHandler,
-                  openUserMenu: !headerHandler.openUserMenu
-                })} />
-            <AiOutlineLogout
-            cursor={"pointer"}
-            className='lg:hidden xs:text-lg text-2xl'
-              onClick={() =>
-                setHeaderHandler({
-                ...headerHandler,
-                openConfirm: !headerHandler.openConfirm
-            })}
+                    ...headerHandler,
+                    openUserMenu: !headerHandler.openUserMenu,
+                  })
+                }
               />
-              {headerHandler.openUserMenu &&
-                <UserMenu
-                userMenu={userMenu}
-                closeHandler={() =>
-                  setHeaderHandler({
-                  ...headerHandler,
-                  openUserMenu: !headerHandler.openUserMenu
-                })}
-                confirmHandler={() =>
+              <AiOutlineLogout
+                cursor={"pointer"}
+                className='lg:hidden xs:text-lg text-2xl'
+                onClick={() =>
                   setHeaderHandler({
                     ...headerHandler,
-                    openConfirm: true,
-                    openUserMenu: false
-                  })}
-              />}
-              </div>
+                    openConfirm: !headerHandler.openConfirm,
+                  })
+                }
+              />
+              {headerHandler.openUserMenu && (
+                <UserMenu
+                  userMenu={userMenu}
+                  closeHandler={() =>
+                    setHeaderHandler({
+                      ...headerHandler,
+                      openUserMenu: !headerHandler.openUserMenu,
+                    })
+                  }
+                  confirmHandler={() =>
+                    setHeaderHandler({
+                      ...headerHandler,
+                      openConfirm: true,
+                      openUserMenu: false,
+                    })
+                  }
+                />
+              )}
+            </div>
           ) : (
             <AiOutlineLogin
               cursor={"pointer"}
               className='xs:text-lg text-2xl'
-                onClick={() =>
-                  setHeaderHandler({
+              onClick={() =>
+                setHeaderHandler({
                   ...headerHandler,
-                  openLogin: !headerHandler.openLogin
-              })}
+                  openLogin: !headerHandler.openLogin,
+                })
+              }
             />
           )}
           <AiOutlineMenu
             cursor={"pointer"}
             className='hidden lg:block xs:text-lg text-2xl'
-            onClick={() => setHeaderHandler({
-              ...headerHandler,
-              openMenu: !headerHandler.openMenu
-            })}
+            onClick={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: !headerHandler.openMenu,
+              })
+            }
           />
         </div>
       </div>
@@ -174,12 +186,15 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
           setHeaderHandler({
             ...headerHandler,
             mode: "login",
-            openLogin: false
+            openLogin: false,
           });
         }}
         mode={headerHandler.mode}
         loginHandler={() => setHeaderHandler({...headerHandler, mode: "login"})}
-        signUpHandler={() => setHeaderHandler({...headerHandler, mode: "signup"})}
+        signUpHandler={() =>
+          setHeaderHandler({...headerHandler, mode: "signup"})
+        }
+        codeHandler={() => setHeaderHandler({...headerHandler, mode: "code"})}
       />
 
       {headerHandler.openMenu && (
@@ -187,9 +202,10 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
           <div
             onClick={() =>
               setHeaderHandler({
-              ...headerHandler,
-              openMenu: !headerHandler.openMenu
-            })}
+                ...headerHandler,
+                openMenu: !headerHandler.openMenu,
+              })
+            }
             className='modal-backdrop sticky top-32'></div>
           <Menu />
         </>
@@ -204,23 +220,25 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
       )}
 
       {headerHandler.openCart && <CartModal />}
-      {headerHandler.openConfirm &&
+      {headerHandler.openConfirm && (
         <ConfirmModal
-        mode="logout"
-        closeHandler={() =>
-          setHeaderHandler({
-            ...headerHandler,
-            openConfirm: !headerHandler.openConfirm
-          })}
-        okHandler={() => {
-          setHeaderHandler({
-            ...headerHandler,
-            openConfirm: !headerHandler.openConfirm
-          })
-          dispatch(removeCurrentUser())
-          router.push('/')
-        }}
-      />}
+          mode='logout'
+          closeHandler={() =>
+            setHeaderHandler({
+              ...headerHandler,
+              openConfirm: !headerHandler.openConfirm,
+            })
+          }
+          okHandler={() => {
+            setHeaderHandler({
+              ...headerHandler,
+              openConfirm: !headerHandler.openConfirm,
+            });
+            dispatch(removeCurrentUser());
+            router.push("/");
+          }}
+        />
+      )}
     </>
   );
 };
