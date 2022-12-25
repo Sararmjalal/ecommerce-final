@@ -1,11 +1,11 @@
 import '../styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app'
 import StateProvider from "../layouts/StateProvider";
 import {Provider} from "react-redux";
 import {store} from "../global-state/store";
 import {SessionProvider} from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AxiosError } from 'axios';
 
@@ -30,8 +30,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-        <StateProvider>
-          <Component {...pageProps} />
+          <StateProvider>
+              <Component {...pageProps} />
           <ToastContainer />
         </StateProvider>
         </QueryClientProvider>
