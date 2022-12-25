@@ -1,22 +1,19 @@
-import React, {useState, useLayoutEffect} from "react";
+import React, {useState} from "react";
 import {AiOutlineClose} from "react-icons/ai";
 import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
 import {useMutation} from "@tanstack/react-query";
 import {userSignupOne, userSignupTwo, userInfo} from "../../apis";
-import {useRouter} from "next/router";
 import {Form} from "../../lib/interfaces";
-import {handleEmptyFields} from "../../lib";
+import {handleEmptyFields, setToken} from "../../lib";
 import OtpInput from "./OtpInput";
 
 const Signup = ({closeHandler, loginHandler}: any) => {
   const thisUser = useSelector(selectUser);
-  const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(1);
-  const {push} = useRouter();
   const dispatch = useDispatch();
-  const [code, setCode] = useState("");
-  const onChangeHandler = (value: string) => setCode(value);
+  const onChangeHandler = (value: string) =>
+    setData({...data, code: {...data.code, value}});
 
   const [data, setData] = useState<Form>({
     phone: {
@@ -33,10 +30,6 @@ const Signup = ({closeHandler, loginHandler}: any) => {
     },
   });
 
-  useLayoutEffect(() => {
-    thisUser ? push("/") : setLoading(false);
-  }, []);
-
   const signUpOne = useMutation({
     mutationFn: async () =>
       await userSignupOne(data.phone.value, data.name.value),
@@ -46,28 +39,38 @@ const Signup = ({closeHandler, loginHandler}: any) => {
   const signUpTwo = useMutation({
     mutationFn: async () =>
       await userSignupTwo(data.phone.value, data.code.value),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: (res) => {
+      console.log(res);
+      setToken(res.data.token, "user");
+      getUserInfo.mutate();
     },
   });
 
   const getUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
-    onSuccess: (data) => {
-      console.log(data);
-      // dispatch(setCurrentUser(data))
-      // push('/')
+    onSuccess: (res) => {
+      console.log(res);
+      dispatch(setCurrentUser(res.data));
+      closeHandler();
     },
   });
 
-  const register = () => {
-    const isEmpty = Object.values(data).some((val) => !val.value);
+  const getRegCode = () => {
+    const isEmpty = Object.entries(data).some(([key, val]) => {
+      if (key !== "code") return !val.value;
+    });
     if (!isEmpty) return signUpOne.mutate();
     const clone = {...data};
-    setData(handleEmptyFields(clone));
+    setData({
+      code: {
+        value: "",
+        msg: "",
+      },
+      phone: handleEmptyFields(clone)["phone"],
+      name: handleEmptyFields(clone)["name"],
+    });
   };
 
-  if (loading) return <h1>Loading....</h1>;
   return (
     <>
       <div onClick={closeHandler} className='modal-backdrop'></div>
@@ -111,7 +114,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
                 },
               });
             }}
-            onKeyDown={(e) => e.key === "Enter" && register()}
+            onKeyDown={(e) => e.key === "Enter" && getRegCode()}
           />
         </div>
         <div className=' w-full'>
@@ -139,7 +142,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
                 },
               });
             }}
-            onKeyDown={(e) => e.key === "Enter" && register()}
+            onKeyDown={(e) => e.key === "Enter" && getRegCode()}
           />
         </div>
         {step === 1 ? (
@@ -150,7 +153,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
             </div>
             <button
               className='btn-primary w-full mt-3 py-4'
-              onClick={() => setStep(2)}>
+              onClick={getRegCode}>
               Get Code
             </button>
             <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-4'>
@@ -165,17 +168,19 @@ const Signup = ({closeHandler, loginHandler}: any) => {
         ) : (
           <div>
             <OtpInput
-              value={code}
+              value={data.code.value}
               valueLength={4}
               onChangeHandler={onChangeHandler}
             />
             <button
               className='btn-primary w-full mt-3 py-4'
-              onClick={() => setStep(2)}>
+              onClick={() => signUpTwo.mutate()}>
               Sign up
             </button>
-            <button className='text-reddish text-xs cursor-pointer flex justify-center mt-4'>
-              Try Again...
+            <button
+              onClick={() => setStep(1)}
+              className='text-reddish text-xs cursor-pointer flex justify-center mt-4'>
+              Change Number
             </button>
           </div>
         )}
