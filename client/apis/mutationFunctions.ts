@@ -1,5 +1,6 @@
 import {postRequest} from "./baseConfig";
 import {Location, Receiver, AddressData, ProductBody} from "../lib/interfaces";
+import { AxiosResponse } from "axios";
 
 export const createAdmin = async (name: string, phone: string) =>
   await postRequest("/admin/create", {name, phone}, "admin");
@@ -7,7 +8,7 @@ export const createAdmin = async (name: string, phone: string) =>
 export const adminLoginOne = async (phone: string) =>
   await postRequest("/admin/login-step-one", {phone});
 
-export const adminLoginTwo = async (phone: string, code: string) =>
+export const adminLoginTwo = async (phone: string, code: string) => 
   await postRequest("/admin/login-step-two", {phone, code});
 
 export const adminInfo = async () => await postRequest("/admin/me", {}, "admin");
