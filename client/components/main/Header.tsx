@@ -8,29 +8,39 @@ import {
   AiOutlineUser,
   AiOutlineMenu,
   AiOutlineLogin,
+  AiOutlineLogout,
 } from "react-icons/ai";
 import Login from "../modals/SignIn";
-import { useSession } from "next-auth/react";
 import Menu from "./Menu";
 import CartModal from "../cart/CartModal";
+import { useDispatch, useSelector } from "react-redux";
+import { removeCurrentUser, selectUser } from "../../global-state/slice";
+import ConfirmModal from "../modals/Confirm";
+import UserMenu from "./UserMenu";
 
-const Header = () => {
+const Header = ({ userMenu }: { userMenu: Object[]}) => {
+
   const router = useRouter();
-  const {data: session} = useSession();
   const [headerHandler, setHeaderHandler] = useState({
     openLogin: false,
     openMenu: false,
     mode: 'login',
     openSearch: false,
-    openCart: false
+    openCart: false,
+    openConfirm: false,
+    openUserMenu: false
   })
+  const thisUser = useSelector(selectUser)
+  const dispatch = useDispatch()
+
+  console.log(headerHandler)
 
   return (
     <>
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
         className='absolute top-0 pt-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px]
-        grid grid-cols-3 lg:grid-cols-2 items-start w-full text-white lg:text-black z-[1000]'>
+        grid grid-cols-3 lg:grid-cols-2 sm:flex sm:justify-between sm:items-center items-start w-full text-white lg:text-black z-[1000]'>
         <Link href={"/"}>
           <div className='flex justify-start gap-6 lg:gap-4'>
             {router.asPath === "/" ? (
@@ -67,28 +77,33 @@ const Header = () => {
           <Link href={"/shop"}>
             <p className='text-lg cursor-pointer'>Shop</p>
           </Link>
-          <p onClick={() =>
-            setHeaderHandler({
-              ...headerHandler,
-              openMenu: !headerHandler.openMenu
-            })}
-            className='text-lg cursor-pointer'>
+          <p
+            className='text-lg cursor-pointer'
+            onMouseEnter={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: true
+              })}
+            onMouseLeave={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: false
+              })}>
             Products
           </p>
         </div>
-
-        <div className='flex justify-end gap-9 lg:gap-7'>
+        <div className='flex justify-end gap-9 lg:gap-7 xs:gap-4'>
           <AiOutlineSearch
             onClick={() =>
               setHeaderHandler({
               ...headerHandler,
               openSearch: !headerHandler.openSearch
             })}
-            size={22}
+            className='xs:text-lg text-2xl'
             cursor={"pointer"}
           />
           <AiOutlineShoppingCart
-            size={22}
+            className='xs:text-lg text-2xl'
             cursor={"pointer"}
             onClick={() => 
               setHeaderHandler({
@@ -97,21 +112,45 @@ const Header = () => {
               })
             }
           />
-          <AiOutlineUser size={22} cursor={"pointer"} className='lg:hidden' />
-          {session ? (
-            <div className='flex flex-col items-center'>
-              <p>Welcome ,{session.user?.email}</p>
-              <img
-                src={session.user?.image!}
-                alt='gmail-pic'
-                className='rounded-full w-5 h-5'
+          {thisUser ? (
+            <div className="relative flex gap-9 lg:gap-7">
+              <AiOutlineUser
+                cursor={"pointer"}
+                className='xs:text-lg text-2xl'
+                onClick={() =>
+                  setHeaderHandler({
+                  ...headerHandler,
+                  openUserMenu: !headerHandler.openUserMenu
+                })} />
+            <AiOutlineLogout
+            cursor={"pointer"}
+            className='lg:hidden xs:text-lg text-2xl'
+              onClick={() =>
+                setHeaderHandler({
+                ...headerHandler,
+                openConfirm: !headerHandler.openConfirm
+            })}
               />
-            </div>
+              {headerHandler.openUserMenu &&
+                <UserMenu
+                userMenu={userMenu}
+                closeHandler={() =>
+                  setHeaderHandler({
+                  ...headerHandler,
+                  openUserMenu: !headerHandler.openUserMenu
+                })}
+                confirmHandler={() =>
+                  setHeaderHandler({
+                    ...headerHandler,
+                    openConfirm: true,
+                    openUserMenu: false
+                  })}
+              />}
+              </div>
           ) : (
             <AiOutlineLogin
-              size={22}
               cursor={"pointer"}
-              className='lg:hidden'
+              className='xs:text-lg text-2xl'
                 onClick={() =>
                   setHeaderHandler({
                   ...headerHandler,
@@ -119,11 +158,9 @@ const Header = () => {
               })}
             />
           )}
-
           <AiOutlineMenu
-            size={22}
             cursor={"pointer"}
-            className='hidden lg:block'
+            className='hidden lg:block xs:text-lg text-2xl'
             onClick={() => setHeaderHandler({
               ...headerHandler,
               openMenu: !headerHandler.openMenu
@@ -167,6 +204,23 @@ const Header = () => {
       )}
 
       {headerHandler.openCart && <CartModal />}
+      {headerHandler.openConfirm &&
+        <ConfirmModal
+        mode="logout"
+        closeHandler={() =>
+          setHeaderHandler({
+            ...headerHandler,
+            openConfirm: !headerHandler.openConfirm
+          })}
+        okHandler={() => {
+          setHeaderHandler({
+            ...headerHandler,
+            openConfirm: !headerHandler.openConfirm
+          })
+          dispatch(removeCurrentUser())
+          router.push('/')
+        }}
+      />}
     </>
   );
 };

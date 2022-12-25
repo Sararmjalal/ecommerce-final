@@ -7,7 +7,7 @@ const Selected = () => {
     <div className='main-container flex-col mb-auto'>
       <div className='flex justify-between items-center sm:justify-center mb-16 sm:mb-10'>
         <p className='text-2xl'>Selected just for you</p>
-        <button className='btn-secondary border-[1px] border-grayish hover:border-primary sm:hidden'>
+        <button className='btn-secondary py-[15px] px-[32px] sm:hidden'>
           SHOW MORE
         </button>
       </div>
@@ -23,7 +23,7 @@ const Selected = () => {
           />
         ))}
       </div>
-      <button className='btn-secondary border-[1px] border-grayish hover:border-primary hidden sm:block mt-8 w-max m-auto'>
+      <button className='btn-secondary hidden sm:block mt-8 w-max m-auto py-[15px] px-[32px]'>
         SHOW MORE
       </button>
     </div>

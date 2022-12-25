@@ -3,7 +3,8 @@ import {menuItems} from "../../lib/staticData";
 
 const Menu = () => {
   return (
-    <div className='absolute top-[97px] pl-40 lg:pl-20 xs:px-5 pr-[634px] md:pr-[300px] py-9 grid grid-cols-4 sm:grid-cols-2 sm:h-fit sm:gap-y-20 gap-64 xl:gap-52 lg:gap-44 md:gap-36 xs:gap-20 w-full h-[384px] bg-white z-[1000]'>
+    <div className='absolute top-[97px] pl-40 lg:pl-20 xs:px-5 pr-[634px] md:pr-[300px] py-9 grid grid-cols-4 sm:grid-cols-2
+    sm:h-fit sm:gap-y-20 gap-64 xl:gap-52 lg:gap-44 md:gap-36 xs:gap-20 w-full h-[384px] bg-white z-[999]'>
       {menuItems.map((branch) => (
         <div
           key={branch.id}

@@ -8,14 +8,48 @@ import {useRouter} from "next/router";
 const StateProvider = ({children}: {children: JSX.Element | JSX.Element[]}) => {
   const router = useRouter();
 
-  if (router.asPath === "/admin/login" || router.asPath === "/admin/create") return <main>{children}</main>;
+  const userMenu = [
+    {
+      name: "Dashboard",
+      path: "/dashboard"
+    },
+    {
+      name: "My Orders",
+      path: "/dashboard/my-orders"
+    },
+    {
+      name: "My Addresses",
+      path: "/dashboard/my-addresses"
+    }
+  ]
+
+  if (router.asPath === "/admin/login" || router.asPath === "/admin/create")
+    return <main>{children}</main>;
+  
   if (router.asPath.includes("admin"))
     return <AdminPanel>{children}</AdminPanel>;
-  if (router.asPath.includes("user")) return <UserPanel>{children}</UserPanel>;
+  
+  if (router.asPath.includes("user"))
+    return (
+      <>
+        <Header
+        userMenu={userMenu}
+        />
+      <UserPanel>
+       {children}
+      </UserPanel>
+      </>
+    )
+  
   return (
     <>
-      <Header />
-      <div className={`${router.asPath !== "/" && "page"}`}>{children}</div>
+      <Header
+        userMenu={userMenu}
+      />
+      <div
+        className={`${router.asPath !== "/" && "page"}`}>
+        {children}
+      </div>
       <Footer />
     </>
   );
