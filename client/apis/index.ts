@@ -17,6 +17,7 @@ export {allUsers} from "./mutationFunctions";
 export {userSignupOne} from "./mutationFunctions";
 export {userSignupTwo} from "./mutationFunctions";
 export {userLoginOne} from "./mutationFunctions";
+export {userLoginTwo} from "./mutationFunctions";
 export {userInfo} from "./mutationFunctions";
 export {createAddress} from "./mutationFunctions";
 export {editAddress} from "./mutationFunctions";

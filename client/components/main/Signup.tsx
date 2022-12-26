@@ -7,11 +7,15 @@ import {userSignupOne, userSignupTwo, userInfo} from "../../apis";
 import {Form} from "../../lib/interfaces";
 import {handleEmptyFields, setToken} from "../../lib";
 import OtpInput from "./OtpInput";
+import {AxiosError} from "axios";
+import {toast} from "react-toastify";
+import Timer from "./Timer";
 
 const Signup = ({closeHandler, loginHandler}: any) => {
   const thisUser = useSelector(selectUser);
   const [step, setStep] = useState(1);
   const dispatch = useDispatch();
+
   const onChangeHandler = (value: string) =>
     setData({...data, code: {...data.code, value}});
 
@@ -34,15 +38,38 @@ const Signup = ({closeHandler, loginHandler}: any) => {
     mutationFn: async () =>
       await userSignupOne(data.phone.value, data.name.value),
     onSuccess: () => setStep(step + 1),
+    onError: (error: AxiosError | unknown) => {
+      if (error instanceof AxiosError) {
+        const {msg} = error.response?.data;
+        if (msg === "this user already exists in the database")
+          return toast.error("You have registered before. Please Sign in.");
+      }
+    },
   });
 
   const signUpTwo = useMutation({
     mutationFn: async () =>
       await userSignupTwo(data.phone.value, data.code.value),
     onSuccess: (res) => {
-      console.log(res);
+      // console.log(res);
       setToken(res.data.token, "user");
       getUserInfo.mutate();
+    },
+    onError: (error: AxiosError | unknown) => {
+      if (error instanceof AxiosError) {
+        const {msg} = error.response?.data;
+        if (msg === "wrong code")
+          return setData({...data, code: {...data.code, msg: "Wrong Code!"}});
+        if (msg === "time's up")
+          return setData({
+            ...data,
+            code: {...data.code, msg: "Time's up! Try Again."},
+          });
+        return setData({
+          ...data,
+          code: {...data.code, msg: "Enter Sent Code!"},
+        });
+      }
     },
   });
 
@@ -69,6 +96,18 @@ const Signup = ({closeHandler, loginHandler}: any) => {
       phone: handleEmptyFields(clone)["phone"],
       name: handleEmptyFields(clone)["name"],
     });
+  };
+
+  const handleSecondStep = () => {
+    return data.code.value.length === 4
+      ? signUpTwo.mutate()
+      : setData({
+          ...data,
+          code: {
+            ...data.code,
+            msg: "Please enter 4 digits lool",
+          },
+        });
   };
 
   return (
@@ -167,11 +206,16 @@ const Signup = ({closeHandler, loginHandler}: any) => {
           </div>
         ) : (
           <div>
+            <div className='text-xs ml-2 text-reddish font-semibold mb-2 mt-4'>
+              {data.code.msg}
+            </div>
             <OtpInput
               value={data.code.value}
               valueLength={4}
               onChangeHandler={onChangeHandler}
+              onKeyDownFunction={handleSecondStep}
             />
+            <Timer setStep={setStep} />
             <button
               className='btn-primary w-full mt-3 py-4'
               onClick={() => signUpTwo.mutate()}>
@@ -179,7 +223,7 @@ const Signup = ({closeHandler, loginHandler}: any) => {
             </button>
             <button
               onClick={() => setStep(1)}
-              className='text-reddish text-xs cursor-pointer flex justify-center mt-4'>
+              className='text-reddish text-xs cursor-pointer mt-4'>
               Change Number
             </button>
           </div>

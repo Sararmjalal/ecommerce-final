@@ -5,14 +5,22 @@ import {signIn} from "next-auth/react";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
-import {userLoginOne} from "../../apis";
+import {userLoginOne, userLoginTwo, userInfo} from "../../apis";
 import {useMutation} from "@tanstack/react-query";
 import {Form} from "../../lib/interfaces";
-import {handleEmptyFields} from "../../lib";
+import {handleEmptyFields, setToken} from "../../lib";
+import {AxiosError} from "axios";
+import {toast} from "react-toastify";
+import OtpInput from "./OtpInput";
+import Timer from "./Timer";
 
-export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
+export default function Login({closeHandler, signUpHandler}: any) {
   const thisUser = useSelector(selectUser);
+  const [step, setStep] = useState(1);
   const dispatch = useDispatch();
+
+  const onChangeHandler = (value: string) =>
+    setData({...data, code: {...data.code, value}});
 
   const [data, setData] = useState<Form>({
     phone: {
@@ -25,16 +33,61 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
     },
   });
 
-  const getLoginCode = useMutation({
+  const loginOne = useMutation({
     mutationFn: async () => await userLoginOne(data.phone.value),
-    onSuccess: () => console.log("Hoooora!"),
+    onSuccess: () => setStep(step + 1),
+    onError: (error: AxiosError | unknown) => {
+      if (error instanceof AxiosError) {
+        console.log(error);
+        const {msg} = error.response?.data;
+        if (msg === "Provided value is not a valid Phone Number")
+          return toast.error("Please enter a valid phone number.");
+        return toast.error("This number is not a member. Please Sign up.");
+      }
+    },
   });
 
-  const userLogin = () => {
+  const loginTwo = useMutation({
+    mutationFn: async () =>
+      await userLoginTwo(data.phone.value, data.code.value),
+    onSuccess: (res) => {
+      // console.log("TOKEN", res);
+      setToken(res.data.token, "user");
+      getUserInfo.mutate();
+    },
+    onError: (error: AxiosError | unknown) => {
+      if (error instanceof AxiosError) {
+        console.log(error);
+        const {msg} = error.response?.data;
+        if (msg === "wrong code")
+          return setData({...data, code: {...data.code, msg: "Wrong Code!"}});
+        if (msg === "time's up")
+          return setData({
+            ...data,
+            code: {...data.code, msg: "Time's up! Try Again."},
+          });
+        return setData({
+          ...data,
+          code: {...data.code, msg: "Enter Sent Code!"},
+        });
+      }
+    },
+  });
+
+  const getUserInfo = useMutation({
+    mutationFn: async () => await userInfo(),
+    onSuccess: (res) => {
+      console.log("USER", res);
+      dispatch(setCurrentUser(res.data));
+      closeHandler();
+    },
+  });
+
+  const getLoginCode = () => {
     const isEmpty = Object.entries(data).some(([key, val]) => {
       if (key !== "code") return !val.value;
     });
-    if (!isEmpty) return getLoginCode.mutate();
+    if (!isEmpty) return loginOne.mutate();
     const clone = {...data};
     setData({
       code: {
@@ -45,7 +98,17 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
     });
   };
 
-  console.log(data);
+  const handleSecondStep = () => {
+    return data.code.value.length === 4
+      ? loginTwo.mutate()
+      : setData({
+          ...data,
+          code: {
+            ...data.code,
+            msg: "Please enter 4 digits lool",
+          },
+        });
+  };
 
   return (
     <>
@@ -70,6 +133,7 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
             type='text'
             name='phone'
             value={data.phone.value}
+            disabled={step === 2}
             className={`input-primary ${
               data.phone.msg
                 ? "border-[1px] border-reddish text-reddish mt-0 mb-2"
@@ -86,33 +150,57 @@ export default function Login({closeHandler, signUpHandler, codeHandler}: any) {
                 },
               });
             }}
-            onKeyDown={(e) => e.key === "Enter" && userLogin()}
+            onKeyDown={(e) => e.key === "Enter" && getLoginCode()}
           />
         </div>
-        <div className='flex justify-center items-center mt-8 gap-3 w-full'>
-          <button className='btn-blue w-[50%]'>
-            <FaFacebookF className='sm:hidden' />
-            Facebook
-          </button>
-          <button className='btn-white-red w-[50%]' onClick={() => signIn()}>
-            <SiGmail className='sm:hidden' />
-            Gmail
-          </button>
-        </div>
-        <button
-          className='btn-primary w-full mt-5 py-4'
-          onClick={() => {
-            userLogin();
-            codeHandler();
-          }}>
-          Get Code
-        </button>
-        <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-8'>
-          <p>Not a member yet?</p>
-          <p className='cursor-pointer hover:underline' onClick={signUpHandler}>
-            Sign up
-          </p>
-        </div>
+        {step === 1 ? (
+          <>
+            <div className='flex justify-center items-center mt-4 gap-3 w-full'>
+              <button
+                className='btn-white-red w-[50%]'
+                onClick={() => signIn()}>
+                <SiGmail className='sm:hidden' />
+                Gmail
+              </button>
+            </div>
+            <button
+              className='btn-primary w-full mt-5 py-4'
+              onClick={getLoginCode}>
+              Get Code
+            </button>
+            <div className='flex justify-center items-center gap-10 sm:text-sm sm:gap-4 mt-8'>
+              <p>Not a member yet?</p>
+              <p
+                className='cursor-pointer hover:underline'
+                onClick={signUpHandler}>
+                Sign up
+              </p>
+            </div>
+          </>
+        ) : (
+          <div>
+            <div className='text-xs ml-2 text-reddish font-semibold mb-2 mt-4'>
+              {data.code.msg}
+            </div>
+            <OtpInput
+              value={data.code.value}
+              valueLength={4}
+              onChangeHandler={onChangeHandler}
+              onKeyDownFunction={handleSecondStep}
+              />
+              <Timer setStep={setStep} />
+            <button
+              className='btn-primary w-full mt-3 py-4'
+              onClick={() => loginTwo.mutate()}>
+              Sign up
+            </button>
+            <button
+              onClick={() => setStep(1)}
+              className='text-reddish text-xs cursor-pointer mt-4'>
+              Change Number
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

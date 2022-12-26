@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../components/user-panel/Sidebar";
+import Sidebar from "../components/admin-panel/Sidebar";
 
 const AdminPanel = ({children}: any) => {
   return (
