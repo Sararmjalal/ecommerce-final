@@ -14,10 +14,10 @@ import Login from "../modals/SignIn";
 import Menu from "./Menu";
 import CartModal from "../cart/CartModal";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCurrentUser, selectUser } from "../../global-state/slice";
+import { removeCurrentUser, selectAdmin, selectUser } from "../../global-state/slice";
 import ConfirmModal from "../modals/Confirm";
 import UserMenu from "./UserMenu";
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 const Header = ({ userMenu }: { userMenu: Object[]}) => {
   const router = useRouter();
@@ -31,14 +31,16 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
     openUserMenu: false,
   });
   const thisUser = useSelector(selectUser);
+  const thisAdmin = useSelector(selectAdmin)
   const dispatch = useDispatch();
 
   return (
     <>
       <div
         style={router.asPath === "/" ? {color: "white"} : {color: "black"}}
-        className='absolute top-0 pt-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px]
-        grid grid-cols-3 lg:grid-cols-2 sm:flex sm:justify-between sm:items-center items-start w-full text-white lg:text-black z-[1000]'>
+        className={`absolute ${thisAdmin ? 'top-8' : "top-0"} py-8 xxl:px-16 xl:px-14 lg:px-6 px-[160px]
+        grid grid-cols-3 lg:grid-cols-2 sm:flex sm:justify-between sm:items-center
+        items-start w-full text-white lg:text-black z-[1000]`}>
         <Link href={"/"}>
           <div className='flex justify-start gap-6 lg:gap-4'>
             {router.asPath === "/" ? (

@@ -7,14 +7,18 @@ import { useRouter } from "next/router";
 import { useToken } from "../lib";
 import { useMutation } from "@tanstack/react-query";
 import { adminInfo, userInfo } from "../apis";
-import { useDispatch } from "react-redux";
-import { setCurrentAdmin, setCurrentUser } from "../global-state/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAdmin, setCurrentAdmin, setCurrentUser } from "../global-state/slice";
+import AdminTopbar from "../components/admin-panel/Topbar";
+import Loading from "../components/main/Loading";
 
 const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   
   const router = useRouter();
 
   const dispatch = useDispatch()
+
+  const thisAdmin = useSelector(selectAdmin)
 
   const userMenu = [
     {
@@ -61,7 +65,7 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
     setAdminInfo.mutate()
   }, [])
 
-  if (loading) return <h1>Loading...</h1>
+  if (loading) return <Loading />
   
   if (router.asPath === "/admin/login" || router.asPath === "/admin/create")
     return <main>{children}</main>;
@@ -69,10 +73,10 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   if (router.asPath.includes("admin"))
     return <AdminPanel>{children}</AdminPanel>;
   
-  if (router.asPath.includes("user"))
+  if (router.asPath.includes("dashboard"))
     return (
       <>
-        <Header
+      <Header
         userMenu={userMenu}
         />
       <UserPanel>
@@ -80,14 +84,16 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
       </UserPanel>
       </>
     )
-  
-  return (
+    
+    return (
     <>
+    <AdminTopbar />
       <Header
         userMenu={userMenu}
       />
       <div
-        className={`${router.asPath !== "/" && "page"}`}>
+          className={`${router.asPath !== "/" && 'page'}`}
+          style={thisAdmin &&  router.asPath !== "/" ? {marginTop:  "130px"} : {}}>
         {children}
       </div>
       <Footer />

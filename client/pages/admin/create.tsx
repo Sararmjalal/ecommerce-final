@@ -7,6 +7,7 @@ import { createAdmin } from '../../apis'
 import { handleEmptyFields } from '../../lib'
 import { Form } from '../../lib/interfaces'
 import { toast } from 'react-toastify'
+import Loading from '../../components/main/Loading'
 
 const CreateAdmin = () => {
 
@@ -46,7 +47,7 @@ const CreateAdmin = () => {
     setData(handleEmptyFields(clone))
   }
   
-  if(loading) return <h1>Loading....</h1>
+  if(loading) return <Loading />
   return (
     <div
       className='flex flex-col justify-center h-screen w-[448px] m-auto sm:w-full'>

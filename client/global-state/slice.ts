@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "universal-cookie";
 import { RootState } from "./store";
 import { GlobalState } from "../lib/interfaces";
+import { toast } from "react-toastify";
 
 const initialState: GlobalState = {
   currentUser: null,
