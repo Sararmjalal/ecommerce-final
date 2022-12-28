@@ -10,11 +10,15 @@ import OtpInput from "./OtpInput";
 import {AxiosError} from "axios";
 import {toast} from "react-toastify";
 import Timer from "./Timer";
+import { useRouter } from "next/router";
 
-const Signup = ({closeHandler, loginHandler}: any) => {
-  const thisUser = useSelector(selectUser);
+const Signup = ({ closeHandler, loginHandler }: any) => {
+  
   const [step, setStep] = useState(1);
+
   const dispatch = useDispatch();
+
+  const router = useRouter()
 
   const onChangeHandler = (value: string) =>
     setData({...data, code: {...data.code, value}});
@@ -42,7 +46,8 @@ const Signup = ({closeHandler, loginHandler}: any) => {
       if (error instanceof AxiosError) {
         const {msg} = error.response?.data;
         if (msg === "this user already exists in the database")
-          return toast.error("You have registered before. Please Sign in.");
+          return setData({ ...data, phone: { ...data.phone, msg: "You're already a member lool" } })
+          setData({...data, phone:{...data.phone, msg: "Please enter a valid phone number"}})
       }
     },
   });
@@ -51,9 +56,9 @@ const Signup = ({closeHandler, loginHandler}: any) => {
     mutationFn: async () =>
       await userSignupTwo(data.phone.value, data.code.value),
     onSuccess: (res) => {
-      // console.log(res);
       setToken(res.data.token, "user");
       getUserInfo.mutate();
+      toast.success("You're one of us now!")
     },
     onError: (error: AxiosError | unknown) => {
       if (error instanceof AxiosError) {
@@ -76,9 +81,10 @@ const Signup = ({closeHandler, loginHandler}: any) => {
   const getUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
     onSuccess: (res) => {
-      console.log(res);
       dispatch(setCurrentUser(res.data));
       closeHandler();
+      toast.success("You're in!")
+      router.push('/dashboard')
     },
   });
 
@@ -185,13 +191,9 @@ const Signup = ({closeHandler, loginHandler}: any) => {
           />
         </div>
         {step === 1 ? (
-          <div>
-            <div className='flex justify-start items-center gap-4 mt-2'>
-              <input type='checkbox' />
-              <p>I agree to the Google Terms of Service and Privacy Policy</p>
-            </div>
+          <div className="w-full">
             <button
-              className='btn-primary w-full mt-3 py-4'
+              className='btn-primary w-full mt-3 py-3'
               onClick={getRegCode}>
               Get Code
             </button>
@@ -217,13 +219,13 @@ const Signup = ({closeHandler, loginHandler}: any) => {
             />
             <Timer setStep={setStep} />
             <button
-              className='btn-primary w-full mt-3 py-4'
+              className='btn-primary w-full mt-3 py-3'
               onClick={() => signUpTwo.mutate()}>
               Sign up
             </button>
             <button
               onClick={() => setStep(1)}
-              className='text-reddish text-xs cursor-pointer mt-4'>
+              className='underline text-xs cursor-pointer mt-4'>
               Change Number
             </button>
           </div>

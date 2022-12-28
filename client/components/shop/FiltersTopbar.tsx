@@ -32,8 +32,6 @@ const FiltersTopbar = ({
     sort();
   }, [selected]);
 
-  // console.log(selectedCategory);
-
   return (
     <div className='flex justify-between items-center mb-8'>
       <div className='text-2xl'>{selectedCategory}</div>

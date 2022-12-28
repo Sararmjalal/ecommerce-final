@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import Timer from "../../components/main/Timer";
 
 const AdminLogin = () => {
+  
   const thisAdmin = useSelector(selectAdmin);
 
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const AdminLogin = () => {
     },
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [step, setStep] = useState(1);
 
@@ -206,7 +207,6 @@ const AdminLogin = () => {
           </button>
         )}
       </div>
-
       <div>
         {/* <p className='text-left mt-6 font-semibold ml-2 text-sm'>{mutation.isSuccess && "Admin created successfully!"}</p> */}
       </div>

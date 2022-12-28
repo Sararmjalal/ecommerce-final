@@ -27,12 +27,12 @@ const ConfirmModal = ({ mode = "logout", closeHandler, okHandler }: ConfirmModal
         </p>
         <div className="flex gap-4">
         <button
-          className='btn-primary w-full mt-5'
+          className='btn-primary w-full mt-5 py-3'
           onClick={closeHandler}
         >
           Cancel
         </button><button
-          className='btn-secondary w-full mt-5'
+          className='btn-secondary w-full mt-5 py-3'
           onClick={okHandler}>
           Yes
         </button>

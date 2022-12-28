@@ -1,3 +1,3 @@
 import Cookies from "universal-cookie";
 
-export default (type:string) => type === 'admin' ? (new Cookies()).get('at') : (new Cookies()).get('ut')
+export default (type:string) => (new Cookies()).get(type === 'admin' ? 'at' : 'ut')

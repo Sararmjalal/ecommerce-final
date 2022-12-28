@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeCurrentUser, selectUser } from "../../global-state/slice";
 import ConfirmModal from "../modals/Confirm";
 import UserMenu from "./UserMenu";
+import {toast} from 'react-toastify'
 
 const Header = ({ userMenu }: { userMenu: Object[]}) => {
   const router = useRouter();
@@ -31,8 +32,6 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
   });
   const thisUser = useSelector(selectUser);
   const dispatch = useDispatch();
-
-  // console.log(headerHandler)
 
   return (
     <>
@@ -234,6 +233,7 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
               openConfirm: !headerHandler.openConfirm,
             });
             dispatch(removeCurrentUser());
+            toast.info("You're out")
             router.push("/");
           }}
         />
