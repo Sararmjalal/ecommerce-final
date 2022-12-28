@@ -10,6 +10,7 @@ import OtpInput from '../../components/main/OtpInput'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import Timer from "../../components/main/Timer";
+import Loading from '../../components/main/Loading'
 
 const AdminLogin = () => {
   
@@ -127,7 +128,7 @@ const AdminLogin = () => {
         });
   };
 
-  if (loading) return <h1>Loading....</h1>;
+  if (loading) return <Loading />
   return (
     <div className='flex flex-col justify-center h-screen w-[448px] m-auto sm:w-full'>
       <p className='text-black font-semibold text-xl mt-4 text-center'>

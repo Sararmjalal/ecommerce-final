@@ -11,7 +11,6 @@ const Timer = ({
     if (timeLeft === 0) {
       setStep(1);
     }
-    if (!timeLeft) return;
     const intervalId = setInterval(() => {
       setTimeLeft(timeLeft - 1);
     }, 1000);

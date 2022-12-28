@@ -1,4 +1,25 @@
 const colors = require("tailwindcss/colors");
+const plugin = require('tailwindcss/plugin')
+
+const shapeRendering = plugin(function ({ addUtilities }) {
+  const newUtilities = {
+    '.shape-auto': {
+      'shape-rendering': 'auto',
+    },
+    '.shape-optimize-speed': {
+      'shape-rendering': 'optimizeSpeed',
+    },
+    '.shape-crisp-edges': {
+      'shape-rendering': 'crispEdges',
+    },
+    '.shape-geometric-precision': {
+      'shape-rendering': 'geometricPrecision',
+    },
+  }
+
+  addUtilities(newUtilities)
+})
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -39,5 +60,5 @@ module.exports = {
     backgroundBlendMode: ["responsive"],
     isolation: ["responsive"],
   },
-  plugins: [require("tailwindcss-blend-mode")()],
+  plugins: [require("tailwindcss-blend-mode")(), shapeRendering],
 };

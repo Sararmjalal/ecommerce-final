@@ -19,8 +19,8 @@ const SingleProduct = () => {
             onClick={() => setSecMode("description")}
             className={`${
               secMode === "description"
-                ? "btn-secondary w-[189px] text-white bg-primary hover:border-primary md:px-2 xs:text-[10px]"
-                : "btn-secondary w-[189px] border-[1px] border-grayish hover:border-primary md:px-2 xs:text-[10px]"
+              ? "btn-primary w-[189px] py-3 font-semibold"
+              : "btn-secondary w-[189px] py-3 font-normal"
             }`}>
             Description
           </button>
@@ -28,8 +28,8 @@ const SingleProduct = () => {
             onClick={() => setSecMode("reviews")}
             className={`${
               secMode === "reviews"
-                ? "btn-secondary w-[189px] text-white bg-primary hover:border-primary md:px-2 xs:text-[10px]"
-                : "btn-secondary w-[189px] border-[1px] border-grayish hover:border-primary md:px-2 xs:text-[10px]"
+                ? "btn-primary w-[189px] py-3 font-semibold"
+                : "btn-secondary w-[189px] py-3 font-normal"
             }`}>
             Reviews
           </button>

@@ -58,7 +58,6 @@ const Signup = ({ closeHandler, loginHandler }: any) => {
     onSuccess: (res) => {
       setToken(res.data.token, "user");
       getUserInfo.mutate();
-      toast.success("You're one of us now!")
     },
     onError: (error: AxiosError | unknown) => {
       if (error instanceof AxiosError) {
