@@ -1,6 +1,5 @@
 import {postRequest} from "./baseConfig";
 import {Location, Receiver, AddressData, ProductBody} from "../lib/interfaces";
-import { AxiosResponse } from "axios";
 
 export const createAdmin = async (name: string, phone: string) =>
   await postRequest("/admin/create", {name, phone}, "admin");
@@ -57,13 +56,11 @@ export const addToCart = async (productId: string, userId: string) =>
 export const removeFromCart = async (productId: string, userId: string) =>
   await postRequest("/cart/remove", {productId, userId}, "user");
 
-export const changeCart = async (
-  productId: string,
-  userId: string,
-  quantity: number
-) => await postRequest("/cart/change", {productId, userId, quantity}, "user");
+export const changeCart = async (productId: string, userId: string, quantity: number) =>
+  await postRequest("/cart/change", { productId, userId, quantity }, "user")
 
-export const checkout = async () => await postRequest("/order/check-out", {}, "user");
+export const checkout = async () =>
+  await postRequest("/order/check-out", {}, "user");
 
 export const submitComment = async (productId: string, text: string) =>
   await postRequest("/comment/submit", {productId, text}, "user");

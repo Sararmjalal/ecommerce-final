@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { createAdmin } from '../../apis'
 import { handleEmptyFields } from '../../lib'
 import { Form } from '../../lib/interfaces'
+import { toast } from 'react-toastify'
 
 const CreateAdmin = () => {
 
@@ -27,7 +28,11 @@ const CreateAdmin = () => {
   const [loading, setLoading] = useState(true)
 
   useLayoutEffect(() => {
-    !thisAdmin ? router.push('/') : setLoading(false)
+    if (thisAdmin) setLoading(false)
+    else {
+      toast.info("You must login before you create an admin")
+      router.push('/admin/login')
+    }
   }, [])
 
   const mutation = useMutation({

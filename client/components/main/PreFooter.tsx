@@ -24,7 +24,7 @@ const PreFooter = () => {
               className='input-primary w-[90%] m-auto'
               placeholder='Enter your e-mail'
             />
-            <button className='btn-primary'>Subscribe</button>
+            <button className='btn-primary py-3'>Subscribe</button>
           </div>
         </div>
       </div>

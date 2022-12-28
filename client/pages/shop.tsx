@@ -58,10 +58,6 @@ const Shop = () => {
     });
   }, []);
 
-  console.log(homeProductsProps);
-
-  // sortByLowestPrice();
-
   return (
     <div>
       <GuideLink

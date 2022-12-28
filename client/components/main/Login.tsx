@@ -1,7 +1,4 @@
 import {AiOutlineClose} from "react-icons/ai";
-import {FaFacebookF} from "react-icons/fa";
-import {SiGmail} from "react-icons/si";
-import {signIn} from "next-auth/react";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
@@ -13,11 +10,15 @@ import {AxiosError} from "axios";
 import {toast} from "react-toastify";
 import OtpInput from "./OtpInput";
 import Timer from "./Timer";
+import { useRouter } from "next/router";
 
 export default function Login({closeHandler, signUpHandler}: any) {
-  const thisUser = useSelector(selectUser);
+  
   const [step, setStep] = useState(1);
+
   const dispatch = useDispatch();
+
+  const router = useRouter();
 
   const onChangeHandler = (value: string) =>
     setData({...data, code: {...data.code, value}});
@@ -38,11 +39,10 @@ export default function Login({closeHandler, signUpHandler}: any) {
     onSuccess: () => setStep(step + 1),
     onError: (error: AxiosError | unknown) => {
       if (error instanceof AxiosError) {
-        console.log(error);
         const {msg} = error.response?.data;
         if (msg === "Provided value is not a valid Phone Number")
-          return toast.error("Please enter a valid phone number.");
-        return toast.error("This number is not a member. Please Sign up.");
+          return setData({...data, phone: {...data.phone, msg: "Please enter a valid phone number"}})
+          setData({...data, phone: {...data.phone, msg: "You're not a member lool"}})
       }
     },
   });
@@ -51,13 +51,11 @@ export default function Login({closeHandler, signUpHandler}: any) {
     mutationFn: async () =>
       await userLoginTwo(data.phone.value, data.code.value),
     onSuccess: (res) => {
-      // console.log("TOKEN", res);
       setToken(res.data.token, "user");
       getUserInfo.mutate();
     },
     onError: (error: AxiosError | unknown) => {
       if (error instanceof AxiosError) {
-        console.log(error);
         const {msg} = error.response?.data;
         if (msg === "wrong code")
           return setData({...data, code: {...data.code, msg: "Wrong Code!"}});
@@ -77,9 +75,10 @@ export default function Login({closeHandler, signUpHandler}: any) {
   const getUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
     onSuccess: (res) => {
-      console.log("USER", res);
       dispatch(setCurrentUser(res.data));
       closeHandler();
+      toast.success("You're in!")
+      router.push('/dashboard')
     },
   });
 
@@ -126,7 +125,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
           Please log in to use all e-commerce features
         </p>
         <div className='w-full'>
-          <div className='text-xs ml-2 text-reddish font-semibold mb-2'>
+          <div className='text-xs ml-2 text-reddish font-semibold my-2'>
             {data.phone.msg}
           </div>
           <input
@@ -136,7 +135,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
             disabled={step === 2}
             className={`input-primary ${
               data.phone.msg
-                ? "border-[1px] border-reddish text-reddish mt-0 mb-2"
+                ? "border-[1px] border-reddish text-reddish"
                 : "my-2"
             }`}
             placeholder='Phone Number'
@@ -155,16 +154,8 @@ export default function Login({closeHandler, signUpHandler}: any) {
         </div>
         {step === 1 ? (
           <>
-            <div className='flex justify-center items-center mt-4 gap-3 w-full'>
-              <button
-                className='btn-white-red w-[50%]'
-                onClick={() => signIn()}>
-                <SiGmail className='sm:hidden' />
-                Gmail
-              </button>
-            </div>
             <button
-              className='btn-primary w-full mt-5 py-4'
+              className='btn-primary w-full mt-5 py-3'
               onClick={getLoginCode}>
               Get Code
             </button>
@@ -183,20 +174,20 @@ export default function Login({closeHandler, signUpHandler}: any) {
               {data.code.msg}
             </div>
             <OtpInput
-              value={data.code.value}
-              valueLength={4}
-              onChangeHandler={onChangeHandler}
-              onKeyDownFunction={handleSecondStep}
+                value={data.code.value}
+                valueLength={4}
+                onChangeHandler={onChangeHandler}
+                onKeyDownFunction={handleSecondStep}
               />
               <Timer setStep={setStep} />
             <button
               className='btn-primary w-full mt-3 py-4'
               onClick={() => loginTwo.mutate()}>
-              Sign up
+              Login
             </button>
             <button
               onClick={() => setStep(1)}
-              className='text-reddish text-xs cursor-pointer mt-4'>
+              className='text-xs cursor-pointer mt-4 underline'>
               Change Number
             </button>
           </div>

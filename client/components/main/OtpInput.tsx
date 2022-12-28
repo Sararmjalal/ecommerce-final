@@ -138,11 +138,10 @@ const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Pr
   };
 
   return (
-    <div className='w-full max-w-full flex justify-center items-end gap-3 sm:gap-1'>
+    <div className='w-full max-w-full flex justify-center items-end gap-3 sm:gap-1 mb-8'>
       <p className="w-1/5 text-gray-400 text-sm ml-3">Enter code:</p>
       {valueItems.map((digit, idx) => (
         <input
-          
           autoFocus
           type='text'
           key={idx}

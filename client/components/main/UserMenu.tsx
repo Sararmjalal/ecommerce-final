@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 const UserMenu = ({ userMenu, closeHandler, confirmHandler }: any) => {
-  console.log(closeHandler)
   return(
       <>
       <div className="modal-backdrop opacity-0" onClick={closeHandler}></div>
