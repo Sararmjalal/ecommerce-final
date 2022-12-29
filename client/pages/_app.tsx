@@ -32,7 +32,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <StateProvider>
               <Component {...pageProps} />
-          <ToastContainer />
+            <ToastContainer
+            style={{zIndex:9999}}
+            />
         </StateProvider>
         </QueryClientProvider>
       </Provider>

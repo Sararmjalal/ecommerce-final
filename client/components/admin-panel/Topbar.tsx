@@ -48,7 +48,6 @@ const AdminTopbar = () => {
           okHandler={() => {
             toast.info("You're out")
             dispatch(removeCurrentAdmin())
-            router.push('/')
           }}
         />
       }

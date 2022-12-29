@@ -1,7 +1,7 @@
 const Loading = () => {
 
   return (
-    <div className="fixed top-0 left-0 w-full h-screen flex flex-col justify-center items-center bg-white z-[9999]">
+    <div className="fixed top-0 left-0 w-full h-screen flex flex-col justify-center items-center bg-white z-[9998]">
     <svg xmlns="http://www.w3.org/2000/svg"
       className="m-auto bg-[rgb(241, 242, 243)] block shape-auto"
       width="200px"
