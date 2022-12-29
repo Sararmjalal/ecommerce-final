@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../components/main/Footer";
-import Header from "../components/main/Header";
 import AdminPanel from "./AdminPanel";
 import UserPanel from "./UserPanel";
+import Loading from "../components/main/Loading";
+import MainLayout from "./MainLayout";
 import { useRouter } from "next/router";
 import { useToken } from "../lib";
 import { useMutation } from "@tanstack/react-query";
 import { adminInfo, userInfo } from "../apis";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAdmin, setCurrentAdmin, setCurrentUser } from "../global-state/slice";
-import AdminTopbar from "../components/admin-panel/Topbar";
-import Loading from "../components/main/Loading";
+import { useDispatch } from "react-redux";
+import { setCurrentAdmin, setCurrentUser } from "../global-state/slice";
 
 const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   
   const router = useRouter();
-
   const dispatch = useDispatch()
-
-  const thisAdmin = useSelector(selectAdmin)
-
   const userMenu = [
     {
       name: "Dashboard",
@@ -68,37 +62,15 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   if (loading) return <Loading />
   
   if (router.asPath === "/admin/login" || router.asPath === "/admin/create")
-    return <main>{children}</main>;
+    return <div>{children}</div>;
   
-  if (router.asPath.includes("admin"))
+  if (router.asPath.includes("/admin/dashboard"))
     return <AdminPanel>{children}</AdminPanel>;
   
   if (router.asPath.includes("dashboard"))
-    return (
-      <>
-      <Header
-        userMenu={userMenu}
-        />
-      <UserPanel>
-       {children}
-      </UserPanel>
-      </>
-    )
+    return <UserPanel userMenu={userMenu}>{children}</UserPanel>
     
-    return (
-    <>
-    <AdminTopbar />
-      <Header
-        userMenu={userMenu}
-      />
-      <div
-          className={`${router.asPath !== "/" && 'page'}`}
-          style={thisAdmin &&  router.asPath !== "/" ? {marginTop:  "130px"} : {}}>
-        {children}
-      </div>
-      <Footer />
-    </>
-  );
+    return <MainLayout userMenu={userMenu}>{children}</MainLayout>
 };
 
 export default StateProvider;

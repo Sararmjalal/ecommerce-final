@@ -37,13 +37,12 @@ const AdminLogin = () => {
 
   useLayoutEffect(() => {
     thisAdmin ? router.push("/admin/dashboard") : setLoading(false);
-  }, []);
+  }, [thisAdmin]);
 
   const getAdminInfo = useMutation({
     mutationFn: async () => await adminInfo(),
     onSuccess: (res) => {
       dispatch(setCurrentAdmin(res.data));
-      router.push("/admin/dashboard");
     },
   });
 

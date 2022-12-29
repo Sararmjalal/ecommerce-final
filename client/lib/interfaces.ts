@@ -112,3 +112,18 @@ export interface ConfirmModalProps {
   closeHandler: () => void;
   okHandler: () => void;
 }
+
+export interface MenuProps {
+  name: string
+  path: string
+}
+
+export interface DashboardMenuProps {
+  menu: MenuProps[]
+  logoutFunc: () => void
+}
+
+export interface LayoutProps {
+  children: JSX.Element | JSX.Element[]
+  userMenu: MenuProps[]
+}

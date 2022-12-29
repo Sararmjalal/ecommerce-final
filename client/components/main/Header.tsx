@@ -236,7 +236,6 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
             });
             dispatch(removeCurrentUser());
             toast.info("You're out")
-            router.push("/");
           }}
         />
       )}
