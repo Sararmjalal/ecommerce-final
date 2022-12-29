@@ -46,6 +46,12 @@
   .user-dashboard-menu {
     @apply text-black border-grayborder border-x-[1px] border-b-[1px] py-4 px-5 hover:text-white hover:bg-primary hover:border-primary cursor-pointer
   }
+  .admin-dashboard-layout {
+    @apply relative min-h-[calc(100vh-160px)] mx-9 my-20 md:mx-4
+  }
+  .admin-dashboard-page {
+    @apply ml-[330px] md:ml-0
+  }
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700;800;900&display=swap');

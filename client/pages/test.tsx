@@ -7,10 +7,7 @@ import Loading from "../components/main/Loading";
 import DashboardMenu from "../components/main/DashboardMenu";
 
 const Test = () => {
-  return (
-    <div className="relative min-h-[calc(100vh-160px)] mx-9 my-10 md:mx-4">
-    </div>
-  )
+  return <div className='admin-dashboard-layout'></div>;
 };
 
 export default Test

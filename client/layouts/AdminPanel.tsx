@@ -46,15 +46,16 @@ const AdminPanel = ({ children }: {children: JSX.Element | JSX.Element[]}) => {
   return (
     <div>
       <AdminTopbar />
-      <div className='relative min-h-[calc(100vh-160px)] mx-9 my-20 md:mx-4'>
-      <DashboardMenu
-        menu={adminMenu}
-        logoutFunc={() => {
-          dispatch(removeCurrentAdmin())
-          }} />
-        <div className="ml-[330px] md:ml-0">
-          <DashboardThisName name={thisName()!['name']} />
-         {children}
+      <div className='admin-dashboard-layout'>
+        <DashboardMenu
+          menu={adminMenu}
+          logoutFunc={() => {
+            dispatch(removeCurrentAdmin());
+          }}
+        />
+        <div className='admin-dashboard-page'>
+          <DashboardThisName name={thisName()!["name"]} />
+          {children}
         </div>
       </div>
     </div>

@@ -26,24 +26,24 @@ const UserPanel = ({ children, userMenu }: LayoutProps) => {
     <div>
       <AdminTopbar />
       <Header userMenu={userMenu} />
-      <div className='border-t-[1px] border-grayborder'
-        style={thisAdmin ? { marginTop: "130px" } : { marginTop: "100px" }}>
-        <div className="relative min-h-[calc(100vh-210px)] mx-9 my-10 md:mx-4">
+      <div
+        className='border-t-[1px] border-grayborder'
+        style={thisAdmin ? {marginTop: "130px"} : {marginTop: "100px"}}>
+        <div className='relative min-h-[calc(100vh-210px)] mx-9 my-10 md:mx-4'>
           <DashboardMenu
             menu={userMenu}
             logoutFunc={() => {
-              dispatch(removeCurrentUser())
-          }}
+              dispatch(removeCurrentUser());
+            }}
           />
-          <div className="ml-[330px] md:ml-0">
-            <DashboardThisName name={thisName()!['name']} />
+          <div className='ml-[330px] md:ml-0'>
+            <DashboardThisName name={thisName()!["name"]} />
             {children}
           </div>
         </div>
-        </div>
+      </div>
     </div>
-    
-  )
+  );
 
 }
 

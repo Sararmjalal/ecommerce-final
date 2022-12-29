@@ -22,6 +22,7 @@ const shapeRendering = plugin(function ({ addUtilities }) {
 
 module.exports = {
   content: [
+    "./layouts/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
@@ -48,7 +49,7 @@ module.exports = {
       emerald: colors.emerald,
       indigo: colors.indigo,
       yellow: colors.yellow,
-      grayborder: '#E5E5E5'
+      grayborder: "#E5E5E5",
     },
     fontFamily: {
       Poppins: ["Poppins", "Sans-serif"],
