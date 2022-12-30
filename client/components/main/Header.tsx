@@ -84,12 +84,6 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
                 ...headerHandler,
                 openMenu: true,
               })
-            }
-            onMouseLeave={() =>
-              setHeaderHandler({
-                ...headerHandler,
-                openMenu: false,
-              })
             }>
             Products
           </p>
@@ -198,17 +192,12 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
       />
 
       {headerHandler.openMenu && (
-        <>
-          <div
-            onClick={() =>
-              setHeaderHandler({
-                ...headerHandler,
-                openMenu: !headerHandler.openMenu,
-              })
-            }
-            className='modal-backdrop sticky top-32'></div>
-          <Menu />
-        </>
+        <Menu
+          closeHandler={() =>
+            setHeaderHandler({
+              ...headerHandler,
+              openMenu: false
+            })}/>
       )}
 
       {headerHandler.openSearch && (
