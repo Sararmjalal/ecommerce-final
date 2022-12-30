@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {
-  AiOutlineSearch,
   AiOutlineShoppingCart,
   AiOutlineUser,
   AiOutlineMenu,
@@ -25,7 +24,6 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
     openLogin: false,
     openMenu: false,
     mode: "login",
-    openSearch: false,
     openCart: false,
     openConfirm: false,
     openUserMenu: false,
@@ -83,32 +81,31 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
               setHeaderHandler({
                 ...headerHandler,
                 openMenu: true,
-              })
-            }>
+              })}
+            onClick={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: !headerHandler.openMenu,
+              })}>
             Products
           </p>
         </div>
         <div className='flex justify-end gap-9 lg:gap-7 xs:gap-4'>
-          <AiOutlineSearch
-            onClick={() =>
-              setHeaderHandler({
-                ...headerHandler,
-                openSearch: !headerHandler.openSearch,
-              })
-            }
-            className='xs:text-lg text-2xl'
-            cursor={"pointer"}
-          />
-          <AiOutlineShoppingCart
-            className='xs:text-lg text-2xl'
-            cursor={"pointer"}
+          <div
+            className="relative cursor-pointer"
             onClick={() =>
               setHeaderHandler({
                 ...headerHandler,
                 openCart: !headerHandler.openCart,
-              })
-            }
-          />
+              })}>
+            <AiOutlineShoppingCart
+            className='xs:text-lg text-2xl'
+            />
+            <div
+              className="absolute bg-primary rounded-full h-[18px] w-[18px] text-xs flex items-center justify-center top-3 -right-[6px] font-semibold text-white">
+              5
+            </div>
+          </div>
           {thisUser ? (
             <div className='relative flex gap-9 lg:gap-7'>
               <AiOutlineUser
@@ -199,16 +196,16 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
               openMenu: false
             })}/>
       )}
-
-      {headerHandler.openSearch && (
-        <input
-          type={"text"}
-          className='outline-none rounded-md px-2 text-black'
-          placeholder='search ...'
+      { headerHandler.openCart &&
+        <CartModal
+        closeHandler={() =>
+          setHeaderHandler({
+            ...headerHandler,
+            openCart: false,
+          })
+        }
         />
-      )}
-
-      {headerHandler.openCart && <CartModal />}
+      }
       {headerHandler.openConfirm && (
         <ConfirmModal
           mode='logout'

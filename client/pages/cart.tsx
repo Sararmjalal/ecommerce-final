@@ -6,12 +6,18 @@ import Checkout from "../components/cart/Checkout";
 import {AiOutlineShoppingCart} from "react-icons/ai";
 import {MdOutlineLocalShipping, MdPayment} from "react-icons/md";
 import Summary from "../components/cart/Summary";
+import Head from "next/head";
+import { useTitle } from "../lib";
 
 const Cart = () => {
   const {asPath} = useRouter();
   const [checkoutStep, setCheckoutStep] = useState("shoppingcart");
   return (
     <div>
+      <Head>
+        <title>{useTitle('Cart')}</title>
+        <meta name='description' content='Developed by Hamidreza Hashemi and Sara Jalal' />
+      </Head>
       <GuideLink
         args={[
           {

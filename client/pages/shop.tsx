@@ -4,6 +4,8 @@ import FiltersSidebar from "../components/shop/FiltersSidebar";
 import ProductCard from "../components/home/ProductCard";
 import {homeProductsProps} from "../lib/staticData";
 import FiltersTopbar from "../components/shop/FiltersTopbar";
+import Head from "next/head";
+import { useTitle } from "../lib";
 
 const Shop = () => {
   const categories = [
@@ -60,6 +62,10 @@ const Shop = () => {
 
   return (
     <div>
+      <Head>
+        <title>{useTitle('Shop')}</title>
+        <meta name='description' content='Developed by Hamidreza Hashemi and Sara Jalal' />
+      </Head>
       <GuideLink
         args={[
           {
