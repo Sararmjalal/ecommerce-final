@@ -37,7 +37,7 @@ const UserPanel = ({ children, userMenu }: LayoutProps) => {
             }}
           />
           <div className='ml-[330px] md:ml-0'>
-            <DashboardThisName name={thisName()!["name"]} />
+          { thisName() && <DashboardThisName name={thisName()!["name"]} /> }
             {children}
           </div>
         </div>

@@ -54,7 +54,7 @@ const AdminPanel = ({ children }: {children: JSX.Element | JSX.Element[]}) => {
           }}
         />
         <div className='admin-dashboard-page'>
-          <DashboardThisName name={thisName()!["name"]} />
+            { thisName() && <DashboardThisName name={thisName()!["name"]} /> }
           {children}
         </div>
       </div>
