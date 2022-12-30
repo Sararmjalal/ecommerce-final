@@ -181,7 +181,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
               />
               <Timer setStep={setStep} />
             <button
-              className='btn-primary w-full mt-3 py-4'
+              className='btn-primary w-full mt-3 py-3'
               onClick={() => loginTwo.mutate()}>
               Login
             </button>

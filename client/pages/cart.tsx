@@ -43,10 +43,9 @@ const Cart = () => {
                 checkoutStep === "shoppingcart"
                   ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer"
                   : "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"
-              }`}>
-              <AiOutlineShoppingCart
-                onClick={() => setCheckoutStep("shoppingcart")}
-              />
+                }`}
+                onClick={() => setCheckoutStep("shoppingcart")}>
+              <AiOutlineShoppingCart />
             </div>
             <div className='w-16 h-[1px] bg-grayborder'></div>
             <div
@@ -54,10 +53,9 @@ const Cart = () => {
                 checkoutStep === "checkout"
                   ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer"
                   : "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"
-              }`}>
-              <MdOutlineLocalShipping
-                onClick={() => setCheckoutStep("checkout")}
-              />
+                }`}
+                onClick={() => setCheckoutStep("checkout")}>
+              <MdOutlineLocalShipping />
             </div>
             <div className='w-16 h-[1px] bg-grayborder'></div>
             <div
@@ -65,8 +63,9 @@ const Cart = () => {
                 checkoutStep === "summary"
                   ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer"
                   : "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"
-              }`}>
-              <MdPayment onClick={() => setCheckoutStep("summary")} />
+                }`}
+                onClick={() => setCheckoutStep("summary")}>
+              <MdPayment />
             </div>
           </div>
         </div>
