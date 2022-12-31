@@ -4,22 +4,10 @@ import * as MdIcons from "react-icons/md";
 import * as IOIcons from "react-icons/io5";
 import TypesMenu from "../../../components/admin-panel/TypesMenu";
 import SmallLoading from "../../../components/main/SmallLoading";
-
-type FormValues = {
-  name: string;
-  variables: {
-    name: string;
-    type: string;
-    options: {[key: number]: string}[];
-  }[];
-};
-
-type VariableObject = {
-  name: {
-    type: string;
-    options?: {[key: number]: string}[];
-  };
-};
+import {
+  AddCategoryFormValues,
+  CategoryVariableObject,
+} from "../../../lib/interfaces";
 
 const AddCategory = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -29,7 +17,7 @@ const AddCategory = () => {
     handleSubmit,
     formState: {errors},
     getValues,
-  } = useForm<FormValues>({
+  } = useForm<AddCategoryFormValues>({
     defaultValues: {
       name: "",
       variables: [
@@ -53,10 +41,10 @@ const AddCategory = () => {
     name: "variables",
   });
 
-  const onSubmit = (data: FormValues) => {
-    const obj = {} as VariableObject;
+  const onSubmit = (data: AddCategoryFormValues) => {
+    const obj = {} as CategoryVariableObject;
     data.variables.forEach(({name, type, options}) => {
-      obj[name as keyof VariableObject] = {
+      obj[name as keyof CategoryVariableObject] = {
         type,
         ...(type !== "text" && {
           options: [...options],

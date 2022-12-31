@@ -6,7 +6,7 @@ export const myOrders = async () => await getRequest('/order/my-orders', true)
 
 export const myCart = async () => await getRequest('/cart', true)
 
-export const categories = async () => await getRequest('/category')
+export const allCategories = async () => await getRequest("/category");
 
 export const comments = async (productId: string) => await getRequest(`/comment/${productId}`)
 

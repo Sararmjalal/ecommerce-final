@@ -112,16 +112,38 @@ export interface ConfirmModalProps {
 }
 
 export interface MenuProps {
-  name: string
-  path: string
+  name: string;
+  path: string;
 }
 
 export interface DashboardMenuProps {
-  menu: MenuProps[]
-  logoutFunc: () => void
+  menu: MenuProps[];
+  logoutFunc: () => void;
 }
 
 export interface LayoutProps {
-  children: JSX.Element | JSX.Element[]
-  userMenu: MenuProps[]
+  children: JSX.Element | JSX.Element[];
+  userMenu: MenuProps[];
+}
+
+export type AddCategoryFormValues = {
+  name: string;
+  variables: {
+    name: string;
+    type: string;
+    options: {[key: number]: string}[];
+  }[];
+};
+
+export type CategoryVariableObject = {
+  name: {
+    type: string;
+    options?: {[key: number]: string}[];
+  };
+};
+
+export interface Category {
+  _id: string;
+  name: string;
+  variables: CategoryVariableObject;
 }
