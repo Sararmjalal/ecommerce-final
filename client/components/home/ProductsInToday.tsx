@@ -1,25 +1,14 @@
 import React from "react";
-import {homeProductsProps} from "../../lib/staticData";
-import SelectedProductCard from "./ProductCard";
+import { Product } from "../../lib/interfaces";
+import Carousel from "./Carousel";
 
-const ProductsInToday = () => {
+const ProductsInToday = ({products}: {products: Product[]}) => {
   return (
-    <div className='main-container flex-col'>
+    <div className='main-container flex-col mb-20'>
       <p className='head-text text-center'>
         Products in today
       </p>
-      <div className='flex md:flex-col justify-between items-center gap-9'>
-        {homeProductsProps.map((product) => (
-          <SelectedProductCard
-            key={product.id}
-            img={product.img}
-            title={product.title}
-            price={product.price}
-            lastPrice={product.lastPrice}
-            badge={product.badge}
-          />
-        ))}
-      </div>
+       <Carousel products={products} />
     </div>
   );
 };

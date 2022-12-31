@@ -19,9 +19,7 @@ export interface ProductCards {
   id?: number;
   img: string;
   title: string;
-  price: number;
-  lastPrice: null | number;
-  badge: boolean;
+  price: string;
 }
 
 export interface CommentShape {

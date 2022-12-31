@@ -3,7 +3,7 @@ import Description from "../components/single-product/Description";
 import Header from "../components/single-product/Broadcamps";
 import ProductCard from "../components/single-product/ProductCard";
 import Reviews from "../components/single-product/Reviews";
-import Selected from "../components/home/Selected";
+import TopProducts from "../components/home/TopProducts";
 
 const SingleProduct = () => {
   const [secMode, setSecMode] = useState("description");
@@ -36,7 +36,7 @@ const SingleProduct = () => {
         </div>
         {secMode === "description" ? <Description /> : <Reviews />}
       </div>
-      <Selected />
+      {/* <TopProducts /> */}
     </div>
   );
 };

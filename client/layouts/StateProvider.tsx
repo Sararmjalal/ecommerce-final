@@ -56,7 +56,9 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
   })
 
   useEffect(() => {
-    setAdminInfo.mutate()
+    if (useToken('admin')) setAdminInfo.mutate()
+    else if (useToken('user')) setUserInfo.mutate()
+    else setLoading(false)
   }, [])
 
   if (loading) return <Loading />

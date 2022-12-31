@@ -1,10 +1,16 @@
+import { useRouter } from "next/router";
 import React from "react";
 import {menuItems} from "../../lib/staticData";
 
-const Menu = () => {
+const Menu = ({ closeHandler }: { closeHandler: () => void }) => {
+
+  const router = useRouter()
+  
   return (
-    <div className='absolute top-[97px] pl-40 lg:pl-20 xs:px-5 pr-[634px] md:pr-[300px] py-9 grid grid-cols-4 sm:grid-cols-2
-    sm:h-fit sm:gap-y-20 gap-64 xl:gap-52 lg:gap-44 md:gap-36 xs:gap-20 w-full h-[384px] bg-white z-[999]'>
+    <div className="relative">
+      <div className={`${router.asPath !== '/' ? 'top-0' : 'top-[100px]'} absolute pl-40 lg:pl-20 xs:px-5 pr-[634px] md:pr-[300px] py-9 grid grid-cols-4 sm:grid-cols-2
+      sm:h-fit sm:gap-y-20 gap-64 xl:gap-52 lg:gap-44 md:gap-36 xs:gap-20 w-full h-[384px] bg-white z-[999] shadow-md border-t-[1px] border-grayborder`}
+        onMouseLeave={closeHandler}>
       {menuItems.map((branch) => (
         <div
           key={branch.id}
@@ -15,6 +21,7 @@ const Menu = () => {
           ))}
         </div>
       ))}
+      </div>
     </div>
   );
 };

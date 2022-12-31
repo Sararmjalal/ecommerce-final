@@ -75,10 +75,10 @@ const ShoppingCart = () => {
       <div className='flex md:flex-col items-center justify-end gap-12 sm:gap-4 mt-20'>
         <p>Total Cost:</p>
         <p>${calcTotalPrice}</p>
-        <button className='btn-secondary border-[1px] border-grayborder'>
+        <button className='btn-secondary py-3'>
           Continue Shopping
         </button>
-        <button className='btn-primary' onClick={nextStepHandle}>
+        <button className='btn-primary text-base py-3' onClick={nextStepHandle}>
           Next Step
         </button>
       </div>

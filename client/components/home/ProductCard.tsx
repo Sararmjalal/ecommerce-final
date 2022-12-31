@@ -13,17 +13,11 @@ const ProductCard = (props: ProductCards) => {
             fill
             className='absolute object-cover object-top'
           />
-          {props.badge && <div className='badge-red absolute m-6'>30%</div>}
         </div>
         <p className='mt-7 md:mt-2'>{props.title}</p>
         <div className='flex justify-start items-center gap-9'>
-          <p
-            className='text-xl'
-            style={props.badge ? {color: "#FF0000"} : {color: "black"}}>
+          <p className='text-xl'>
             ${props.price}
-          </p>
-          <p className='text-xl text-grayish'>
-            {props.lastPrice && props.lastPrice}
           </p>
         </div>
       </div>

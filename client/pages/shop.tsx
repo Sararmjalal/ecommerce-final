@@ -1,11 +1,31 @@
-import React, {useLayoutEffect, useState} from "react";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import React, { useLayoutEffect, useState } from "react";
 import GuideLink from "../components/main/GuideLink";
 import FiltersSidebar from "../components/shop/FiltersSidebar";
-import ProductCard from "../components/home/ProductCard";
-import {homeProductsProps} from "../lib/staticData";
 import FiltersTopbar from "../components/shop/FiltersTopbar";
+import ProductCard from "../components/home/ProductCard";
+import Head from "next/head";
+import { useTitle } from "../lib";
+import { allProducts } from "../apis";
+import { Product } from "../lib/interfaces";
+
+export async function getStaticProps() {
+
+  const queryClient = new QueryClient()
+  
+  await queryClient.prefetchQuery(['products'], allProducts)
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
+}
 
 const Shop = () => {
+
+  const { data: products } = useQuery({ queryKey: ['products'], queryFn: allProducts })
+
   const categories = [
     {
       name: "T-shirts",
@@ -34,7 +54,7 @@ const Shop = () => {
   const prices = [50, 100, 200, 500, 400, 387, 2000];
 
   const [filteredData, setFilteredData] = useState({
-    products: homeProductsProps,
+    products: products,
     selectedCategory: categories[0].name,
     catFilterOpen: false,
     selectedSize: sizes[0],
@@ -60,6 +80,10 @@ const Shop = () => {
 
   return (
     <div>
+      <Head>
+        <title>{useTitle('Shop')}</title>
+        <meta name='description' content='Developed by Hamidreza Hashemi and Sara Jalal' />
+      </Head>
       <GuideLink
         args={[
           {
@@ -87,21 +111,23 @@ const Shop = () => {
             filteredData={filteredData}
             setFilteredData={setFilteredData}
           />
-
-          <div className='grid grid-cols-3 gap-16 sm:gap-8 sm:grid-cols-1 md:grid-cols-2'>
-            {filteredData.products.map((product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  img={product.img}
-                  title={product.title}
-                  price={product.price}
-                  lastPrice={product.lastPrice}
-                  badge={product.badge}
-                />
-              );
-            })}
-          </div>
+          {
+            filteredData.products[0] ?
+            <div className='grid grid-cols-3 gap-16 sm:gap-8 sm:grid-cols-1 md:grid-cols-2'>
+              {filteredData.products.map((product: Product) => {
+                return (
+                  <ProductCard
+                    key={product._id}
+                    img={product.images[0]}
+                    title={product.title}
+                    price={product.price}
+                  />
+                );
+              })}
+            </div>
+                :
+            <p className="text-lg text-center font-semibold mt-20 mb-28">No products available yet!</p>
+          }
         </div>
       </div>
     </div>
