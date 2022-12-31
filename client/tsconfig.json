@@ -15,6 +15,13 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/staticData.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "lib/staticData.js",
+    "pages/test2.jsx",
+    "pages/test3.tsx"
+  ],
   "exclude": ["node_modules"]
 }

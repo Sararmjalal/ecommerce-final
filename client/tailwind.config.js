@@ -49,6 +49,8 @@ module.exports = {
       emerald: colors.emerald,
       indigo: colors.indigo,
       yellow: colors.yellow,
+      green: colors.green,
+      violet: colors.violet,
       grayborder: "#E5E5E5",
     },
     fontFamily: {

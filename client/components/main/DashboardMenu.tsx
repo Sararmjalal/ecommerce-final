@@ -17,53 +17,61 @@ const DashboardMenu = ({ menu, logoutFunc }: DashboardMenuProps) => {
   const activeStyle = {background: thisColor, fontWeight: 500, color: "white", border:thisColor}
 
   return (
-    <div
-      className="absolute md:static md:mb-5 top-0 left-0 md:w-full w-[300px]">
+    <div className='absolute md:static md:mb-5 top-0 left-0 md:w-full w-[300px]'>
       <div
-        className={`${thisClass} border-t-[1px] flex justify-between items-center`}
+        className={`${thisClass} ${
+          !handleOnClicks.openMenu ? "md:shadow-md" : ""
+        } border-t-[1px] flex justify-between items-center`}
         style={router.asPath === menu[0].path ? activeStyle : {}}
-        onClick={() =>{
-          setHandleOnClicks({ ...handleOnClicks, openMenu: !handleOnClicks.openMenu })
-          if(router.asPath !== menu[0].path) router.push(menu[0].path)
+        onClick={() => {
+          setHandleOnClicks({
+            ...handleOnClicks,
+            openMenu: !handleOnClicks.openMenu,
+          });
         }}>
-          <Link href={menu[0].path}>
-            <p className="cursor-pointer">{menu[0].name}</p>
-          </Link>
-        <div className="md:block hidden cursor-pointer">
-        {
-          handleOnClicks.openMenu ? <AiOutlineClose /> : <AiOutlineMenu />
-        }
+        <Link href={menu[0].path}>
+          <p className='cursor-pointer'>{menu[0].name}</p>
+        </Link>
+        <div className='md:block hidden cursor-pointer'>
+          {handleOnClicks.openMenu ? <AiOutlineClose /> : <AiOutlineMenu />}
         </div>
       </div>
-        <ul className="w-full flex flex-col md:hidden"
+      <ul
+        className='w-full flex flex-col md:hidden'
         style={handleOnClicks.openMenu ? {display: "flex"} : {}}>
-          {
-            menu.slice(1).map(({ name, path }) => {
-              return (
-                <Link href={path} key={path}>
-                <li
-                  style={router.asPath === path ? activeStyle : {}}
-                  className={thisClass}>
-                  {name}
-                </li>
-                </Link>
-              )
-            })
-          }
-          <li
+        {menu.slice(1).map(({name, path}) => {
+          return (
+            <Link href={path} key={path}>
+              <li
+                style={router.asPath === path ? activeStyle : {}}
+                className={thisClass}
+                onClick={() =>
+                  setHandleOnClicks({...handleOnClicks, openMenu: false})
+                }>
+                {name}
+              </li>
+            </Link>
+          );
+        })}
+        <li
           className={thisClass}
-          onClick={() => setHandleOnClicks({...handleOnClicks, openConfirm: true})}>Logout</li>
-        </ul>
-        {
-          handleOnClicks.openConfirm &&
-          <ConfirmModal 
+          onClick={() =>
+            setHandleOnClicks({...handleOnClicks, openConfirm: true})
+          }>
+          Logout
+        </li>
+      </ul>
+      {handleOnClicks.openConfirm && (
+        <ConfirmModal
           mode='logout'
-          closeHandler={() => setHandleOnClicks({...handleOnClicks, openConfirm: false})}
+          closeHandler={() =>
+            setHandleOnClicks({...handleOnClicks, openConfirm: false})
+          }
           okHandler={logoutFunc}
-          />
-        }
+        />
+      )}
     </div>
-  )
+  );
 }
 
 export default DashboardMenu
