@@ -8,6 +8,7 @@ import Head from "next/head";
 import { useTitle } from "../lib";
 import { allProducts } from "../apis";
 import { Product } from "../lib/interfaces";
+import { homeProductsProps } from "../lib/staticData";
 
 export async function getStaticProps() {
 
@@ -54,7 +55,7 @@ const Shop = () => {
   const prices = [50, 100, 200, 500, 400, 387, 2000];
 
   const [filteredData, setFilteredData] = useState({
-    products: products,
+    products: homeProductsProps,
     selectedCategory: categories[0].name,
     catFilterOpen: false,
     selectedSize: sizes[0],
@@ -114,13 +115,14 @@ const Shop = () => {
           {
             filteredData.products[0] ?
             <div className='grid grid-cols-3 gap-16 sm:gap-8 sm:grid-cols-1 md:grid-cols-2'>
-              {filteredData.products.map((product: Product) => {
+              {filteredData.products.map((product) => {
                 return (
                   <ProductCard
                     key={product._id}
-                    img={product.images[0]}
+                    img={product.img}
                     title={product.title}
                     price={product.price}
+                    _id={product._id}
                   />
                 );
               })}

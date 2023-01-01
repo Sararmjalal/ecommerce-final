@@ -16,7 +16,7 @@ export interface Banner {
 }
 
 export interface ProductCards {
-  id?: number;
+  _id: string;
   img: string;
   title: string;
   price: string;

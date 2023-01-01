@@ -8,17 +8,13 @@ import {
   Category,
   CategoryVariableObject,
 } from "../../../lib/interfaces";
-import {createCategory} from "../../../apis";
-import {useMutation} from "@tanstack/react-query";
+import {allCategories, createCategory} from "../../../apis";
+import {QueryClient, useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
 import {useRouter} from "next/router";
 
 const AddCategory = () => {
   const types = [
-    {
-      name: "Text",
-      value: "text",
-    },
     {
       name: "Select",
       value: "select",
@@ -26,6 +22,14 @@ const AddCategory = () => {
     {
       name: "Multi Select",
       value: "multiselect",
+    },
+    {
+      name: "Color",
+      value: "multiselect"
+    },
+    {
+      name: "Text",
+      value: "text",
     },
   ];
 
@@ -35,11 +39,11 @@ const AddCategory = () => {
 
   useEffect(() => {
     const clone = getValues("variables");
-    selectedTypes.forEach((type, index) => {
-      clone[index].type = type.value;
-      update(index, clone[index]);
-    });
-  }, [selectedTypes]);
+    const thisIndex = selectedTypes.length - 1
+    if (selectedTypes[thisIndex].name === 'Color') clone[thisIndex].options[0] = '#000000'
+    clone[thisIndex].type = selectedTypes[thisIndex].value
+    setValue('variables', clone)
+  }, []);
 
   const {
     register,
@@ -47,6 +51,7 @@ const AddCategory = () => {
     handleSubmit,
     formState: {errors},
     getValues,
+    setValue,
   } = useForm<AddCategoryFormValues>({
     defaultValues: {
       name: "",
@@ -61,24 +66,20 @@ const AddCategory = () => {
     mode: "onSubmit",
   });
 
-  const {
-    fields: variables,
-    append,
-    remove,
-    update,
-  } = useFieldArray({
+  const { fields: variables, append, update, remove } = useFieldArray({
     control,
     name: "variables",
   });
 
   const addCategory = useMutation({
     mutationFn: async (cat: Category) => await createCategory(cat),
-    onSuccess: (res) => {
+    onSuccess: async(res) => {
       toast.success("Category added successfully");
+      const queryClient = new QueryClient
+      await queryClient.invalidateQueries({ queryKey: ['categories'] })
+      await queryClient.prefetchQuery(['categories'], allCategories)
       push("/admin/dashboard/categories");
-      console.log(res);
     },
-    onError: (error) => console.log(error),
   });
 
   const onSubmit = (data: AddCategoryFormValues) => {
@@ -117,7 +118,7 @@ const AddCategory = () => {
             }
           }
           className={`text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 lg:mb-4 mb-8`}
-          {...register(`name` as const, {
+          {...register('name', {
             required: true,
             maxLength: 50,
           })}
@@ -130,10 +131,15 @@ const AddCategory = () => {
                 className='flex md:flex-col gap-4 md:gap-0 mt-4 w-full'
                 key={`var${outerIndex}`}>
                 <div
-                  className={`mb-5 cursor-pointer mt-9 mr-2 flex hover:text-violet-700 ${
+                  className={`mb-5 cursor-pointer mt-9 mr-2 flex hover:text-primary ${
                     variables.length > 1 ? "block" : "hidden"
                   }`}
-                  onClick={() => remove(outerIndex)}>
+                  onClick={() => {
+                    const clone = [...selectedTypes]
+                    clone.splice(outerIndex, 1)
+                    remove(outerIndex)
+                    setSelectedTypes(clone)
+                  }}>
                   <div className='md:w-max w-1/3 mr-0 text-2xl md:mr-1'>
                     <MdIcons.MdRemoveCircle />
                   </div>
@@ -154,7 +160,7 @@ const AddCategory = () => {
                       }
                     }
                     className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 text-sm'
-                    placeholder='var name'
+                    placeholder='Variable Name'
                     {...register(`variables.${outerIndex}.name`, {
                       required: true,
                       maxLength: 50,
@@ -162,7 +168,7 @@ const AddCategory = () => {
                   />
                   {errors.variables && errors.variables![outerIndex]?.name && (
                     <p className='text-xs text-reddish ml-1 my-2 '>
-                      Enter Variable Name
+                      Please fillout this field!
                     </p>
                   )}
                 </div>
@@ -174,7 +180,6 @@ const AddCategory = () => {
                     outerIndex={outerIndex}
                   />
                   <div className='text-red-400 text-sm font-semibold ml-1'>
-                    {/* {row.errorMessage} */}
                   </div>
                 </div>
                 <div className='w-1/3 md:w-full'>
@@ -183,70 +188,71 @@ const AddCategory = () => {
                       <label className='ml-1 font-light text-sm'>
                         Options:
                       </label>
-                      {variable.options.map((option, innerIndex) => {
-                        return (
-                          <>
-                            <div className='flex flex-col'>
-                              <div className='flex items-center gap-2'>
-                                <input
-                                  style={
-                                    errors.variables &&
-                                    errors.variables[outerIndex] &&
-                                    errors.variables![outerIndex]?.options![
-                                      innerIndex
-                                    ] && {
+                      <div className={`${selectedTypes[outerIndex].name === 'Color' ? 'flex flex-wrap gap-2 mt-2 mb-4' : ''}`}>
+                        {variable.options.map((option, innerIndex) => {
+                          return (
+                            <>
+                              <div className='flex flex-col'>
+                                <div className='flex items-center justify-center gap-2'>
+                                  <input
+                                    style={errors.variables && 
+                                      errors.variables[outerIndex]?.options &&
+                                      errors.variables[outerIndex]?.options![innerIndex] ? {
                                       border: "1px",
                                       borderStyle: "solid",
                                       borderColor: "red",
-                                    }
-                                  }
-                                  className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1  text-sm'
-                                  placeholder='option'
-                                  {...register(
-                                    `variables.${outerIndex}.options.${innerIndex}`,
-                                    {required: true, maxLength: 50}
-                                  )}
-                                />
-                                <div
-                                  className={`w-max cursor-pointer ${
-                                    variable.options.length > 1
-                                      ? "block"
-                                      : "hidden"
-                                  }`}
-                                  onClick={() => {
-                                    const thisVariable = getValues(
-                                      `variables.${outerIndex}`
-                                    );
-                                    thisVariable.options.splice(outerIndex, 1);
-                                    update(outerIndex, thisVariable);
-                                  }}>
-                                  <MdIcons.MdRemoveCircle />
+                                    } : {}}
+                                    autoFocus
+                                    {...register(`variables.${outerIndex}.options.${innerIndex}`, {required:true})}
+                                    type={selectedTypes[outerIndex].name === 'Color' ? 'color' : 'text'}
+                                    className={`text-gray-600 w-full outline-none text-sm border-none
+                                    ${selectedTypes[outerIndex].name === 'Color' ?
+                                      "h-[50px] p-0 bg-white shadow-md cursor-pointer"
+                                      :
+                                      " py-3 px-2 bg-gray-100 rounded-xl mt-1"}`}
+                                    placeholder='Option'
+                                  />
+                                  <div
+                                    className={`w-max cursor-pointer ${
+                                      variable.options.length > 1
+                                        ? "block"
+                                        : "hidden"
+                                    }`}
+                                    onClick={() => {
+                                      const thisVariable = getValues(
+                                        `variables.${outerIndex}`
+                                      );
+                                      thisVariable.options.splice(outerIndex, 1);
+                                      update(outerIndex, thisVariable);
+                                    }}>
+                                    <MdIcons.MdRemoveCircle
+                                    className="hover:text-primary"
+                                    />
+                                  </div>
                                 </div>
+                                {errors.variables && 
+                                  errors.variables[outerIndex]?.options &&
+                                  errors.variables[outerIndex]?.options![innerIndex] &&(
+                                    <p className='text-xs text-reddish ml-1 my-2'>
+                                      Please fillout this field!
+                                    </p>
+                                  )}
                               </div>
-                              {errors.variables &&
-                                errors.variables[outerIndex] &&
-                                errors.variables![outerIndex]?.options![
-                                  innerIndex
-                                ] && (
-                                  <p className='text-xs text-reddish ml-1 my-2'>
-                                    Enter Option Name
-                                  </p>
-                                )}
-                            </div>
-                          </>
-                        );
-                      })}
+                            </>
+                          );
+                        })}
+                      </div>
                       <div
                         key={`addOpt${outerIndex}`}
                         onClick={() => {
                           const thisVariable = getValues(
                             `variables.${outerIndex}`
                           );
-                          thisVariable.options.push("");
+                          thisVariable.options.push(selectedTypes[outerIndex].name === 'Color' ?  "#000000" : "");
                           update(outerIndex, thisVariable);
                         }}
-                        className='text-sm cursor-pointer ml-1 text-gray-900 hover:text-violet-700 font-semibold flex'>
-                        <div className='w-max flex items-center gap-1'>
+                        className='text-sm cursor-pointer ml-1 text-gray-900 hover:text-primary font-semibold flex'>
+                        <div className='w-max flex items-center gap-1 mt-2'>
                           <IOIcons.IoAddCircle />
                           <div>Add More Options</div>
                         </div>
@@ -262,12 +268,12 @@ const AddCategory = () => {
           onClick={() => {
             append({
               name: "",
-              type: "",
+              type: types[0].value,
               options: [""],
             });
             setSelectedTypes([...selectedTypes, types[0]]);
           }}
-          className='flex cursor-pointer ml-1 text-gray-900 hover:text-violet-700 font-semibold w-min'>
+          className='flex cursor-pointer ml-1 text-gray-900 hover:text-primary font-semibold w-min'>
           <div className='w-max flex items-center mt-10 gap-1'>
             <div className='text-2xl'>
               <IOIcons.IoAddCircle />

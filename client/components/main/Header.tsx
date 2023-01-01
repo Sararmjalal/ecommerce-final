@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
@@ -17,6 +17,8 @@ import { removeCurrentUser, selectAdmin, selectUser } from "../../global-state/s
 import ConfirmModal from "../modals/Confirm";
 import UserMenu from "./UserMenu";
 import { toast } from 'react-toastify'
+import { useQuery } from "@tanstack/react-query";
+import { allCategories } from "../../apis";
 
 const Header = ({ userMenu }: { userMenu: Object[]}) => {
   const router = useRouter();
@@ -31,6 +33,11 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
   const thisUser = useSelector(selectUser);
   const thisAdmin = useSelector(selectAdmin)
   const dispatch = useDispatch();
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async() => await allCategories()
+  })
 
   return (
     <>
@@ -69,24 +76,37 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
           </div>
         </Link>
         <div className='lg:hidden flex justify-center items-center gap-20'>
-          <Link href={"/"}>
+          <Link href={"/"}
+            onClick={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: false
+              })}>
             <p className='text-lg cursor-pointer'>Home</p>
           </Link>
-          <Link href={"/shop"}>
+          <Link href={"/shop"}
+            onClick={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: false
+              })}>
             <p className='text-lg cursor-pointer'>Shop</p>
           </Link>
           <p
             className='text-lg cursor-pointer'
             onMouseEnter={() =>
+              categories[0] &&
               setHeaderHandler({
                 ...headerHandler,
                 openMenu: true,
               })}
-            onClick={() =>
+            onClick={() => categories[0] ? 
               setHeaderHandler({
                 ...headerHandler,
                 openMenu: !headerHandler.openMenu,
-              })}>
+              })
+              :
+              toast.info("No products available yet.")}>
             Products
           </p>
         </div>
@@ -162,12 +182,13 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
           <AiOutlineMenu
             cursor={"pointer"}
             className='hidden lg:block xs:text-lg text-2xl'
-            onClick={() =>
+            onClick={() => categories[0] ? 
               setHeaderHandler({
                 ...headerHandler,
                 openMenu: !headerHandler.openMenu,
               })
-            }
+              :
+              toast.info("No products available yet.")}
           />
         </div>
       </div>
@@ -188,14 +209,16 @@ const Header = ({ userMenu }: { userMenu: Object[]}) => {
         codeHandler={() => setHeaderHandler({...headerHandler, mode: "code"})}
       />
 
-      {headerHandler.openMenu && (
-        <Menu
-          closeHandler={() =>
-            setHeaderHandler({
-              ...headerHandler,
-              openMenu: false
-            })}/>
-      )}
+      {headerHandler.openMenu &&
+          <Menu
+            closeHandler={() =>
+              setHeaderHandler({
+                ...headerHandler,
+                openMenu: false
+              })}
+            categories={categories}
+          />
+        }
       { headerHandler.openCart &&
         <CartModal
         closeHandler={() =>

@@ -49,34 +49,34 @@ const pillsProps = [
 
 const homeProductsProps = [
   {
-    id: 1,
+    _id: "1",
     img: "/assets/products/product-1.png",
     title: "Loose Knit 3/4 Sleeve",
-    price: 119.99,
+    price: "119.99",
     lastPrice: null,
     badge: false,
   },
   {
-    id: 2,
+    _id: "2",
     img: "/assets/products/product-2.png",
     title: "Basic Slim-fit T-shirt",
-    price: 79.99,
+    price: "79.99",
     lastPrice: null,
     badge: false,
   },
   {
-    id: 3,
+    _id: "3",
     img: "/assets/products/product-3.png",
     title: "T-shirt Summer Vibes",
-    price: 89.99,
+    price:"89.99",
     lastPrice: 119.99,
     badge: true,
   },
   {
-    id: 4,
+    _id: "4",
     img: "/assets/products/product-4.png",
     title: "Loose Textured T-shirt",
-    price: 119.99,
+    price: "119.99",
     lastPrice: null,
     badge: false,
   },
@@ -158,7 +158,19 @@ const commentData = [
 ];
 
 const menuItems = [
-  {id: 1, title: " ", items: ["Sales", "Bestsellers", "Latest Arrivals"]},
+    {
+    id: 1,
+    title: "SHOES",
+    items: [
+      "Lifestyle",
+      "Running",
+      "Soccer",
+      "Basketball",
+      "Football",
+      "Golf",
+      "Baseball",
+    ],
+  },
   {
     id: 2,
     title: "SHOES",
@@ -199,6 +211,19 @@ const menuItems = [
       "Wallets & Cases",
       "Scarves",
       "Glasses",
+    ],
+  },
+  {
+    id: 5,
+    title: "SHOES",
+    items: [
+      "Lifestyle",
+      "Running",
+      "Soccer",
+      "Basketball",
+      "Football",
+      "Golf",
+      "Baseball",
     ],
   },
 ];
