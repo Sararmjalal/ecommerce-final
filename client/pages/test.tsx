@@ -1,75 +1,54 @@
-import {useState} from "react";
-import {useForm, SubmitHandler} from "react-hook-form";
+import * as React from "react";
+import {useForm} from "react-hook-form";
 
-// type Inputs = {
-//   example: string;
-//   exampleRequired: string;
-// };
-type Inputs = {
-  name: string;
-  type: string;
-  _id: string;
+type FormInputs = {
+  username: string;
+  firstName: string;
 };
 
-export default function App() {
+const App = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    setError,
     formState: {errors},
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const clone = [...vars];
-    clone.forEach(({_id, name, type}, index, ref) => {
-      ref[index] = {
-        ...ref[index],
-        name: data[`name${_id}`],
-        type: data[`type${_id}`],
-      };
-    });
-    setVars(clone);
+  } = useForm<FormInputs>();
+
+  const onSubmit = (data: FormInputs) => {
+    console.log(data);
   };
-
-  console.log(watch("example")); // watch input value by passing the name of it
-
-  const [vars, setVars] = useState([
-    {
-      _id: "1",
-      name: "",
-      type: "",
-    },
-    {
-      _id: "2",
-      name: "",
-      type: "",
-    },
-  ]);
-  console.log(vars);
-
+  console.log(errors);
   return (
-    <form onChange={(e) => console.log(e)} onSubmit={handleSubmit(onSubmit)}>
-      {vars.map(({_id, name, type, options}, outterIndex) => {
-        return (
-          <div>
-            <input className='input-primary' {...register("name" + _id)} />
-            <input className='input-primary' {...register("type" + _id)} />
-            <button
-              onClick={() =>
-                setVars([
-                  ...vars,
-                  {
-                    _id: "3",
-                    name: "",
-                    type: "",
-                  },
-                ])
-              }>
-              Add variable
-            </button>
-          </div>
-        );
-      })}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label>Username</label>
+      <input {...register("username")} />
+      {errors.username && <p>{errors.username.message}</p>}
+      <label>First Name</label>
+      <input {...register("firstName")} />
+      {errors.firstName && <p>{errors.firstName.message}</p>}
+      <button
+        type='button'
+        onClick={() => {
+          [
+            {
+              type: "manual",
+              name: "username",
+              message: "Double Check This",
+            },
+            {
+              type: "manual",
+              name: "firstName",
+              message: "Triple Check This",
+            },
+          ].forEach(({name, type, message}) =>
+            setError("name", {type, message})
+          );
+        }}>
+        Trigger Name Errors
+      </button>
       <input type='submit' />
     </form>
   );
-}
+};
+
+export default App;

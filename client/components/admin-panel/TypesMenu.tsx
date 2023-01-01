@@ -1,10 +1,13 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {TypesMenuProps} from "../../lib/interfaces";
 import TypesList from "./TypesList";
 
-export default function TypesMenu(props: any) {
-  const {register, outerIndex} = props;
-  const types = ["Text", "Select", "Multi Select"];
-  const [selected, setSelected] = useState(types[0]);
+export default function TypesMenu({
+  types,
+  setSelectedTypes,
+  selectedTypes,
+  outerIndex,
+}: TypesMenuProps) {
   const [openTypes, setOpenTypes] = useState(false);
 
   return (
@@ -14,7 +17,7 @@ export default function TypesMenu(props: any) {
         <div
           className='text-gray-600 py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 mb-4 text-sm cursor-pointer'
           onClick={() => setOpenTypes(!openTypes)}>
-          {selected}
+          {selectedTypes[outerIndex].name}
         </div>
         <div className='relative w-full'>
           {openTypes && (
@@ -23,20 +26,20 @@ export default function TypesMenu(props: any) {
                 className='fixed top-0 left-0 w-screen h-screen z-[999]'
                 onClick={() => setOpenTypes(false)}
               />
-              <select
-                {...register(`variables.${outerIndex}.type`)}
-                className='absolute bg-gray-100 text-gray-600 overflow-hidden rounded-xl z-[1000] w-full top-4 text-center cursor-pointer'>
-                {types.map((itemType) => (
-                  <TypesList
-                    key={itemType.trim()}
-                    itemType={itemType}
-                    setSelected={setSelected}
-                    setOpenTypes={setOpenTypes}
-                    register={register}
-                    outerIndex={outerIndex}
-                  />
+              <ul className='absolute bg-gray-100 text-gray-600 overflow-hidden rounded-xl z-[1000] w-full cursor-pointer'>
+                {types.map((type) => (
+                  <li
+                    className='w-full py-4 pl-2  text-gray-600 outline-none text-sm hover:bg-gray-700 hover:text-white cursor-pointer'
+                    onClick={() => {
+                      const clone = [...selectedTypes];
+                      clone[outerIndex] = type;
+                      setSelectedTypes(clone);
+                      setOpenTypes(false);
+                    }}>
+                    {type.name}
+                  </li>
                 ))}
-              </select>
+              </ul>
             </>
           )}
         </div>

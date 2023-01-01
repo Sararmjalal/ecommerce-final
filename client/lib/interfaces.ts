@@ -147,3 +147,23 @@ export interface Category {
   name: string;
   variables: CategoryVariableObject;
 }
+
+export interface TypesMenuProps {
+  types: {
+    name: string;
+    value: string;
+  }[];
+  selectedTypes: {
+    name: string;
+    value: string;
+  }[];
+  setSelectedTypes: React.Dispatch<
+    React.SetStateAction<
+      {
+        name: string;
+        value: string;
+      }[]
+    >
+  >;
+  outerIndex: number;
+}
