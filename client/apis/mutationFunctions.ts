@@ -1,5 +1,11 @@
 import {postRequest} from "./baseConfig";
-import {Location, Receiver, AddressData, ProductBody} from "../lib/interfaces";
+import {
+  Location,
+  Receiver,
+  AddressData,
+  ProductBody,
+  Category,
+} from "../lib/interfaces";
 
 export const createAdmin = async (name: string, phone: string) =>
   await postRequest("/admin/create", {name, phone}, "admin");
@@ -7,17 +13,18 @@ export const createAdmin = async (name: string, phone: string) =>
 export const adminLoginOne = async (phone: string) =>
   await postRequest("/admin/login-step-one", {phone});
 
-export const adminLoginTwo = async (phone: string, code: string) => 
+export const adminLoginTwo = async (phone: string, code: string) =>
   await postRequest("/admin/login-step-two", {phone, code});
 
-export const adminInfo = async () => await postRequest("/admin/me", {}, "admin");
+export const adminInfo = async () =>
+  await postRequest("/admin/me", {}, "admin");
 
 export const addressByUser = async (userId: string) =>
   await postRequest("/address/userList", {userId}, "admin");
 
-export const createCategory = async (name: string, variables: Object) =>
-  await postRequest("/category/create", {name, variables}, "admin");
-
+export const createCategory = async (category: Category) =>
+  await postRequest("/category/create", category, "admin");
+ 
 export const createProduct = async (body: ProductBody) =>
   await postRequest("/product/create", body, "admin");
 

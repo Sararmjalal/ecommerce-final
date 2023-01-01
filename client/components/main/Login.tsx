@@ -1,7 +1,7 @@
 import {AiOutlineClose} from "react-icons/ai";
 import {useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
-import {selectUser, setCurrentUser} from "../../global-state/slice";
+import {useDispatch} from "react-redux";
+import {setCurrentUser} from "../../global-state/slice";
 import {userLoginOne, userLoginTwo, userInfo} from "../../apis";
 import {useMutation} from "@tanstack/react-query";
 import {Form} from "../../lib/interfaces";

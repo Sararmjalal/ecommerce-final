@@ -131,7 +131,7 @@ export type AddCategoryFormValues = {
   variables: {
     name: string;
     type: string;
-    options: {[key: number]: string}[];
+    options: string[];
   }[];
 };
 
@@ -143,7 +143,6 @@ export type CategoryVariableObject = {
 };
 
 export interface Category {
-  _id: string;
   name: string;
   variables: CategoryVariableObject;
 }

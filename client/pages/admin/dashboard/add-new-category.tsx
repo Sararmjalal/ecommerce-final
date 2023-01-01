@@ -3,11 +3,15 @@ import {useForm, useFieldArray} from "react-hook-form";
 import * as MdIcons from "react-icons/md";
 import * as IOIcons from "react-icons/io5";
 import TypesMenu from "../../../components/admin-panel/TypesMenu";
-import {ErrorMessage} from "@hookform/error-message";
 import {
   AddCategoryFormValues,
+  Category,
   CategoryVariableObject,
 } from "../../../lib/interfaces";
+import {createCategory} from "../../../apis";
+import {useMutation} from "@tanstack/react-query";
+import {toast} from "react-toastify";
+import {useRouter} from "next/router";
 
 const AddCategory = () => {
   const types = [
@@ -25,6 +29,8 @@ const AddCategory = () => {
     },
   ];
 
+  const {push} = useRouter();
+
   const [selectedTypes, setSelectedTypes] = useState([types[0]]);
 
   useEffect(() => {
@@ -41,7 +47,6 @@ const AddCategory = () => {
     handleSubmit,
     formState: {errors},
     getValues,
-    setError,
   } = useForm<AddCategoryFormValues>({
     defaultValues: {
       name: "",
@@ -53,10 +58,8 @@ const AddCategory = () => {
         },
       ],
     },
-    mode: "onBlur",
+    mode: "onSubmit",
   });
-
-  console.log(errors);
 
   const {
     fields: variables,
@@ -68,23 +71,32 @@ const AddCategory = () => {
     name: "variables",
   });
 
-  const onSubmit = (data: AddCategoryFormValues) => {
-    console.log(data);
+  const addCategory = useMutation({
+    mutationFn: async (cat: Category) => await createCategory(cat),
+    onSuccess: (res) => {
+      toast.success("Category added successfully");
+      push("/admin/dashboard/categories");
+      console.log(res);
+    },
+    onError: (error) => console.log(error),
+  });
 
-    const variables = {} as CategoryVariableObject;
+  const onSubmit = (data: AddCategoryFormValues) => {
+    const obj = {} as CategoryVariableObject;
     data.variables.forEach(({name, type, options}) => {
       type = type.toLowerCase().trim();
-      variables[name as keyof CategoryVariableObject] = {
+      obj[name as keyof CategoryVariableObject] = {
         type,
         ...(type !== "text" && {
           options: [...options],
         }),
       };
     });
-    console.log(variables);
+    addCategory.mutate({
+      name: data.name,
+      variables: obj,
+    });
   };
-
-  // console.log(errors.variables[0]?.options[0].ref);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -131,27 +143,28 @@ const AddCategory = () => {
                 </div>
                 <div className='w-1/3 md:mr-4 md:w-full'>
                   <label className='ml-1 font-light text-sm'>Name:</label>
-                  {/* <ErrorMessage errors={errors} name='name' /> */}
-                  {errors.variables && (
-                    <p className='text-xs text-reddish ml-3'>
-                      Enter Variable Name
-                    </p>
-                  )}
+
                   <input
                     style={
-                      errors.variables && {
+                      errors.variables &&
+                      errors.variables![outerIndex]?.name && {
                         border: "1px",
                         borderStyle: "solid",
                         borderColor: "red",
                       }
                     }
-                    className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 mb-4 text-sm'
+                    className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 text-sm'
                     placeholder='var name'
                     {...register(`variables.${outerIndex}.name`, {
                       required: true,
                       maxLength: 50,
                     })}
                   />
+                  {errors.variables && errors.variables![outerIndex]?.name && (
+                    <p className='text-xs text-reddish ml-1 my-2 '>
+                      Enter Variable Name
+                    </p>
+                  )}
                 </div>
                 <div className='w-1/3 md:w-full'>
                   <TypesMenu
@@ -173,44 +186,52 @@ const AddCategory = () => {
                       {variable.options.map((option, innerIndex) => {
                         return (
                           <>
-                            {errors?.variables && (
-                              <p className='text-xs text-reddish ml-3'>
-                                {variable.options.length === 1
-                                  ? "At least 1 option is required for non-text types"
-                                  : "Add option name or remove empty option fields."}
-                              </p>
-                            )}
-                            <div className='flex items-center gap-2'>
-                              <input
-                                style={
-                                  errors?.variables && {
-                                    border: "1px",
-                                    borderStyle: "solid",
-                                    borderColor: "red",
+                            <div className='flex flex-col'>
+                              <div className='flex items-center gap-2'>
+                                <input
+                                  style={
+                                    errors.variables &&
+                                    errors.variables[outerIndex] &&
+                                    errors.variables![outerIndex]?.options![
+                                      innerIndex
+                                    ] && {
+                                      border: "1px",
+                                      borderStyle: "solid",
+                                      borderColor: "red",
+                                    }
                                   }
-                                }
-                                className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 mb-4 text-sm'
-                                placeholder='option'
-                                {...register(
-                                  `variables.${outerIndex}.options.${innerIndex}`,
-                                  {required: true, maxLength: 50}
-                                )}
-                              />
-                              <div
-                                className={`w-max cursor-pointer ${
-                                  variable.options.length > 1
-                                    ? "block"
-                                    : "hidden"
-                                }`}
-                                onClick={() => {
-                                  const thisVariable = getValues(
-                                    `variables.${outerIndex}`
-                                  );
-                                  thisVariable.options.splice(outerIndex, 1);
-                                  update(outerIndex, thisVariable);
-                                }}>
-                                <MdIcons.MdRemoveCircle />
+                                  className='text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1  text-sm'
+                                  placeholder='option'
+                                  {...register(
+                                    `variables.${outerIndex}.options.${innerIndex}`,
+                                    {required: true, maxLength: 50}
+                                  )}
+                                />
+                                <div
+                                  className={`w-max cursor-pointer ${
+                                    variable.options.length > 1
+                                      ? "block"
+                                      : "hidden"
+                                  }`}
+                                  onClick={() => {
+                                    const thisVariable = getValues(
+                                      `variables.${outerIndex}`
+                                    );
+                                    thisVariable.options.splice(outerIndex, 1);
+                                    update(outerIndex, thisVariable);
+                                  }}>
+                                  <MdIcons.MdRemoveCircle />
+                                </div>
                               </div>
+                              {errors.variables &&
+                                errors.variables[outerIndex] &&
+                                errors.variables![outerIndex]?.options![
+                                  innerIndex
+                                ] && (
+                                  <p className='text-xs text-reddish ml-1 my-2'>
+                                    Enter Option Name
+                                  </p>
+                                )}
                             </div>
                           </>
                         );
