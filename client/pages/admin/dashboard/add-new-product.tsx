@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useForm, useFieldArray} from "react-hook-form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Editor as TinyMCEEditor} from "tinymce";
@@ -7,6 +7,9 @@ import {useQuery} from "@tanstack/react-query";
 import {allCategories} from "../../../apis";
 import {Category} from "../../../lib/interfaces";
 import Loading from "../../../components/main/Loading";
+import { ProductBodyForm } from "../../../lib/interfaces";
+import UploadBox from "../../../components/admin-panel/product/UploadBox";
+import UploadModal from "../../../components/modals/Upload";
 
 const AddProduct = () => {
 
@@ -14,37 +17,43 @@ const AddProduct = () => {
 
   const [tempState, setTempState] = useState({
     isAvailable: false,
-    isSelected: false
+    isSelected: false,
+    openUpload:false
   });
 
   const { isLoading, data: categories, error} = useQuery({ queryKey: ["categories"], queryFn: allCategories });
 
-  const { register, control, handleSubmit, formState: { errors } } = useForm<any>({
+  const { register, control, handleSubmit, formState: { errors }, getValues, setValue } = useForm<ProductBodyForm>({
     defaultValues: {
-      title: "", price: "", quantity: "", description: "", isAvalible: false, categoryId: "", images: [""],
-      variables: {
-        name: { type: "", options: [""] },
-      },   
+      title: "", price: "", quantity: "", description: "", isAvalible: false, categoryId: "",
+      images: [],
+      variables: [{
+        name: "",
+        type: "",
+        options: [""]
+      }],   
     },
     mode: "onSubmit",
   });
-
-  const { fields: variables, append, remove, update } = useFieldArray({ control, name: "variables" });
-
-  const onSubmit = (data: any) => console.log(data);
+  
+  const { fields: variables, append: appendVar, remove: removeVar, update: updateVar } = useFieldArray({ control, name: 'variables' });
+  
+  const { fields: images, append: appendImg, remove: removeImg, update: updateImg } = useFieldArray({ control, name:"images"});
+  
+  const onSubmit = (data: ProductBodyForm) => console.log(data);
 
   if (isLoading) return <Loading />;
-console.log(errors)
   return (
+    <div className={tempState.openUpload ? 'hidden' : ''}>
     <form onSubmit={handleSubmit(onSubmit)}>
-
       <div>
         <input
           placeholder='Product title...'
           className={`text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 lg:mb-4 mb-8`}
-          {...register(`title` as const, { required: true, maxLength: 50 })} />
+          // {...register(`title` as const, { required: true, maxLength: 50 })}
+        />
         <Editor
-          {...register(`description`, { required: true, maxLength: 500 })}
+          // {...register(`description`, { required: true, maxLength: 500 })}
           onInit={(evt, editor) => (editorRef.current = editor)}
           init={{
             placeholder: "Product Description...",
@@ -103,25 +112,40 @@ console.log(errors)
           </div>
           <div className="flex-1 flex-col gap-2 items-start mx-8 md:mx-4  my-6 px-4">
             <p>Variables</p>
-            <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100"></ul>
+            <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100">
+            
+            </ul>
           </div>
         </div>
-
       </div>
-      
       <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6 px-4'>
         <div>
           <p className='m-4 font-semibold'>Product Gallery:</p>
-          <div className='flex flex-col items-center py-24 cursor-pointer bg-gray-100 hover:bg-gray-200 focus:bg-grat-200 w-full rounded-xl'>
+            <div
+              className='flex flex-col items-center py-24 cursor-pointer bg-gray-100 hover:bg-gray-200 focus:bg-grat-200 w-full rounded-xl'
+              onClick={() => setTempState({...tempState, openUpload: true}) }
+            >
             <div>
               <ReactIconsBS.BsPlusSquareDotted />
             </div>
           </div>
         </div>
       </div>
-
       <button className='dashboard-btn' type='submit'>Add Product</button>
     </form>
+      {
+        tempState.openUpload
+        &&
+        <UploadModal
+          removeImg={removeImg}
+          setValue={setValue}
+          images={images}
+          closeHandler={() => setTempState({
+            ...tempState,
+            openUpload: false
+          })} />
+        }
+    </div>
   );
 };
 
