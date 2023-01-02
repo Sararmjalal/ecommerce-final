@@ -13,11 +13,17 @@
   .btn-blue {
     @apply bg-blueish py-4 px-11 flex justify-center items-center gap-4 rounded-full text-white hover:bg-blue-700 transition-all focus:outline-none;
   }
+  .dashboard-btn {
+    @apply mt-4 text-white bg-gray-900 outline-none hover:bg-gray-800 focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-6 py-2
+  }
   .btn-white-red {
     @apply border-[1px] border-red-500 py-4 px-11 flex justify-center items-center gap-4 rounded-full text-black hover:bg-red-500 hover:text-white transition-all focus:outline-none;
   }
   .input-primary {
     @apply w-full h-12 rounded-full px-9 outline-none border-[1px] border-grayborder lg:text-sm lg:px-3 md:text-center;
+  }
+  .dashboard-input {
+    @apply outline-none text-gray-600 py-3 pl-2 bg-gray-100 hover:bg-gray-200 focus:bg-gray-200	rounded-xl mt-1
   }
   .badge-red {
     @apply text-white bg-reddish px-3 py-2 rounded-full text-xs font-semibold
@@ -95,51 +101,6 @@ a {
   height: 3px;
 }
 
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 30px;
-  height: 20px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 10px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: black;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 10px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-
-
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
-}
 
 input[type="color"] {
 	-webkit-appearance: none;

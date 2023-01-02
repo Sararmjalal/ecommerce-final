@@ -63,5 +63,5 @@ module.exports = {
     backgroundBlendMode: ["responsive"],
     isolation: ["responsive"],
   },
-  plugins: [require("tailwindcss-blend-mode")(), shapeRendering],
+  plugins: [require('tailwind-scrollbar'), require("tailwindcss-blend-mode")(), shapeRendering],
 };
