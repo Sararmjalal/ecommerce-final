@@ -1,4 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
+import { UseFieldArrayRemove, UseFormSetValue } from "react-hook-form";
 
 export interface Pill {
   id?: number;
@@ -79,25 +80,6 @@ export interface GlobalState {
   [key: string]: null | User;
 }
 
-export interface ProductBody {
-  title: string;
-  price: string;
-  quantity: string;
-  description: string;
-  isAvalible: boolean;
-  images: string[];
-  categoryId?: string;
-  variables?: Object;
-}
-
-export interface Product extends ProductBody {
-  _id: string;
-  averageScore: number;
-  scores: Object;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface Form {
   [key: string]: {
     value: string;
@@ -165,4 +147,50 @@ export interface TypesMenuProps {
     >
   >;
   outerIndex: number;
+}
+
+export interface ProductBody {
+  title: string;
+  price: string;
+  quantity: string;
+  description: string;
+  isAvalible: boolean;
+  images: string[];
+  categoryId: string;
+  variables: CategoryVariableObject;
+}
+
+export interface ProductBodyForm {
+  title: string;
+  price: string;
+  quantity: string;
+  description: string;
+  isAvalible: boolean;
+  images: {
+    url: unknown
+  }[]
+  categoryId: string;
+  variables: {
+    name: string;
+    type: string;
+    options: string[];
+  }[];
+}
+
+export interface Product extends ProductBody {
+  _id: string;
+  averageScore: number;
+  scores: Object;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UploadBoxProps {
+  removeImg: UseFieldArrayRemove
+  images: { url: unknown }[]
+}
+
+export interface UploadModalProps extends UploadBoxProps {
+  setValue: UseFormSetValue<ProductBodyForm>
+  closeHandler: () => void
 }
