@@ -1,11 +1,11 @@
 import {QueryClient, useQuery, dehydrate} from "@tanstack/react-query";
-import {allCategories} from "../../../apis";
+import {allProducts} from "../../../apis";
 import List from "../../../components/admin-panel/List";
 import Loading from "../../../components/main/Loading";
 
 export async function getStaticProps() {
   const queryClient = new QueryClient
-  await queryClient.prefetchQuery(['categories'], allCategories)
+  await queryClient.prefetchQuery(['categories'], allProducts)
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -13,19 +13,19 @@ export async function getStaticProps() {
   }
 }
 
-const Categories = () => {
-  const {data: categories, isLoading} = useQuery({
+const Products = () => {
+  const {data: products, isLoading} = useQuery({
     queryKey: ["categories"],
-    queryFn: allCategories,
+    queryFn: allProducts,
   });
 
   if(isLoading) return <Loading />
   return (
     <List
-    name='categories'
-    data={categories}
+    name='products'
+    data={products}
     />
   )
 };
 
-export default Categories;
+export default Products
