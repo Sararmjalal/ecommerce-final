@@ -1,5 +1,5 @@
 import {MdRemoveCircle} from "react-icons/md";
-import { OptionsFormProps } from "../../lib/interfaces";
+import { OptionsFormProps } from "../../../lib/interfaces";
 
 const OptionsForm = ({ errors, outerIndex, register, innerIndex, selectedTypes, variable, getValues, update }: OptionsFormProps) => {
   if(!innerIndex) return <></>

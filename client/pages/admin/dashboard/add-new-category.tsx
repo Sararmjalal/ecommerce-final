@@ -7,7 +7,7 @@ import {allCategories, createCategory} from "../../../apis";
 import {QueryClient, useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
 import {useRouter} from "next/router";
-import VariableForm from "../../../components/categories/VariablesForm";
+import VariableForm from "../../../components/admin-panel/categories/VariablesForm";
 
 const AddCategory = () => {
   const types = [

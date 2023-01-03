@@ -2,8 +2,8 @@ import React from 'react'
 import OptionsForm from './OptionsForm'
 import { MdRemoveCircle } from "react-icons/md";
 import * as IOIcons from "react-icons/io5";
-import TypesMenu from '../admin-panel/TypesMenu';
-import { VariablesFormProps } from '../../lib/interfaces';
+import TypesMenu from '../TypesMenu';
+import { VariablesFormProps } from '../../../lib/interfaces';
 
 const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelectedTypes, errors, register, types, variable, getValues, update}: VariablesFormProps) => {
   return (
