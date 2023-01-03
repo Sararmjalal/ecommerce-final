@@ -1,5 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
-import { UseFieldArrayRemove, UseFormSetValue } from "react-hook-form";
+import { UseFieldArrayMove, UseFieldArrayRemove, UseFormSetValue } from "react-hook-form";
 
 export interface Pill {
   id?: number;
@@ -188,9 +188,29 @@ export interface Product extends ProductBody {
 export interface UploadBoxProps {
   removeImg: UseFieldArrayRemove
   images: { url: unknown }[]
+  moveImg: UseFieldArrayMove
 }
 
 export interface UploadModalProps extends UploadBoxProps {
   setValue: UseFormSetValue<ProductBodyForm>
   closeHandler: () => void
+}
+
+export interface ReadAllFilesProps {
+  files: FileList | null
+  useFor: string
+  images: {
+    url: unknown
+  }[]
+  setImages: UseFormSetValue<ProductBodyForm>
+}
+
+export interface ImagesBoxProps {
+  useFor: string,
+  images: {
+    url: unknown
+  }[],
+  title: string,
+  handleOpenUpload: () => void,
+  setValue: UseFormSetValue<ProductBodyForm>
 }
