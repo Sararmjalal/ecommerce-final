@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {useForm, useFieldArray} from "react-hook-form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Editor as TinyMCEEditor} from "tinymce";
@@ -8,21 +8,18 @@ import {allCategories} from "../../../apis";
 import {Category} from "../../../lib/interfaces";
 import Loading from "../../../components/main/Loading";
 import { ProductBodyForm } from "../../../lib/interfaces";
-import UploadBox from "../../../components/admin-panel/product/UploadBox";
 import UploadModal from "../../../components/modals/Upload";
+import ImagesBox from "../../../components/admin-panel/product/ImagesBox";
 
 const AddProduct = () => {
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
-
   const [tempState, setTempState] = useState({
     isAvailable: false,
     isSelected: false,
     openUpload:false
   });
-
   const { isLoading, data: categories, error} = useQuery({ queryKey: ["categories"], queryFn: allCategories });
-
   const { register, control, handleSubmit, formState: { errors }, getValues, setValue } = useForm<ProductBodyForm>({
     defaultValues: {
       title: "", price: "", quantity: "", description: "", isAvalible: false, categoryId: "",
@@ -35,10 +32,8 @@ const AddProduct = () => {
     },
     mode: "onSubmit",
   });
-  
   const { fields: variables, append: appendVar, remove: removeVar, update: updateVar } = useFieldArray({ control, name: 'variables' });
-  
-  const { fields: images, append: appendImg, remove: removeImg, update: updateImg } = useFieldArray({ control, name:"images"});
+  const { fields: images, append: appendImg, remove: removeImg, update: updateImg, move: moveImg } = useFieldArray({ control, name: "images" });
   
   const onSubmit = (data: ProductBodyForm) => console.log(data);
 
@@ -60,9 +55,7 @@ const AddProduct = () => {
             height: 500,
           }} />
       </div>
-
       <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6'>
-        
         <div>
           <p className='m-4 font-semibold'>Product Details:</p>
           <div className='flex gap-2 items-center mx-8 md:mx-4 mr-1'>
@@ -87,7 +80,6 @@ const AddProduct = () => {
             </div>
           )}
         </div>
-        
         <div className="flex lg:flex-col w-full">
           <div className="flex-1 flex-col gap-2 items-start mx-8 md:mx-4 my-6 px-4">
             <p>Category</p>
@@ -112,25 +104,32 @@ const AddProduct = () => {
           </div>
           <div className="flex-1 flex-col gap-2 items-start mx-8 md:mx-4  my-6 px-4">
             <p>Variables</p>
-            <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100">
-            
+              <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl
+              mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100">
             </ul>
           </div>
         </div>
       </div>
-      <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6 px-4'>
-        <div>
-          <p className='m-4 font-semibold'>Product Gallery:</p>
-            <div
-              className='flex flex-col items-center py-24 cursor-pointer bg-gray-100 hover:bg-gray-200 focus:bg-grat-200 w-full rounded-xl'
-              onClick={() => setTempState({...tempState, openUpload: true}) }
-            >
-            <div>
-              <ReactIconsBS.BsPlusSquareDotted />
-            </div>
+      <div className='w-full grid grid-cols-3 lg:grid-cols-1 gap-4 border-[1px] border-gray-200 rounded-xl md:mr-[1rem] mr-0 mt-4 pb-6 px-4'>
+          <div className="col-span-1">
+            <ImagesBox
+              title='Featured Image:'
+              useFor="single"
+              images={images}
+              setValue={setValue}
+              handleOpenUpload={() => setTempState({...tempState, openUpload: true})}
+              />
           </div>
-        </div>
-      </div>
+          <div className="col-span-2 md::col-span-1">
+          <ImagesBox
+              title='Gallery:'
+              useFor="multiple"
+              images={images}
+              setValue={setValue}
+              handleOpenUpload={() => setTempState({...tempState, openUpload: true})}
+              />
+          </div>
+          </div>
       <button className='dashboard-btn' type='submit'>Add Product</button>
     </form>
       {
@@ -139,11 +138,9 @@ const AddProduct = () => {
         <UploadModal
           removeImg={removeImg}
           setValue={setValue}
+          moveImg={moveImg}
           images={images}
-          closeHandler={() => setTempState({
-            ...tempState,
-            openUpload: false
-          })} />
+          closeHandler={() => setTempState({...tempState, openUpload: false })} />
         }
     </div>
   );
