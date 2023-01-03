@@ -28,7 +28,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
       msg: "",
       value: "",
     },
-    code: {
+    code: { 
       msg: "",
       value: "",
     },

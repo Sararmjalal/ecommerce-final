@@ -17,11 +17,13 @@ export default function App({ Component, pageProps }: AppProps) {
   queryClient.setDefaultOptions({
     queries: {
       onError: (error: AxiosError | unknown) => {
+        console.log(error)
         error instanceof AxiosError ? toast.error(error?.response?.data?.msg) : toast.error('Something went wrong.')
       }
     },
       mutations: {
-      onError: (error: AxiosError | unknown) => {
+        onError: (error: AxiosError | unknown) => {
+          
           error instanceof AxiosError ? toast.error(error?.response?.data?.msg) : toast.error('Something went wrong.')
         }
       }

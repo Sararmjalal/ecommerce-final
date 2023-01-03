@@ -1,9 +1,17 @@
 import React from "react";
 import Image from "next/image";
 import {AiOutlineClose, AiOutlinePlus, AiOutlineMinus} from "react-icons/ai";
+import { useMutation } from "@tanstack/react-query";
+import { changeCart } from "../../apis";
+import { CartBody } from "../../lib/interfaces";
 
 const CartItemCard = (props) => {
-  console.log(props);
+  const changeQuantity = useMutation({
+    mutationFn: async (cartInfo: CartBody) => await changeCart(cartInfo),
+    onSuccess: (res) => console.log(res),
+    onError: (res) => console.log(res)
+  })
+  // console.log(props);
   return (
     <div className='grid grid-cols-12 gap-4 w-full text-center items-center my-4 border-[1px] border-grayborder rounded-lg p-2'>
       <div className=' col-span-4 md:col-span-12 '>
@@ -39,7 +47,7 @@ const CartItemCard = (props) => {
         <p>${props.price * props.ammount}</p>
       </div>
       <div className=' col-span-1 md:col-span-3'>
-        <AiOutlineClose />
+        <AiOutlineClose className="cursor-pointer" />
       </div>
     </div>
   );

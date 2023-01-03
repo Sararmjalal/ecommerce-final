@@ -72,7 +72,7 @@ class CartSchema {
     try {
       if (!this.doesCacheneedsUpdate && this.cache) return this.cache;
 
-      const result = readdirSync(dbDirectory).map((item) => {
+      const result = readdirSync(dbDirectory)?.map((item) => {
         return JSON.parse(
           readFileSync(path.join(dbDirectory, item), {
             encoding: "utf-8",
@@ -96,8 +96,7 @@ class CartSchema {
   async findByUserId(userId) {
     try {
       const allCart = deepClone(await this.findAll())
-
-      return allCart.find(cart => cart.userId == userId)
+      return allCart.find(cart => cart.userId == userId) ?? []
 
     } catch (error) {
       throw error

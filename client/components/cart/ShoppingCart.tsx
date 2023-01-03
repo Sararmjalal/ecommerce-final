@@ -2,39 +2,19 @@ import React from "react";
 import CartItemCard from "./CartItemCard";
 import {toast} from "react-toastify";
 import Checkout from "./Checkout";
+import {AiOutlineArrowLeft} from 'react-icons/ai'
+import Link from "next/link";
 
-const ShoppingCart = () => {
-  const cartItems = [
-    {
-      id: 1,
-      image: "/assets/products/product-1.png",
-      title: "T-shirt Summer Vibes",
-      color: "White",
-      size: "XL",
-      ammount: 2,
-      price: 89.99,
-    },
-    {
-      id: 2,
-      image: "/assets/products/product-2.png",
-      title: "Basic Slim-Fit T-shirt",
-      color: "Black",
-      size: "XL",
-      ammount: 2,
-      price: 69.99,
-    },
-  ];
-
-  const calcTotalPrice = cartItems.reduce(
-    (prevVal, currentVal) => prevVal + currentVal.price * currentVal.ammount,
+const ShoppingCart = (props:{setCheckoutStep:React.Dispatch<React.SetStateAction<string>>, cartItems}) => {
+ 
+  const calcTotalPrice = props.cartItems.reduce(
+    (prevVal:number, currentVal:number) => prevVal + currentVal.price * currentVal.ammount,
     0
   );
-
-  const nextStepHandle = () => <Checkout />;
-
+ 
   return (
     <>
-      <div className='grid grid-cols-12 w-full gap-2 text-center md:text-start my-4'>
+      <div className='md:hidden grid grid-cols-12 w-full gap-2 text-center md:text-start my-4'>
         <div className=' col-span-4 md:col-span-12 text-grayish'>
           <p>Product</p>
         </div>
@@ -45,15 +25,15 @@ const ShoppingCart = () => {
           <p>Size</p>
         </div>
         <div className=' col-span-3 md:col-span-6 text-grayish'>
-          <p>Ammount</p>
+          <p>Amount</p>
         </div>
         <div className=' col-span-1 md:col-span-3 text-grayish'>
           <p>Price</p>
         </div>
         <div className=' col-span-1 md:col-span-3 text-grayish'></div>
       </div>
-      {cartItems.length ? (
-        cartItems.map((cartItem) => {
+      {props.cartItems.length ? (
+        props.cartItems.map((cartItem) => {
           return (
             <CartItemCard
               key={cartItem.id}
@@ -72,15 +52,22 @@ const ShoppingCart = () => {
           There is no items in your cart!
         </p>
       )}
-      <div className='flex md:flex-col items-center justify-end gap-12 sm:gap-4 mt-20'>
-        <p>Total Cost:</p>
-        <p>${calcTotalPrice}</p>
-        <button className='btn-secondary py-3'>
-          Continue Shopping
-        </button>
-        <button className='btn-primary text-base py-3' onClick={nextStepHandle}>
-          Next Step
-        </button>
+      <div className="flex md:flex-col md:gap-4 justify-between items-center mt-20 md:mt-10">
+        <Link href={'/shop'}>
+          <div className="flex items-center gap-6 hover:scale-110 transition duration-200 cursor-pointer">
+            <AiOutlineArrowLeft/>
+            <button className='font-semibold'>
+              Continue Shopping
+            </button>
+          </div>
+        </Link>
+        <div className='flex md:flex-col items-center gap-12 sm:gap-4'>
+          <p>Total Cost:</p>
+          <p>${calcTotalPrice}</p>
+          <button className='btn-primary text-base py-3' onClick={()=>props.setCheckoutStep('checkout')}>
+            Checkout
+          </button>
+        </div>
       </div>
     </>
   );

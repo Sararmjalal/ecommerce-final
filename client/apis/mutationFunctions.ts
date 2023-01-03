@@ -5,6 +5,7 @@ import {
   AddressData,
   ProductBody,
   Category,
+  CartBody
 } from "../lib/interfaces";
 
 export const createAdmin = async (name: string, phone: string) =>
@@ -63,8 +64,8 @@ export const addToCart = async (productId: string, userId: string) =>
 export const removeFromCart = async (productId: string, userId: string) =>
   await postRequest("/cart/remove", {productId, userId}, "user");
 
-export const changeCart = async (productId: string, userId: string, quantity: number) =>
-  await postRequest("/cart/change", { productId, userId, quantity }, "user")
+export const changeCart = async (body:CartBody) =>
+  await postRequest("/cart/change", body, "user")
 
 export const checkout = async () =>
   await postRequest("/order/check-out", {}, "user");

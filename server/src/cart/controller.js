@@ -10,11 +10,11 @@ export default {
     const thisUser = await UserModel.authorizeUser(req.user)  
 
     const thisCart = await Cart.findByUserId(thisUser._id)
-
-    const newCart = await pricifyCart(thisCart, ProductModel)
+ 
+    // const newCart = await pricifyCart(thisCart, ProductModel)
 
     return res.status(200).json({
-      cart: newCart
+      cart: thisCart[0] ? await pricifyCart(thisCart, ProductModel) : thisCart
     })
   },
   addtoCart: async (req, res) => {
