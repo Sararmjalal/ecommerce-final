@@ -4,7 +4,7 @@ import {
   Receiver,
   AddressData,
   ProductBody,
-  Category,
+  CreateCategoryBody,
   CartBody
 } from "../lib/interfaces";
 
@@ -23,7 +23,7 @@ export const adminInfo = async () =>
 export const addressByUser = async (userId: string) =>
   await postRequest("/address/userList", {userId}, "admin");
 
-export const createCategory = async (category: Category) =>
+export const createCategory = async (category: CreateCategoryBody) =>
   await postRequest("/category/create", category, "admin");
  
 export const createProduct = async (body: ProductBody) =>
