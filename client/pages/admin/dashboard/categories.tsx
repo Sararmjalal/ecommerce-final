@@ -1,7 +1,8 @@
 import {QueryClient, useQuery, dehydrate} from "@tanstack/react-query";
 import {allCategories} from "../../../apis";
-import List from "../../../components/admin-panel/List";
+import ListItem from "../../../components/admin-panel/ListItem";
 import Loading from "../../../components/main/Loading";
+import { Category } from "../../../lib/interfaces";
 
 export async function getStaticProps() {
   const queryClient = new QueryClient
@@ -21,10 +22,21 @@ const Categories = () => {
 
   if(isLoading) return <Loading />
   return (
-    <List
-    name='categories'
-    data={categories}
-    />
+    <div>
+      {
+        !categories[0] ?
+        <p className='font-light'>No Category found.</p>
+          :
+          categories.map((category:Category) => (
+            <ListItem
+              key={category._id}
+              title={category.name}
+              _id={category._id}
+              isCategory={true}
+            />
+        ))
+      }
+   </div>
   )
 };
 

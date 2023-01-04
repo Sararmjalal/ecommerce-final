@@ -272,9 +272,18 @@ export interface CatListProps {
   onCategorySelect: (i :number) => void
 }
 
+export interface DashboardListProps {
+  _id:string,
+  title:string,
+  isProduct?:boolean,
+  isCategory?:boolean,
+  isUser?:boolean,
+  img?:string }
+
 
 // CART TYPES ==============================================
 export interface CartBody {
   productId: string,
   userId: string
 }
+

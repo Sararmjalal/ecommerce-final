@@ -9,6 +9,7 @@ import {SessionProvider} from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query'
 import { AxiosError } from 'axios';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export default function App({ Component, pageProps }: AppProps) {
   
@@ -41,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
             />
             </StateProvider>
           </Hydrate>
+          <ReactQueryDevtools />
         </QueryClientProvider>
       </Provider>
     </SessionProvider>

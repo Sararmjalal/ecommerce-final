@@ -1,38 +1,41 @@
-import { MdExpandMore } from "react-icons/md";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import Image from "next/image";
 import CategoryInfo from "./category/Info";
 import UserInfo from "./user/UserInfo";
 import { useState } from "react";
 import Link from "next/link";
+import { DashboardListProps } from "../../lib/interfaces";
 
-const ListItem = ({ item, name }: { item: any, name: string }) => {
-  const [open, setOpen] = useState(false)
+const ListItem = ({ _id, title, isProduct = false, isCategory = false, isUser = false, img }: DashboardListProps) => {
+  
+  const [open, setOpen] = useState({
+    category: false,
+    user:false
+  })
   
   return (
     <div>
-      <div className={`grid grid-cols-3 bg-gray-100 py-6 my-2 px-4 rounded-xl border-[1px] border-gray-200`}>
+      <div className='grid grid-cols-3 bg-gray-100 py-6 my-2 px-4 rounded-xl border-[1px] border-gray-200'>
         {
-          name !== 'categories' &&
+          isProduct || isUser &&
           <div className='col-span-1 relative w-full h-24'>
           <Image
-            alt={`${name} image`}
+            alt='dashboard list image'
             fill
-            src={item.images ? `${process.env.server}${item.images[0]}` : '/default.svg'}
+            src={img ?? '/default.svg'}
           />
         </div>
         }
-        <div className={name === 'categories' ? 'col-span-2' : 'col-span-1'}>
-          <p className='font-light w-max'>
-            { name === 'products' ? item.title : item.name }
-          </p>
+        <div className={!img ? 'col-span-2' : 'col-span-1'}>
+          <p className='font-light w-max'>{title}</p>
         </div>
         <div className="col-span-1 ">
           {
-            name === 'products' ?
+            isProduct ?
               <div className="w-full flex gap-2 items-end">
                 <Link href={{
                   pathname: '/admin/dashboard/edit-product/[_id]',
-                  query:{_id: item._id}
+                  query: {_id}
                 }}>
                   Edit
                 </Link>
@@ -41,12 +44,27 @@ const ListItem = ({ item, name }: { item: any, name: string }) => {
               </div>
               :
               <div className="p-1 rounded-full bg-black border-gray-200 w-max ml-auto cursor-pointer">
-                <MdExpandMore onClick={() => setOpen(!open)} color="#f3f4f6"/>
+                 {
+                  isCategory && !isProduct && open.category &&
+                  <MdExpandLess onClick={() => setOpen({...open, category:false })} color="#f3f4f6" />
+                }
+                {
+                  isUser && !isProduct && open.user &&
+                  <MdExpandLess onClick={() => setOpen({...open, user:false })} color="#f3f4f6" />
+                }
+                {
+                  isCategory && !isProduct && !open.category &&
+                  <MdExpandMore onClick={() => setOpen({...open, category:true })} color="#f3f4f6" />
+                }
+{
+                  isUser && !isProduct && !open.user &&
+                  <MdExpandMore onClick={() => setOpen({...open, user:true })} color="#f3f4f6" />
+                }
               </div>
           }
           </div>
-          {name === 'categories' && open && <CategoryInfo />}
-          {name === 'users' && open && <UserInfo />}
+          {isCategory && open.category && <CategoryInfo />}
+          {!isCategory && !isProduct && open.user && <UserInfo />}
       </div>
   </div>
 );

@@ -32,8 +32,11 @@ export const createProduct = async (body: ProductBody) =>
 export const editProduct = async (productId: string, data: ProductBody) =>
   await postRequest("/product/edit", {productId, data}, "admin");
 
-export const allUsers = async (page: number, limit: number) =>
-  await postRequest("/user/allusers", {page, limit}, "admin");
+export const allUsers = async (body: {
+  page: number,
+  limit: number
+}) =>
+  await postRequest("/user/allusers", body, "admin");
 
 export const userSignupOne = async (phone: string, name: string) =>
   await postRequest("/user/sign-up-one", {phone, name});
