@@ -29,8 +29,5 @@ export default {
       return res.status(500).json({ msg: error.message });
   
     }
-  },
-  editCategory: async (req, res) => {
-    
   }
 }

@@ -10,6 +10,8 @@ export default {
 
       const thisAdmin = await AdminModel.authorizeAdmin(req.admin)
 
+      if (!thisAdmin) throw new Error("unauthorized");
+
       const { categoryId, variables, ...rest } = req.body
       
       await CategoryModel.compareVariables(categoryId, variables)
@@ -31,6 +33,8 @@ export default {
   editProduct: async (req, res) => {
     try {
       const thisAdmin = await AdminModel.authorizeAdmin(req.admin)
+
+      if (!thisAdmin) throw new Error("unauthorized");
 
       if (!req.body.productId || !req.body.data) throw new Error("bad request: bad inputs");
 

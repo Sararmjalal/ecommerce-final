@@ -210,22 +210,27 @@ export interface ProductBody {
   variables: CategoryVariableObject;
 }
 
+export interface ThisCategory extends Category {
+  vars: {
+    name: string;
+    type: string;
+    options: { name: string, isSelected: boolean }[];
+    isSelected:boolean
+  }[];
+  isSelected: boolean
+}
+
 export interface ProductBodyForm {
   title: string;
-  price: string;
-  quantity: string;
-  description: string;
+  price: number;
+  quantity: number;
   isAvalible: boolean;
-  cats: ProductCategory[];
+  cats: ThisCategory[];
   images: {
     url: unknown
   }[]
-  categoryId: string;
-  variables: {
-    name: string;
-    type: string;
-    options: string[];
-  }[];
+  thisCategory: ThisCategory
+  openUpload: boolean
 }
 
 export interface Product extends ProductBody {
@@ -267,7 +272,7 @@ export interface ImagesBoxProps {
 }
 
 export interface CatListProps {
-  cat: ProductCategory,
+  cat: ThisCategory,
   i: number,
   onCategorySelect: (i :number) => void
 }
@@ -278,7 +283,20 @@ export interface DashboardListProps {
   isProduct?:boolean,
   isCategory?:boolean,
   isUser?:boolean,
-  img?:string }
+  img?: string
+}
+  
+export interface VarListProps {
+  thisVariable: {
+    name: string
+    type: string
+    options?: { name: string, isSelected: boolean }[]
+  }
+  outerIndex: number
+  onOptionSelect: (outerIndex: number, innerIndex: number, thisType:string) => void
+  length: number
+  register: UseFormRegister<ProductBodyForm>
+}
 
 
 // CART TYPES ==============================================

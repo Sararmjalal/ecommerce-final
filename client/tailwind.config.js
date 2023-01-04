@@ -16,7 +16,6 @@ const shapeRendering = plugin(function ({ addUtilities }) {
       'shape-rendering': 'geometricPrecision',
     },
   }
-
   addUtilities(newUtilities)
 })
 
