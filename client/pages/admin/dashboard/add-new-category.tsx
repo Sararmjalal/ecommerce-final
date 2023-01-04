@@ -24,10 +24,10 @@ const AddCategory = () => {
   useEffect(() => {
     const clone = getValues("variables");
     const thisIndex = selectedTypes.length - 1
-    if (selectedTypes[thisIndex].name === 'Color') clone[thisIndex].options[0] = '#000000'
+    if (selectedTypes[thisIndex].name === 'Color') clone[thisIndex].options[1] = '#000000'
     clone[thisIndex].type = selectedTypes[thisIndex].value
     setValue('variables', clone)
-  }, []);
+  }, [selectedTypes]);
 
   const {
     register, control, handleSubmit, formState: {errors}, getValues, setValue } = useForm<AddCategoryFormValues>({

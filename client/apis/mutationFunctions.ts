@@ -77,4 +77,4 @@ export const submitComment = async (productId: string, text: string) =>
   await postRequest("/comment/submit", {productId, text}, "user");
 
 export const submitRate = async (productId: string, score: number) =>
-  await postRequest("/rate/submit", {productId, score}, "user");
+  await postRequest("/rate/submit", {productId, score}, "user"); 
