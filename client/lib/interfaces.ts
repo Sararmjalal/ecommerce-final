@@ -140,6 +140,7 @@ export interface Category extends CreateCategoryBody {
 
 export interface ProductCategory extends Category {
   isSelected: boolean
+  vars: CategoryVariableObject[] 
 }
 
 export interface TypesMenuProps {

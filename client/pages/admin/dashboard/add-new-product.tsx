@@ -6,7 +6,7 @@ import * as ReactIconsBS from "react-icons/bs/index";
 import {useQuery} from "@tanstack/react-query";
 import {allCategories} from "../../../apis";
 import Loading from "../../../components/main/Loading";
-import { ProductBodyForm, ProductCategory, Category } from "../../../lib/interfaces";
+import { ProductBodyForm, ProductCategory, Category, CategoryVariableObject } from "../../../lib/interfaces";
 import UploadModal from "../../../components/modals/Upload";
 import ImagesBox from "../../../components/admin-panel/product/ImagesBox";
 import Link from "next/link";
@@ -19,41 +19,48 @@ const AddProduct = () => {
     isAvailable: false,
     openUpload: false,
   });
+
   const { isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: allCategories,
     onSuccess: (data) => {
-      const clone = data.map((cetegory: Category) => (
-        {...cetegory, isSelected: false}
-      ))
+      const clone = data.map((category: Category) => {
+        const vars: CategoryVariableObject[]  = []
+        Object.entries(category.variables).forEach(([key, val]) => {
+          vars.push({
+            name: key,
+            ...val
+          })
+        })
+        return { ...category, isSelected: false, vars }
+        })
       setValue('cats', clone)
     }
-  });
+  })
+
   const { register, control, handleSubmit, formState: { errors }, getValues, setValue } = useForm<ProductBodyForm>({
     defaultValues: {
       title: "", price: "", quantity: "", description: "", isAvalible: false, categoryId: "",
       cats:[],
       images: [],
-      variables: [{
-        name: "",
-        type: "",
-        options: [""]
-      }],   
+      variables: [],   
     },
     mode: "onSubmit",
   });
+
   const { fields: variables, append: appendVar, remove: removeVar, update: updateVar } = useFieldArray({ control, name: 'variables' });
   const { fields: images, append: appendImg, remove: removeImg, update: updateImg, move: moveImg } = useFieldArray({ control, name: "images" });
   const { fields: cats, append: appendCat, remove: removeCat, update: updateCat, move: moveCat } = useFieldArray({ control, name: "cats" });
-
+  console.log(cats)
   const onCategorySelect = (i: number) => {
     const clone = [...cats]
     clone.forEach((category: ProductCategory) => category.isSelected = false)
     clone[i].isSelected = true
     setValue('cats', clone)
   }
+  console.log(cats)
   const onSubmit = (data: ProductBodyForm) => console.log(data);
-// console.log(cats)
+
   if (isLoading) return <Loading />;
   return (
     <div className={tempState.openUpload ? 'hidden' : ''}>
@@ -114,9 +121,26 @@ const AddProduct = () => {
           </div>
           <div className="flex-1 flex-col gap-2 items-start mx-8 md:mx-4  my-6 px-4">
             <p>Variables</p>
-              <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl
-              mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100">
-            </ul>
+              <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl mt-4 p-4 mr-4 md:mr-0 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100">
+                {cats.map((cat: ProductCategory) => (
+                  <div>
+                   {/* {cat.vars.map((variable, innerIndex:number) => {
+                     return (
+                       variable.name?.type === 'text' ?
+                      ( <div className="flex items-center gap-2 w-full mb-6">
+                      <p className='w-1/2 font-semibold text-gray-500'>{variable.name}:</p>
+                      <input
+                        placeholder='Type value...'
+                        className="w-1/2 outline-none text-gray-600 py-3 pl-2 bg-gray-100	rounded-xl mt-1 hover:bg-gray-200 focus:bg-gray-200"
+                      />
+                    </div>):(<p>asdfghjkhmgfd</p>)   
+                      
+                         
+                    );
+                })} */}
+                  </div>
+                ))}
+              </ul>
           </div>
         </div>
       </div>
@@ -139,7 +163,7 @@ const AddProduct = () => {
               handleOpenUpload={() => setTempState({...tempState, openUpload: true})}
               />
           </div>
-          </div>
+        </div>
       <button className='dashboard-btn' type='submit'>Add Product</button>
     </form>
       {

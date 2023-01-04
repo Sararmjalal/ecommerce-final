@@ -65,14 +65,12 @@ const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelecte
           </div>
           <div
             key={`addOpt${outerIndex}`}
+            className='text-sm cursor-pointer ml-1 text-gray-900 hover:text-primary font-semibold flex'
             onClick={() => {
-              const thisVariable = getValues(
-                `variables.${outerIndex}`
-              );
+              const thisVariable = getValues(`variables.${outerIndex}`);
               thisVariable.options.push(selectedTypes[outerIndex].name === 'Color' ?  "#000000" : "");
               update(outerIndex, thisVariable);
-            }}
-            className='text-sm cursor-pointer ml-1 text-gray-900 hover:text-primary font-semibold flex'>
+            }}>
             <div className='w-max flex items-center gap-1 mt-2'>
               <IOIcons.IoAddCircle />
               <div>Add More Options</div>
