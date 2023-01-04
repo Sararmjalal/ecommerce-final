@@ -1,6 +1,7 @@
 
 import { getTimeDifference } from 'lib/date'
 import UserModel from './model'
+import AdminModel from '../admin/model'
 import validatePhoneNumber from 'lib/utils/validatePhoneNumber'
 
 const userTemp = {}
@@ -120,11 +121,20 @@ export default {
   },
   userList: async (req, res) => {
 
-    const { page = 0, limit = 10 } = req.body;
+    try {
+      const thisAdmin = await AdminModel.authorizeAdmin(req.admin)
 
-    const allUsers = await UserModel.findAll()
+      if(!thisAdmin) throw new Error('unauthorized')
 
-    return res.status(200).json(allUsers.slice(page * limit, (page + 1) * limit));
+      const { page = 0, limit = 10 } = req.body;
+
+      const allUsers = await UserModel.findAll()
+
+      return res.status(200).json(allUsers.slice(page * limit, (page + 1) * limit));
+    
+   } catch (error) {
+    throw error
+   }
     
   }
 
