@@ -22,7 +22,7 @@ const UserPanel = ({ children, userMenu }: LayoutProps) => {
   } , [thisUser])
 
   if(!thisUser) return <Loading />
-  return (
+  return ( 
     <div>
       <AdminTopbar />
       <Header userMenu={userMenu} />

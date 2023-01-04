@@ -6,6 +6,7 @@ import TypesMenu from '../TypesMenu';
 import { VariablesFormProps } from '../../../lib/interfaces';
 
 const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelectedTypes, errors, register, types, variable, getValues, update}: VariablesFormProps) => {
+  
   return (
     <div
     key={`var${outerIndex}`}
@@ -44,7 +45,7 @@ const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelecte
       />
     </div>
     <div className='w-1/3 md:w-full'>
-      {variables[outerIndex].type !== "text" && (
+        {variables[outerIndex].type !== "text" && (
         <>
           <label className='ml-1 font-light text-sm'>Options:</label>
           <div className={`${selectedTypes[outerIndex].name === 'Color' ? 'flex flex-wrap gap-2 mt-2 mb-4' : ''}`}>
