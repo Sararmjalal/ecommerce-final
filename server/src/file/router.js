@@ -1,16 +1,13 @@
 
 import multer from 'multer'
-
 import express from 'express'
 import asyncHandler from "lib/utils/asyncHandler";
-import adminAuth from 'lib/utils/adminAuth'
-import AdminModel from 'admin/model'
-
+import adminAuth from "lib/utils/adminAuth";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
 
-    if (!req.user || !req.user._id) return
+    if (!req.admin || !req.admin._id) return 
 
     cb(null, './src/public')
   },
@@ -31,7 +28,8 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    if (!req.user || !req.user._id) return cb(null, false)
+
+    if (!req.admin || !req.admin._id) return cb(null, false)
 
     cb(null, true)
   }
@@ -40,13 +38,12 @@ const upload = multer({
 const router = express.Router()
 
 
-router.post('/upload-reserve', asyncHandler(adminAuth), upload.single('reserve'), async (req, res, next) => {
+router.post('/upload-reserve', asyncHandler(adminAuth) ,upload.single('reserve'), async (req, res, next) => {
   try {
 
     if (!req.fileName) throw new Error('somethings wrong')
 
     return res.status(200).json({ name: req.fileName })
-
     
   } catch (error) {
     return res.status(500).json({ msg: error.message })

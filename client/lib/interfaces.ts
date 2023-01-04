@@ -305,3 +305,7 @@ export interface CartBody {
   userId: string
 }
 
+export interface PaginationBody {
+  page: number
+  limit: number
+}
