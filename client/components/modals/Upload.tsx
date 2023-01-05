@@ -4,7 +4,7 @@ import { UploadModalProps } from "../../lib/interfaces"
 import UploadBox from "../admin-panel/product/UploadBox"
 import { readAllFiles } from "../../lib";
 
-const UploadModal = ({ images, setValue, closeHandler, removeImg, moveImg }: UploadModalProps) => {
+const UploadModal = ({ images, setValue, closeHandler, removeImg, moveImg, files }: UploadModalProps) => {
 
   return createPortal((
     <>
@@ -41,14 +41,18 @@ const UploadModal = ({ images, setValue, closeHandler, removeImg, moveImg }: Upl
             accept="image/*"
             className="hidden"
             multiple
-            onChange={(e) => 
+            onChange={(e) => {
               readAllFiles({
                 useFor: 'gallery',
                 files: e.target.files,
                 images,
                 setImages: setValue
               })
-            }
+              const clone = [...files]
+              if(!e.target.files) return
+              for(let i=0; i<e.target.files.length; i++) clone.push(e.target.files[i])
+              setValue('files', clone)
+            }}
           />
           </div>
         </div>

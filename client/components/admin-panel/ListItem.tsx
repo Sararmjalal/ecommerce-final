@@ -1,6 +1,6 @@
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import Image from "next/image";
-import CategoryInfo from "./category/Info";
+import CategoryInfo from "./categories/Info";
 import UserInfo from "./user/UserInfo";
 import { useState } from "react";
 import Link from "next/link";
@@ -17,14 +17,14 @@ const ListItem = ({ _id, title, isProduct = false, isCategory = false, isUser = 
     <div>
       <div className='grid grid-cols-3 bg-gray-100 py-6 my-2 px-4 rounded-xl border-[1px] border-gray-200'>
         {
-          isProduct || isUser &&
-          <div className='col-span-1 relative w-full h-24'>
+          img &&
+          <div className='col-span-1 relative w-24 h-24'>
           <Image
             alt='dashboard list image'
             fill
-            src={img ?? '/default.svg'}
+            src={img ? `${process.env.SERVER}/${img}` : `/assets/images/default.svg`}
           />
-        </div>
+         </div>
         }
         <div className={!img ? 'col-span-2' : 'col-span-1'}>
           <p className='font-light w-max'>{title}</p>
@@ -34,7 +34,7 @@ const ListItem = ({ _id, title, isProduct = false, isCategory = false, isUser = 
             isProduct ?
               <div className="w-full flex gap-2 items-end">
                 <Link href={{
-                  pathname: '/admin/dashboard/edit-product/[_id]',
+                  pathname: '/admin/dashboard/product/edit/[_id]',
                   query: {_id}
                 }}>
                   Edit

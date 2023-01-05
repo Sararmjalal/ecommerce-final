@@ -197,17 +197,41 @@ export interface VariablesFormProps extends OptionsFormProps {
 }[]>>
 }
 
-
 // PRODUCT TYPES ==============================================
+export interface AddProductDefaultValues{
+  title: "",
+  isAvalible: false,
+  cats: [],
+  thisCategory: {},
+  images: [] | {url:string}[],
+  openUpload: false,
+  files: [],
+  description: string
+}
+
+export interface EditProductDefaultValues extends AddProductDefaultValues {
+  price: number,
+  quantity: number,
+}
+
+export interface AddEditProductForm {
+  defaultValues: AddProductDefaultValues | EditProductDefaultValues
+  useFor: string
+}
+
 export interface ProductBody {
   title: string;
-  price: string;
-  quantity: string;
+  price: number;
+  quantity: number;
   description: string;
   isAvalible: boolean;
   images: string[];
   categoryId: string;
-  variables: CategoryVariableObject;
+  variables: ProductBodyVariables;
+}
+
+export interface ProductBodyVariables {
+  [key: string]: string[]
 }
 
 export interface ThisCategory extends Category {
@@ -231,6 +255,8 @@ export interface ProductBodyForm {
   }[]
   thisCategory: ThisCategory
   openUpload: boolean
+  files: File[]
+  description: string
 }
 
 export interface Product extends ProductBody {
@@ -250,6 +276,7 @@ export interface UploadBoxProps {
 export interface UploadModalProps extends UploadBoxProps {
   setValue: UseFormSetValue<ProductBodyForm>
   closeHandler: () => void
+  files: File[]
 }
 
 export interface ReadAllFilesProps {
@@ -269,6 +296,7 @@ export interface ImagesBoxProps {
   title: string,
   handleOpenUpload: () => void,
   setValue: UseFormSetValue<ProductBodyForm>
+  files: File[]
 }
 
 export interface CatListProps {

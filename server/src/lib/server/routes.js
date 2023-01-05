@@ -7,6 +7,7 @@ import CategoryRouter from 'category/router'
 import OrderRouter from 'order/router'
 import userRouter from 'user/router'
 import fileRouter from 'file/router'
+import addressRouter from 'address/router'
 
 import resetDb from "lib/utils/reset-db";
 
@@ -38,6 +39,8 @@ export default (app) => {
   app.use('/order/', OrderRouter)
 
   app.use('/file/', fileRouter)
+
+  app.use('/address/', addressRouter)
 
   app.use((error, req, res, next) => {
     printError(error.message)
