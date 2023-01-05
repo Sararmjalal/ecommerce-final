@@ -22,7 +22,7 @@ if (!existsSync(dbDirectory)) {
     "cpu": ["coreI7"],
     "moreInfo": ["kheyli qashange too jibam ja mishe taze"],
     "ports": ["hdmi", "wifi"]
-  }
+  } 
 
 
 */

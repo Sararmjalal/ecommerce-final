@@ -1,8 +1,7 @@
 import {MdRemoveCircle} from "react-icons/md";
 import { OptionsFormProps } from "../../../lib/interfaces";
 
-const OptionsForm = ({ errors, outerIndex, register, innerIndex, selectedTypes, variable, getValues, update }: OptionsFormProps) => {
-  if(!innerIndex) return <></>
+const OptionsForm = ({ errors, outerIndex, register, innerIndex=0, selectedTypes, variable, getValues, update }: OptionsFormProps) => {
   return (
     <div className='flex flex-col'>
     <div className='flex items-center justify-center gap-2'>

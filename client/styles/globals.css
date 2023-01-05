@@ -62,9 +62,9 @@
     height: 3px;
   }
   
-  .tox-notification.tox-notification--in.tox-notification--warning {
-    display: none;
-  }
+}
+.tox-notification.tox-notification--in.tox-notification--warning {
+  display: none;
 }
 
 @layer components {

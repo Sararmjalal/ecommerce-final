@@ -33,7 +33,7 @@ const AddProduct = () => {
           name: key,
           type: val.type,
           options: val.type === 'text' ?
-            [''] :
+            [{name: '', isSelected:false}] :
             val.options?.map(opt => ({
               name: opt,
               isSelected: false
@@ -49,7 +49,7 @@ const AddProduct = () => {
 
   const { register, control, handleSubmit, formState: { errors }, watch, getValues, setValue } = useForm<ProductBodyForm>({
     defaultValues: {
-      title: "", isAvalible: false, cats: [], thisCategory: {}, images: [], openUpload:false,
+      title: "", isAvalible: false, cats: [], thisCategory: {}, images: [], price:0, quantity:0, openUpload:false,
     },
     mode: "onSubmit",
   });
@@ -80,7 +80,7 @@ const AddProduct = () => {
     const clone = { ...thisCategory }
     if (thisType === 'select')
       clone.vars[outerIndex].options.forEach(opt => opt.isSelected = false)
-    clone.vars[outerIndex].options[innerIndex].isSelected = !clone.vars[outerIndex].options[innerIndex].isSelected
+    clone.vars[outerIndex].options[innerIndex].isSelected = true
     setValue('thisCategory', clone)
   }
 
@@ -89,26 +89,63 @@ const AddProduct = () => {
     onSuccess: () => {
       toast.success('Product added lool')
       router.push('/admin/products')
-    }
-  })
-  
-  const onSubmit = (data: ProductBodyForm) => console.log(data);
+    },
+    // onerror: (res: AxiosError) => console.log(res)
+  }) 
+
+  const onSubmit = (data: ProductBodyForm) => {
+    const variables: {
+      [key: string]: string[]
+    } = {}
+    data.thisCategory.vars.forEach(({ name, type, options }) => {
+      options.forEach((opt, i, ref) => ref[i].isSelected && (  
+        variables[name] ? variables[name].push(opt.name) : variables[name] = [opt.name]
+        ))
+    })
+    console.log(variables)
+    addProduct.mutate({
+      title: data.title,
+      price: data.price,
+      quantity: data.quantity,
+      isAvalible: data.isAvalible,
+      images: data.images,
+      variables,
+      categoryId: data.thisCategory._id,
+      description: editorRef.current?.getContent()
+    })
+  }
+
+  // console.log(editorRef.current!.getContent())
+
+  console.log(errors)
+  // console.log(getValues('isAvalible'))
 
   if (isLoading) return <Loading />;
   return (
     <div className={openUpload ? 'hidden' : ''}>
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <input
+        <div>
+        {errors.title && (<p className='text-xs text-reddish ml-3'>Please enter product title</p>)}
+          <input
+          style={ errors.title?.ref && { border: "1px", borderStyle: "solid", borderColor: "red" } }
           placeholder='Product title...'
           className={`text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 lg:mb-4 mb-8`}
           {...register('title', { required: true, maxLength: 50 })}
         />
-        <Editor
+          <Editor
           onInit={(evt, editor) => (editorRef.current = editor)}
           init={{
             placeholder: "Product Description...",
             height: 500,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
           }} />
       </div>
       <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6'>
@@ -124,17 +161,25 @@ const AddProduct = () => {
             </div>
           </div>
           {watch('isAvalible') && (
-            <div className='my-4 grid grid-cols-4 lg:grid-cols-2 gap-3 px-4'>
-              <input
-                className='dashboard-input col-span-1'
-                placeholder='Quantity'
-                type='number'
-                {...register('quantity', {required: getValues('isAvalible'), maxLength: 50})}/>
-              <input
-                placeholder='Price'
-                type='number'
-                className='dashboard-input col-span-1'
-                {...register('price', {required: getValues('isAvalible'), maxLength: 50})}/>
+              <div className='my-4 grid grid-cols-2 gap-3'>
+                  <div className="col-span-1 lg:col-span-2">
+                    <input
+                    style={ errors.quantity && { border: "1px", borderStyle: "solid", borderColor: "red" } }
+                    className='dashboard-input'
+                    placeholder='Quantity'
+                    type='number'
+                    {...register('quantity', {required: getValues('isAvalible'), maxLength: 10})}/>
+                    {errors.quantity && (<p className='text-xs text-reddish ml-3 '>Please enter quantity</p>)}
+                  </div>
+                <div className="col-span-1 lg:col-span-2">
+                    <input
+                      style={ errors.price && { border: "1px", borderStyle: "solid", borderColor: "red" } }
+                      placeholder='Price'
+                      type='number'
+                      className='dashboard-input'
+                      {...register('price', {required: getValues('isAvalible'), maxLength: 50})}/>
+                      {errors.price && (<p className='text-xs text-reddish ml-3'>Please enter price</p>)}
+                </div>
             </div>
           )}
         </div>

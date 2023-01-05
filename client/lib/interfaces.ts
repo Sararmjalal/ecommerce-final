@@ -222,7 +222,7 @@ export interface ThisCategory extends Category {
 
 export interface ProductBodyForm {
   title: string;
-  price: number;
+  price: number; 
   quantity: number;
   isAvalible: boolean;
   cats: ThisCategory[];
