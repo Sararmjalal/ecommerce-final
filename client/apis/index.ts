@@ -28,3 +28,4 @@ export {changeCart} from "./mutationFunctions";
 export {checkout} from "./mutationFunctions";
 export {submitComment} from "./mutationFunctions";
 export {submitRate} from "./mutationFunctions";
+export {upload} from './mutationFunctions'

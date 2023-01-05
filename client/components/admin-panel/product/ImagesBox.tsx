@@ -2,7 +2,7 @@ import { BsPlusSquareDotted } from "react-icons/bs"
 import { readAllFiles } from "../../../lib"
 import { ImagesBoxProps } from "../../../lib/interfaces"
 
-const ImagesBox = ({ useFor, images, title, handleOpenUpload, setValue }: ImagesBoxProps) => (
+const ImagesBox = ({ useFor, images, title, handleOpenUpload, setValue, files }: ImagesBoxProps) => (
   <div className="col-span-2 md::col-span-1">
     <p className='my-4 font-semibold'>{title}</p>
       <div
@@ -31,12 +31,18 @@ const ImagesBox = ({ useFor, images, title, handleOpenUpload, setValue }: Images
           type='file'
           className="hidden"
             accept="image/*"
-            onChange={(e) => readAllFiles({
-              useFor: 'featured',
-              files:e.target.files,
-              images,
-              setImages: setValue,
-            })}
+                onChange={(e) => {
+                  if(!e.target.files) return
+                  readAllFiles({
+                  useFor: 'featured',
+                  files:e.target.files,
+                  images,
+                  setImages: setValue,
+                  })
+                  const clone = [...files]
+                  clone[0] = e.target.files[0]
+                  setValue('files', clone)
+                }}
           />
           </label>
             :

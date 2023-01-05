@@ -20,6 +20,8 @@ const Products = () => {
     queryFn: allProducts,
   });
 
+  console.log(products)
+
   if(isLoading) return <Loading />
   return (
     <div>
