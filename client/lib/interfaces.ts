@@ -216,7 +216,7 @@ export interface VariablesFormProps extends OptionsFormProps {
 // PRODUCT TYPES ==============================================
 export interface AddProductDefaultValues{
   title: "",
-  isAvalible: false,
+  isAvailable: false,
   cats: [],
   thisCategory: {},
   images: [] | {url:string}[],
@@ -232,7 +232,8 @@ export interface EditProductDefaultValues extends AddProductDefaultValues {
 
 export interface AddEditProductForm {
   defaultValues: AddProductDefaultValues | EditProductDefaultValues
-  useFor: string
+  useFor: string,
+  productId?: string
 }
 
 
@@ -241,23 +242,27 @@ export interface ProductBodyVariables {
 }
 
 export interface ThisCategory extends Category {
-  vars: {
+  vars?: {
     name: string;
     type: string;
     options: { name: string, isSelected: boolean }[];
     isSelected:boolean
   }[];
-  isSelected: boolean
+  isSelected?: boolean
+}
+
+export interface ProductWithVars extends Product {
+  vars?: { name: string, options: {name:string}[] }[]
 }
 
 export interface ProductBodyForm {
   title: string;
   price: number; 
   quantity: number;
-  isAvalible: boolean;
+  isAvailable: boolean;
   cats: ThisCategory[];
   images: {
-    url: unknown
+    url: string
   }[]
   thisCategory: ThisCategory
   openUpload: boolean
@@ -270,7 +275,7 @@ export interface ProductBody {
   price: number;
   quantity: number;
   description: string;
-  isAvalible: boolean;
+  isAvailable: boolean;
   images: string[];
   categoryId: string;
   variables: ProductBodyVariables;
@@ -282,6 +287,18 @@ export interface Product extends ProductBody {
   scores: Object;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface EdtiProductProps {
+  initialProduct: Product,
+  initialThisCategory: Category,
+  initialCategories: Category[]
+}
+
+export interface EditProductNewData {
+  thisCategory: ThisCategory,
+  thisProduct: ProductWithVars,
+  status: string
 }
 
 export interface UploadBoxProps {
@@ -319,6 +336,7 @@ export interface ImagesBoxProps {
 export interface CatListProps {
   cat: ThisCategory,
   i: number,
+  thisCategory: ThisCategory,
   onCategorySelect: (i :number) => void
 }
 

@@ -5,7 +5,7 @@ const AddProduct = () => (
       useFor='Add Product'
       defaultValues={{
         title: "",
-        isAvalible: false,
+        isAvailable: false,
         cats: [],
         thisCategory: {},
         images: [],

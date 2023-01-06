@@ -17,7 +17,7 @@ export async function getStaticProps() {
 const Products = () => {
   const {data: products, isLoading} = useQuery({
     queryKey: ["products"],
-    queryFn: allProducts,
+    queryFn: async() => await allProducts(),
   });
 
   console.log(products)
