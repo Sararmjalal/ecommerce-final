@@ -5,8 +5,7 @@ import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
 import { Product } from "../../lib/interfaces";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  console.log(product)
-
+  
   const [singleProductData, setSingleProductData] = useState({
     selectedImg: 0,
     selectedColor: product.variables.Color[0],

@@ -3,7 +3,7 @@ import {MdOutlineLocalShipping} from "react-icons/md";
 import {TbTruckDelivery} from "react-icons/tb";
 import GuideLink from "../main/GuideLink";
 
-const Broadcamps = () => {
+const Broadcamps = ({productTitle}:{productTitle: string}) => {
   return (
     <div className='grid grid-cols-2 items-start md:gap-2 w-full md:pr-0'>
       <GuideLink
@@ -15,7 +15,7 @@ const Broadcamps = () => {
             },
           },
           {
-            name: "T-Shirt Summer Vibes",
+            name: productTitle,
             href: {
               pathname: "/single-product",
             },

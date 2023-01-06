@@ -4,9 +4,11 @@ import Header from "../../components/single-product/Broadcamps";
 import ProductCard from "../../components/single-product/ProductCard";
 import Reviews from "../../components/single-product/Reviews";
 import TopProducts from "../../components/home/TopProducts";
-import { allProducts, singleProduct } from "../../apis";
-import { Product } from "../../lib/interfaces";
+import { allProducts, singleProduct, submitComment } from "../../apis";
+import { AddCommentBody, Product } from "../../lib/interfaces";
 import { GetStaticPropsContext } from "next";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 
 export async function getStaticPaths() {
@@ -21,7 +23,6 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   try {
     const thisId = context?.params?._id
     const product = typeof thisId === 'string' ? await singleProduct(thisId) : {}
-    // const thisCategory = (await allCategories()).find((cat:Category) => cat._id === product.categoryId)
 
     return {
     props: { product }
@@ -37,12 +38,15 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 const SingleProduct = ({ product }: { product: Product }) => {
   
   const [secMode, setSecMode] = useState("description");
+
   return (
     <div>
       <div className='w-full flex flex-col justify-between items-start md:gap-5 gap-8 xs:gap-12 md:items-center'>
-        <Header />
+        <Header
+          productTitle= {product.title}
+        />
         <ProductCard
-          product ={product}
+          product = {product}
         />
       </div>
       <div className='flex flex-col justify-start mt-28'>
@@ -72,7 +76,7 @@ const SingleProduct = ({ product }: { product: Product }) => {
           />
           :
           <Reviews
-            score={product.averageScore}
+            product = {product}
           />}
       </div>
       {/* <TopProducts /> */}

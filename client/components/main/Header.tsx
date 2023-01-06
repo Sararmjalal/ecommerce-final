@@ -1,14 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import {
-  AiOutlineShoppingCart,
-  AiOutlineUser,
-  AiOutlineMenu,
-  AiOutlineLogin,
-  AiOutlineLogout,
-} from "react-icons/ai";
+import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineMenu, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
 import Login from "../modals/SignIn";
 import Menu from "./Menu";
 import CartModal from "../cart/CartModal";

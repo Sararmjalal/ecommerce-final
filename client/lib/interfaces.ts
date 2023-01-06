@@ -24,14 +24,6 @@ export interface ProductCards {
   price: number;
 }
 
-export interface CommentShape {
-  id?: number;
-  user: string;
-  pic: string;
-  rate: any;
-  text: string;
-}
-
 export interface DynamicLink {
   pathname: string;
   query?: {
@@ -384,9 +376,9 @@ export interface PaginationBody {
 
 // ADDRESS TYPES ==============================================
 export interface AddressBody {
-    location: {
-      address: string,
-      postalcode: string,
+  location: {
+    address: string,
+    postalcode: string,
       geo: {
         lat: number,
         lon: number
@@ -396,9 +388,9 @@ export interface AddressBody {
       name: string,
       phone: string
     }
-}
+  }
 
-export interface AddAddressFormValues {
+  export interface AddAddressFormValues {
     address: string,
     postalcode: string,
     geo: {
@@ -408,5 +400,62 @@ export interface AddAddressFormValues {
     receiver: {
       name: string,
       phone: string
+    }
   }
+
+  
+  // COMMENT TYPES ==============================================
+  export interface AddCommentBody {
+    productId: string,
+  text: string | null
+}
+
+export interface CommentData {
+    commentText: string,
+    score: number,
+    openCommentSection: boolean
+}
+
+export interface AddCommentProps {
+  onSubmit: () => void,
+  setCommentsData: React.Dispatch<React.SetStateAction<{
+    commentText: string;
+    score: number;
+    openCommentSection: boolean;
+  }>>
+  commentsData: CommentData
+
+}
+
+export interface CommentShape {
+  user: string,
+  text: string,
+}
+
+export interface Comment {
+  _id: string,
+  createdAt: string,
+  productId: string,
+  text: string,
+  userId: string,
+}
+
+
+// RATE TYPES ==============================================
+export interface AddRateBody {
+  productId: string,
+  score: number
+}
+
+// USER TYPES ==============================================
+export interface ThisUser {
+  authObj: {
+    code: string,
+    date: string
+  }
+  createdAt: string
+  name: string
+  phone: string
+  updatedAt: string
+  _id: string
 }
