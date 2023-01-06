@@ -8,9 +8,9 @@ const Carousel = ({ products }: {products: Product[]}) => (
       <ProductCard
           key={product._id}
           _id={product._id}
-        img={product.images[0]}
-        title={product.title}
-        price={product.price}
+          images={product.images}
+          title={product.title}
+          price={product.price}
       />
     ))}
     </div>

@@ -7,6 +7,7 @@ import TopProducts from "../components/home/TopProducts";
 import WhyChooseUs from "../components/home/WhyChooseUs";
 import { useTitle } from "../lib";
 import { topProducts, allProducts } from "../apis";
+import Loading from "../components/main/Loading";
 
 export async function getStaticProps() {
 
@@ -25,10 +26,11 @@ export async function getStaticProps() {
 
 export default function Home() {
 
-  const { data: topProduct } = useQuery({ queryKey: ['topProducts'], queryFn: topProducts })
+  const { data: topProduct, isLoading:isLoadingTop } = useQuery({ queryKey: ['topProducts'], queryFn: async() => await topProducts() })
 
-  const { data: products } = useQuery({ queryKey: ['products'], queryFn: allProducts })
+  const { data: products, isLoading: isLoadingAll } = useQuery({ queryKey: ['products'], queryFn: async() => await allProducts() })
 
+  if(isLoadingAll || isLoadingTop) return <Loading />
   return (
     <div>
       <Head>
