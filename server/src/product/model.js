@@ -37,7 +37,7 @@ class ProductSchema {
     
     try {
       
-      const { title, price, quantity, description, isAvalible, images, categoryId, variables } = data;
+      const { title, price, quantity, description, isAvailable, images, categoryId, variables } = data;
 
       if (
         !title ||
@@ -64,7 +64,7 @@ class ProductSchema {
         title,
         price,
         quantity,
-        isAvalible: isAvalible ? isAvalible : false,
+        isAvailable: isAvailable ? isAvailable : false,
         description,
         categoryId,
         variables,

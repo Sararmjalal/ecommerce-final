@@ -42,7 +42,7 @@ export default {
         title: req.body.data.title,
         price: req.body.data.price,
         quantity: req.body.data.quantity,
-        isAvalible: req.body.data.isAvalible,
+        isAvailable: req.body.data.isAvailable,
         description: req.body.data.description,
         images: req.body.data.images,
       };

@@ -4,8 +4,8 @@ import {useForm, useFieldArray, useWatch} from "react-hook-form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Editor as TinyMCEEditor} from "tinymce";
 import {BsCheck} from "react-icons/bs";
-import {useMutation, useQuery} from "@tanstack/react-query";
-import {allCategories, createProduct, upload} from "../../../apis";
+import {useMutation, useQuery, QueryClient} from "@tanstack/react-query";
+import {allCategories, createProduct, upload, editProduct} from "../../../apis";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import UploadModal from "../../../components/modals/Upload";
@@ -15,8 +15,7 @@ import Link from "next/link";
 import CatList from "../../../components/admin-panel/product/CatList";
 import VarList from "../../../components/admin-panel/product/VarList";
 
-const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
-  
+const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProductForm) => {
   
   const editorRef = useRef<TinyMCEEditor | null>(null);
   
@@ -66,6 +65,11 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
     control,
     name: 'openUpload'
   })
+
+  const isAvailable = useWatch({
+    control,
+    name:'isAvailable'
+  })
   
   const onCategorySelect = (i: number) => {
     const clone = [...cats]
@@ -77,6 +81,7 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
 
   const onOptionSelect = (outerIndex:number, innerIndex:number, thisType: string) => {
     const clone = { ...thisCategory }
+    if(!clone['vars']) return
     if (thisType === 'select')
     clone.vars[outerIndex].options.forEach(opt => opt.isSelected = false)
     clone.vars[outerIndex].options[innerIndex].isSelected = true
@@ -84,27 +89,42 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
     setValue('thisCategory', clone)
   }
   
-  const addProduct = useMutation({
+  const addProductMutation = useMutation({
     mutationFn: async (body: ProductBody) => await createProduct(body),
     onSuccess: () => {
+      const queryClient = new QueryClient
       toast.success('Product added lool')
+      queryClient.invalidateQueries({queryKey: ['products']})
       router.push('/admin/dashboard/products')
     },
-    onError: () => toast.error('You suck lool')
+    onError: () => toast.error('You suck lool'),
+  }) 
+
+  const editProductMutation = useMutation({
+    mutationFn: async (body: ProductBody) => await editProduct(productId, body),
+    onSuccess: () => {
+      const queryClient = new QueryClient
+      toast.success('Product Edited lool')
+      queryClient.invalidateQueries({queryKey: ['products']})
+      router.push('/admin/dashboard/products')
+    },
+    onError: () => toast.error('You suck lool'),
   }) 
 
   const onSubmit = async (data: ProductBodyForm) => {
-    
     if (!thisCategory._id) return toast.error('You must select a category')
-    if (!thisCategory.vars.every(item => item.isSelected)) return toast.error('Put some vars in it lool')
+    if (!thisCategory?.vars?.every(item => item.isSelected)) return toast.error('Put some vars in it lool')
 
     const variables: ProductBodyVariables = {}
-    data.thisCategory.vars.forEach(({ name, type, options }) => {
+    data?.thisCategory?.vars?.forEach(({ name, type, options }) => {
       options.forEach((opt, i, ref) => ref[i].isSelected && (  
         variables[name] ? variables[name].push(opt.name) : variables[name] = [opt.name]
         ))
-      })
+    })
+    
+    // return console.log(variables)
       
+    if (getValues('files')[0]) {
       const postFormData = (file:File) => {
         if(!file) return
         return new Promise((resolve, reject) => {
@@ -114,22 +134,26 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
         })
       }
       
-    const thisImages = []
+      const thisImages = []
+      for (let i = 0; i < images.length; i++) thisImages.push(postFormData(getValues('files')[i]))
+      const imageValues = await Promise.all(thisImages)
+      setValue('images', imageValues.map((item: any) => item['data'] && {url: item?.data?.name}))
+    }
 
-    for (let i = 0; i < images.length; i++) thisImages.push(postFormData(getValues('files')[i]))
-    
-    const imageValues = await Promise.all(thisImages)
-
-    addProduct.mutate({
+    const newData = {
       title: data.title,
-      price: watch('isAvalible') ? Number(data.price) : 0,
-      quantity: watch('isAvalible') ? Number(data.quantity) : 0,
-      isAvalible: data.isAvalible,
-      images: images[0] ? imageValues.map((item:any) => item['data'] && item?.data?.name) : ['default.svg'],
+      price: isAvailable ? Number(data.price) : 0,
+      quantity: isAvailable ? Number(data.quantity) : 0,
+      isAvailable: data.isAvailable,
+      images: images[0] ? images.map(item => item.url) : ['default.svg'],
       variables,
       categoryId: data.thisCategory._id,
       description: editorRef.current?.getContent() ?? "No description provided yet."
-    })
+    }
+
+    // return console.log(newData)
+
+    useFor === 'Add Product' ? addProductMutation.mutate(newData) : editProductMutation.mutate(newData)
   }
   
   if (isLoading) return <Loading />;
@@ -144,9 +168,10 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
           className={`text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 lg:mb-4 mb-8`}
           {...register('title', { required: true, maxLength: 50 })}
           />
-          <Editor
+          {/* <Editor
             onInit={(evt, editor) => (editorRef.current = editor)}
             initialValue={getValues('description') ?? ''}
+            onChange={(e) => console.log(e.target.value)}
             init={{
               placeholder: "Product Description...",
               height: 500,
@@ -159,21 +184,21 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
               'bold italic backcolor | alignleft aligncenter ' +
               'alignright alignjustify | bullist numlist outdent indent | ' +
               'removeformat | help',
-            }} />
+            }} /> */}
       </div>
       <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6'>
         <div>
           <p className='m-4 font-semibold'>Product Details:</p>
             <div
               className='flex gap-2 items-center ml-4 cursor-pointer'
-              onClick={() => setValue('isAvalible', !getValues('isAvalible'))}>
-              <p className={watch('isAvalible') ? "font-semibold" : "font-normal"}>Is Available?</p>
+              onClick={() => setValue('isAvailable', !getValues('isAvailable'))}>
+              <p className={isAvailable ? "font-semibold" : "font-normal"}>Is Available?</p>
               <div className={`w-5 h-5 rounded-md p-[1.5px]
-                ${watch('isAvalible') ? "bg-gray-700" : "bg-white border-2 border-gray-200"}`}>
-              {watch('isAvalible') && <BsCheck fill='white' size='18px' />}
+                ${isAvailable ? "bg-gray-700" : "bg-white border-2 border-gray-200"}`}>
+              {isAvailable && <BsCheck fill='white' size='18px' />}
             </div>
           </div>
-          {watch('isAvalible') && (
+          {isAvailable && (
               <div className='m-4 grid grid-cols-2 gap-3 w-1/2'>
                   <div className="col-span-1 lg:col-span-2">
                     {errors.quantity && (<p className='text-xs text-reddish ml-1'>Please enter quantity</p>)}
@@ -182,7 +207,7 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
                     className='w-full dashboard-input'
                     placeholder='Quantity'
                     type='number'
-                    {...register('quantity', {required: getValues('isAvalible'), maxLength: 10})}/>
+                    {...register('quantity', {required: getValues('isAvailable'), maxLength: 10})}/>
                   </div>
                 <div className="col-span-1 lg:col-span-2">
                   {errors.price && (<p className='text-xs text-reddish ml-1'>Please enter price</p>)}
@@ -191,7 +216,7 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
                       placeholder='Price'
                       type='number'
                       className='w-full dashboard-input'
-                      {...register('price', {required: getValues('isAvalible'), maxLength: 50})}/>
+                      {...register('price', {required: getValues('isAvailable'), maxLength: 50})}/>
                 </div>
             </div>
           )}
@@ -207,6 +232,7 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
                     key={cat._id}
                     cat={cat}
                     i={i}
+                    thisCategory={thisCategory}
                     onCategorySelect={onCategorySelect}
                   />
                 )) : <p>No categories created yet.<Link href={'/admin/dashboard/categories'}> <p className="text-blueish font-semibold">Create one.</p></Link></p>
@@ -217,7 +243,7 @@ const AddEditProductForm = ({ useFor, defaultValues }: AddEditProductForm) => {
             <p className="ml-1">Variables</p>
               <ul className="overflow-y-auto flex flex-col w-full h-64 border-[1px] border-gray-200 rounded-xl mt-4 p-4 mr-4
               md:mr-0 scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-500 scrollbar-track-gray-100">
-                {thisCategory._id &&
+                {thisCategory._id && thisCategory.vars &&
                   thisCategory.vars[0] &&
                   thisCategory.vars.map((thisVariable, outerIndex, ref) => (
                     <VarList
