@@ -1,11 +1,13 @@
-import {useLayoutEffect, useState} from "react";
 import {BsCheck2} from "react-icons/bs";
 import ColorCard from "../single-product/ColorCard";
+// @ts-ignore-start
 import RangeSlider from 'react-range-slider-input';
+// @ts-ignore-end
 import 'react-range-slider-input/dist/style.css';
 import FilterPlaceholders from "./FilterPlaceholders";
+import { FilterSidebarProps } from "../../lib/interfaces";
 
-const FiltersSidebar = ({data, setData, categories, sizes, prices, colors}) => {
+const FiltersSidebar = ({data, setData, categories, sizes, prices, colors}: FilterSidebarProps) => {
   return (
     <div className='flex flex-col items-start gap-3 w-full'>
       <div className='w-full bg-black text-white p-4'>

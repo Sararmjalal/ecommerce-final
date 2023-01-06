@@ -18,9 +18,10 @@ export interface Banner {
 
 export interface ProductCards {
   _id: string;
-  img: string;
+  key: string;
+  images: string[];
   title: string;
-  price: string;
+  price: number;
 }
 
 export interface CommentShape {
@@ -106,6 +107,29 @@ export interface DashboardMenuProps {
 export interface LayoutProps {
   children: JSX.Element | JSX.Element[];
   userMenu: MenuProps[];
+}
+
+
+// CATEGORY TYPES ==============================================
+export interface FilterData {
+  products: Product[]
+  selectedCategory: string,
+  catFilterOpen: boolean,
+  selectedSize: string,
+  sizeFilterOpen: boolean,
+  selectedColor: string,
+  colorFilterOpen: boolean,
+  priceRange: number[]
+  priceFilterOpen: boolean,
+}
+
+export interface FilterSidebarProps {
+  data: FilterData,
+  setData: React.Dispatch<React.SetStateAction<FilterData>>,
+  categories: Category[],
+  sizes: string[],
+  prices: number[],
+  colors: string[]
 }
 
 
@@ -219,16 +243,6 @@ export interface AddEditProductForm {
   useFor: string
 }
 
-export interface ProductBody {
-  title: string;
-  price: number;
-  quantity: number;
-  description: string;
-  isAvalible: boolean;
-  images: string[];
-  categoryId: string;
-  variables: ProductBodyVariables;
-}
 
 export interface ProductBodyVariables {
   [key: string]: string[]
@@ -257,6 +271,17 @@ export interface ProductBodyForm {
   openUpload: boolean
   files: File[]
   description: string
+}
+
+export interface ProductBody {
+  title: string;
+  price: number;
+  quantity: number;
+  description: string;
+  isAvalible: boolean;
+  images: string[];
+  categoryId: string;
+  variables: ProductBodyVariables;
 }
 
 export interface Product extends ProductBody {
@@ -336,4 +361,34 @@ export interface CartBody {
 export interface PaginationBody {
   page: number
   limit: number
+}
+
+
+// ADDRESS TYPES ==============================================
+export interface AddressBody {
+    location: {
+      address: string,
+      postalcode: string,
+      geo: {
+        lat: number,
+        lon: number
+      }
+    },
+    receiver: {
+      name: string,
+      phone: string
+    }
+}
+
+export interface AddAddressFormValues {
+    address: string,
+    postalcode: string,
+    geo: {
+      lat: string,
+      lon: string
+    }
+    receiver: {
+      name: string,
+      phone: string
+  }
 }

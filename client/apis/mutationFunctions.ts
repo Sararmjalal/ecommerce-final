@@ -1,5 +1,5 @@
 import {postRequest} from "./baseConfig";
-import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, CartBody, PaginationBody} from "../lib/interfaces";
+import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, CartBody, PaginationBody, AddressBody} from "../lib/interfaces";
 
 export const createAdmin = async (name: string, phone: string) => await postRequest("/admin/create", {name, phone}, "admin");
 
@@ -29,7 +29,7 @@ export const userLoginTwo = async (phone: string, code: string) => await postReq
 
 export const userInfo = async () => await postRequest("/user/me", {}, "user");
 
-export const createAddress = async (location: Location, receiver: Receiver) => await postRequest("/address/create", {location, receiver}, "user");
+export const createAddress = async (body:AddressBody) => await postRequest("/address/create", body, "user");
 
 export const editAddress = async (addressId: string, data: AddressData) => await postRequest(`/address/edit/${addressId}`, {data}, "user");
 

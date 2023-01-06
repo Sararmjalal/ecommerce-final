@@ -5,14 +5,14 @@ import {commentData} from "../../lib/staticData";
 import Comment from "./Comment";
 import AddComment from "./AddComment";
 
-const Reviews = () => {
+const Reviews = ({score}: {score:number}) => {
   const [commentSection, setCommentSection] = useState(false);
   return (
     <div className='main-container '>
       <div className='grid grid-cols-2 md:grid-cols-1 gap-32 xl:gap-24 md:gap-20 w-full flex-wrap'>
         <div className='md:col-span-2 '>
           <div className=' flex flex-col justify-center items-center'>
-            <p className='text-6xl font-semibold'>4.5</p>
+            <p className='text-6xl font-semibold'>{score}</p>
             <ReactStars count={5} size={24} color2={"#ffd700"} />
             <div className='flex items-center gap-2'>
               <AiOutlineUser className='text-grayish' />

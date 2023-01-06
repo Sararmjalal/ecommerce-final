@@ -6,14 +6,15 @@ import FiltersTopbar from "../components/shop/FiltersTopbar";
 import ProductCard from "../components/home/ProductCard";
 import Head from "next/head";
 import { useTitle } from "../lib";
-import { allProducts } from "../apis";
-import { Product } from "../lib/interfaces";
+import { allCategories, allProducts } from "../apis";
+import { FilterData, Product } from "../lib/interfaces";
 import { homeProductsProps } from "../lib/staticData";
 
 export async function getStaticProps() {
 
   const queryClient = new QueryClient()
   
+  await queryClient.prefetchQuery(['categories'], allCategories)
   await queryClient.prefetchQuery(['products'], allProducts)
 
   return {
@@ -26,27 +27,9 @@ export async function getStaticProps() {
 const Shop = () => {
 
   const { data: products } = useQuery({ queryKey: ['products'], queryFn: allProducts })
-
-  const categories = [
-    {
-      name: "T-shirts",
-    },
-    {
-      name: "Sweatshirts",
-    },
-    {
-      name: "Tank Tops",
-    },
-    {
-      name: "Dress Shirts",
-    },
-    {
-      name: "Dalam",
-    },
-    {
-      name: "bazam dalam",
-    },
-  ];
+  const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: allCategories })
+  console.log('PRODUCTS',products)
+  console.log('CATS',categories)
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
@@ -54,8 +37,8 @@ const Shop = () => {
 
   const prices = [50, 100, 200, 500, 400, 387, 2000];
 
-  const [filteredData, setFilteredData] = useState({
-    products: homeProductsProps,
+  const [filteredData, setFilteredData] = useState<FilterData>({
+    products,
     selectedCategory: categories[0].name,
     catFilterOpen: false,
     selectedSize: sizes[0],
@@ -115,14 +98,14 @@ const Shop = () => {
           {
             filteredData.products[0] ?
             <div className='grid grid-cols-3 gap-16 sm:gap-8 sm:grid-cols-1 md:grid-cols-2'>
-              {filteredData.products.map((product) => {
+              {filteredData.products.map((product:Product) => {
                 return (
                   <ProductCard
                     key={product._id}
-                    img={product.img}
+                    _id={product._id}
+                    images={product.images}
                     title={product.title}
                     price={product.price}
-                    _id={product._id}
                   />
                 );
               })}
