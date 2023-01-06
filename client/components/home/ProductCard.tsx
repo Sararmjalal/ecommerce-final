@@ -4,7 +4,7 @@ import { ProductCards } from "../../lib/interfaces";
 import {useState} from 'react'
 import Link from "next/link";
 
-const ProductCard = ({key, _id, images, title, price}: ProductCards) => {
+const ProductCard = ({_id, images, title, price}: ProductCards) => {
   return ( 
       <div className='flex flex-col justify-start items-start w-full shadow-md rounded-2xl overflow-hidden'>
         <Link style={{width: '100%'}} href={{
