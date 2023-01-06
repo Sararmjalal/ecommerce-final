@@ -1,5 +1,5 @@
 import {postRequest} from "./baseConfig";
-import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, CartBody, PaginationBody, AddressBody} from "../lib/interfaces";
+import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, CartBody, PaginationBody, AddressBody, AddCommentBody, AddRateBody} from "../lib/interfaces";
 
 export const createAdmin = async (name: string, phone: string) => await postRequest("/admin/create", {name, phone}, "admin");
 
@@ -17,7 +17,7 @@ export const createProduct = async (body: ProductBody) => await postRequest("/pr
 
 export const editProduct = async (productId: string, data: ProductBody) => await postRequest("/product/edit", {productId, data}, "admin");
 
-export const allUsers = async (body: PaginationBody) => await postRequest("/user/allusers", body, "admin");
+export const allUsers = async (body: PaginationBody | string) => await postRequest("/user/allusers", body, "admin");
 
 export const userSignupOne = async (phone: string, name: string) => await postRequest("/user/sign-up-one", {phone, name});
 
@@ -43,8 +43,8 @@ export const changeCart = async (body:CartBody) => await postRequest("/cart/chan
 
 export const checkout = async () => await postRequest("/order/check-out", {}, "user");
 
-export const submitComment = async (productId: string, text: string) => await postRequest("/comment/submit", {productId, text}, "user");
+export const submitComment = async (body: AddCommentBody) => await postRequest("/comment/submit", body, "user");
 
-export const submitRate = async (productId: string, score: number) => await postRequest("/rate/submit", {productId, score}, "user"); 
+export const submitRate = async (body: AddRateBody) => await postRequest("/rate/submit", body, "user"); 
 
 export const upload = async(formData: FormData) => await postRequest('/file/upload-reserve', formData, 'admin')

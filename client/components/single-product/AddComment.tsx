@@ -1,20 +1,12 @@
 import React from "react";
-import Image from "next/image";
 import {BsFillArrowUpCircleFill} from "react-icons/bs";
+import { AddCommentProps } from "../../lib/interfaces";
 
-const AddComment = () => {
+const AddComment = ({onSubmit, commentsData, setCommentsData} : AddCommentProps ) => {
+
   return (
     <div className='w-full mt-4'>
       <div className='flex  items-center gap-4'>
-        <div className='relative w-12 h-12 flex justify-center items-center rounded-full'>
-          <Image
-            src={"/assets/site_images/profile-1.png"}
-            width={48}
-            height={48}
-            alt='profile-pic'
-            className='absolute'
-          />
-        </div>
         <div className='relative w-full'>
           <input
             type='text'
@@ -22,11 +14,13 @@ const AddComment = () => {
             id=''
             className='input-primary'
             placeholder='Your opinion'
+            onChange={(e) => setCommentsData({...commentsData, commentText:e.target.value})}
           />
           <BsFillArrowUpCircleFill
+            onClick={onSubmit}
             size={35}
             cursor={"pointer"}
-            className='absolute right-2 bottom-[13%] hover:text-grayish transition-all text-grayish'
+            className='absolute right-2 bottom-[13%] transition-all text-grayish hover:text-primary'
           />
         </div>
       </div>

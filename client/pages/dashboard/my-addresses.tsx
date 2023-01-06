@@ -12,13 +12,6 @@ import { useMutation } from "@tanstack/react-query";
 import { AddAddressFormValues, AddressBody } from "../../lib/interfaces";
 import { toast } from "react-toastify";
 
-let DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
-
 const MyAddresses = () => {
   const [isCreate, setIsCreate] = useState(false);
   const locRef = useRef<null>(null);
@@ -49,8 +42,8 @@ const MyAddresses = () => {
         address: data.address,
         postalcode: data.postalcode,
         geo: {
-          lat: parseFloat(locRef.current.getCenter().lat),
-          lon: parseFloat(locRef.current.getCenter().lng),
+          lat: parseFloat(locRef.current?.getCenter().lat),
+          lon: parseFloat(locRef.current?.getCenter().lng),
         }
       },
       receiver: {
