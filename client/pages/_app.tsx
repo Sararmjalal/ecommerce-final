@@ -11,10 +11,10 @@ import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query
 import { AxiosError } from 'axios';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+export const queryClient = new QueryClient()
+
 export default function App({ Component, pageProps }: AppProps) {
   
-  const [queryClient] = useState(() => new QueryClient())
-
   queryClient.setDefaultOptions({
     queries: {
       onError: (error: AxiosError | unknown) => {

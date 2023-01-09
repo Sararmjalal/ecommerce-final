@@ -39,6 +39,8 @@ const SingleProduct = ({ product }: { product: Product }) => {
   
   const [secMode, setSecMode] = useState("description");
 
+  console.log(product)
+
   return (
     <div>
       <div className='w-full flex flex-col justify-between items-start md:gap-5 gap-8 xs:gap-12 md:items-center'>

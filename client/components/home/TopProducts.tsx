@@ -1,4 +1,3 @@
-import React from "react";
 import { Product } from "../../lib/interfaces";
 import Carousel from "./Carousel";
 
@@ -11,7 +10,7 @@ const TopProducts = ({ products }: {products: Product[]}) => {
           SHOW MORE
         </button>
       </div>
-        <Carousel products={products} />
+      <Carousel products={products} />
       <button className='btn-secondary hidden sm:block mt-8 w-max m-auto py-[15px] px-[32px]'>
         SHOW MORE
       </button>

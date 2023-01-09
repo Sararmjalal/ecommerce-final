@@ -6,11 +6,11 @@ const Carousel = ({ products }: {products: Product[]}) => (
     <div className='grid grid-cols-4 lg:grid-cols-2 sm:grid-cols-1 items-center gap-16 sm:gap-8'>
       {products.map((product) => (
       <ProductCard
-          key={product._id}
-          _id={product._id}
-          images={product.images}
-          title={product.title}
-          price={product.price}
+        key={product._id}
+        _id={product._id}
+        images={product.images}
+        title={product.title}
+        price={product.price}
       />
     ))}
     </div>

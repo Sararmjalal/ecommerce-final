@@ -3,17 +3,18 @@ import React, {useRef} from "react";
 import {useForm, useFieldArray, useWatch} from "react-hook-form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Editor as TinyMCEEditor} from "tinymce";
-import {BsCheck} from "react-icons/bs";
-import {useMutation, useQuery, QueryClient} from "@tanstack/react-query";
 import {allCategories, createProduct, upload, editProduct} from "../../../apis";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import UploadModal from "../../../components/modals/Upload";
-import Loading from "../../../components/main/Loading";
 import ImagesBox from "../../../components/admin-panel/product/ImagesBox";
-import Link from "next/link";
+import {useMutation, useQuery, QueryClient} from "@tanstack/react-query";
 import CatList from "../../../components/admin-panel/product/CatList";
 import VarList from "../../../components/admin-panel/product/VarList";
+import UploadModal from "../../../components/modals/Upload";
+import Loading from "../../../components/main/Loading";
+import { useRouter } from "next/router";
+import {BsCheck} from "react-icons/bs";
+import { toast } from "react-toastify";
+import Link from "next/link";
+import { queryClient } from "../../../pages/_app";
 
 const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProductForm) => {
   
@@ -92,7 +93,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
   const addProductMutation = useMutation({
     mutationFn: async (body: ProductBody) => await createProduct(body),
     onSuccess: () => {
-      const queryClient = new QueryClient
       toast.success('Product added lool')
       queryClient.invalidateQueries({queryKey: ['products']})
       router.push('/admin/dashboard/products')
@@ -103,7 +103,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
   const editProductMutation = useMutation({
     mutationFn: async (body: ProductBody) => await editProduct(productId, body),
     onSuccess: () => {
-      const queryClient = new QueryClient
       toast.success('Product Edited lool')
       queryClient.invalidateQueries({queryKey: ['products']})
       router.push('/admin/dashboard/products')

@@ -6,13 +6,13 @@ import {AiOutlineShoppingCart} from "react-icons/ai";
 import {MdOutlineLocalShipping} from "react-icons/md";
 import Head from "next/head";
 import { useTitle } from "../lib";
-import { QueryClient, dehydrate, useQuery, useMutation } from "@tanstack/react-query";
+import { dehydrate, useQuery, useMutation } from "@tanstack/react-query";
 import { myCart, changeCart } from "../apis";
 import { CartBody } from "../lib/interfaces";
+import { queryClient } from "./_app";
 
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient()
   await queryClient.prefetchQuery(['cart'], myCart)
 
   return {

@@ -3,11 +3,12 @@ import {useForm, useFieldArray} from "react-hook-form";
 import * as MdIcons from "react-icons/md";
 import * as IOIcons from "react-icons/io5";
 import { AddCategoryFormValues, CreateCategoryBody, CategoryVariableObject } from "../../../lib/interfaces";
-import {allCategories, createCategory} from "../../../apis";
-import {QueryClient, useMutation} from "@tanstack/react-query";
+import { createCategory} from "../../../apis";
+import { useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
 import {useRouter} from "next/router";
 import VariableForm from "../../../components/admin-panel/categories/VariablesForm";
+import { queryClient } from "../../_app";
 
 const AddCategory = () => {
   const types = [
@@ -51,11 +52,9 @@ const AddCategory = () => {
 
   const addCategory = useMutation({
     mutationFn: async (cat: CreateCategoryBody) => await createCategory(cat),
-    onSuccess: async(res) => {
+    onSuccess: async() => {
       toast.success("Category added successfully");
-      const queryClient = new QueryClient
       await queryClient.invalidateQueries({ queryKey: ['categories'] })
-      await queryClient.prefetchQuery(['categories'], allCategories)
       push("/admin/dashboard/categories");
     },
   });

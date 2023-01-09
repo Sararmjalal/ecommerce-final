@@ -1,16 +1,16 @@
-import {AiOutlineClose} from "react-icons/ai";
-import {useState} from "react";
-import {useDispatch} from "react-redux";
-import {setCurrentUser} from "../../global-state/slice";
 import {userLoginOne, userLoginTwo, userInfo} from "../../apis";
-import {useMutation} from "@tanstack/react-query";
-import {Form} from "../../lib/interfaces";
+import {setCurrentUser} from "../../global-state/slice";
 import {handleEmptyFields, setToken} from "../../lib";
-import {AxiosError} from "axios";
+import {useMutation} from "@tanstack/react-query";
+import {AiOutlineClose} from "react-icons/ai";
+import {Form} from "../../lib/interfaces";
+import { useRouter } from "next/router";
+import {useDispatch} from "react-redux";
 import {toast} from "react-toastify";
 import OtpInput from "./OtpInput";
+import {AxiosError} from "axios";
+import {useState} from "react";
 import Timer from "./Timer";
-import { useRouter } from "next/router";
 
 export default function Login({closeHandler, signUpHandler}: any) {
   
@@ -20,8 +20,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
 
   const router = useRouter();
 
-  const onChangeHandler = (value: string) =>
-    setData({...data, code: {...data.code, value}});
+  const onChangeHandler = (value: string) => setData({...data, code: {...data.code, value}});
 
   const [data, setData] = useState<Form>({
     phone: {
@@ -48,8 +47,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
   });
 
   const loginTwo = useMutation({
-    mutationFn: async () =>
-      await userLoginTwo(data.phone.value, data.code.value),
+    mutationFn: async () => await userLoginTwo(data.phone.value, data.code.value),
     onSuccess: (res) => {
       setToken(res.data.token, "user");
       getUserInfo.mutate();
@@ -133,11 +131,7 @@ export default function Login({closeHandler, signUpHandler}: any) {
             name='phone'
             value={data.phone.value}
             disabled={step === 2}
-            className={`input-primary ${
-              data.phone.msg
-                ? "border-[1px] border-reddish text-reddish"
-                : "my-2"
-            }`}
+            className={`input-primary ${data.phone.msg ? "border-[1px] border-reddish text-reddish" : "my-2"}`}
             placeholder='Phone Number'
             onChange={(e) => {
               const {name, value} = e.target;
@@ -178,8 +172,8 @@ export default function Login({closeHandler, signUpHandler}: any) {
                 valueLength={4}
                 onChangeHandler={onChangeHandler}
                 onKeyDownFunction={handleSecondStep}
-              />
-              <Timer setStep={setStep} />
+            />
+            <Timer setStep={setStep} />
             <button
               className='btn-primary w-full mt-3 py-3'
               onClick={() => loginTwo.mutate()}>

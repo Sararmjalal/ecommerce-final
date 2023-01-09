@@ -101,6 +101,13 @@ export interface LayoutProps {
   userMenu: MenuProps[];
 }
 
+export type OtpProps = {
+  value: string;
+  valueLength: number;
+  onChangeHandler: (value: string) => void;
+  onKeyDownFunction: () => void
+};
+
 
 // CATEGORY TYPES ==============================================
 export interface FilterData {
@@ -275,7 +282,7 @@ export interface ProductBody {
   price: number;
   quantity: number;
   description: string;
-  isAvailable: boolean;
+  isAvalible: boolean;
   images: string[];
   categoryId: string;
   variables: ProductBodyVariables;
@@ -365,13 +372,13 @@ export interface VarListProps {
 // CART TYPES ==============================================
 export interface CartBody {
   productId: string,
-  userId: string
+  userId: string | undefined
 }
 
 export interface PaginationBody {
   page: number
   limit: number
-}
+} 
 
 
 // ADDRESS TYPES ==============================================

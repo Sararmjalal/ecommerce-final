@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Loading from '../../../components/main/Loading';
 import ListItem from '../../../components/admin-panel/ListItem';
 import { allUsers } from '../../../apis';
+import { queryClient } from '../../_app';
 
 const users = () => {
-  const queryClient = new QueryClient
 
   const getUsers = useMutation({
     mutationFn: async (body) => await allUsers(body),

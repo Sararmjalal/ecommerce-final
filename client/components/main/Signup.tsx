@@ -1,27 +1,25 @@
-import React, {useState} from "react";
-import {AiOutlineClose} from "react-icons/ai";
-import {useSelector, useDispatch} from "react-redux";
 import {selectUser, setCurrentUser} from "../../global-state/slice";
-import {useMutation} from "@tanstack/react-query";
 import {userSignupOne, userSignupTwo, userInfo} from "../../apis";
-import {Form} from "../../lib/interfaces";
 import {handleEmptyFields, setToken} from "../../lib";
+import {useSelector, useDispatch} from "react-redux";
+import {useMutation} from "@tanstack/react-query";
+import {AiOutlineClose} from "react-icons/ai";
+import {Form} from "../../lib/interfaces";
+import { useRouter } from "next/router";
+import {toast} from "react-toastify";
 import OtpInput from "./OtpInput";
 import {AxiosError} from "axios";
-import {toast} from "react-toastify";
+import {useState} from "react";
 import Timer from "./Timer";
-import { useRouter } from "next/router";
 
 const Signup = ({ closeHandler, loginHandler }: any) => {
   
   const [step, setStep] = useState(1);
 
   const dispatch = useDispatch();
-
   const router = useRouter()
 
-  const onChangeHandler = (value: string) =>
-    setData({...data, code: {...data.code, value}});
+  const onChangeHandler = (value: string) => setData({...data, code: {...data.code, value}});
 
   const [data, setData] = useState<Form>({
     phone: {
@@ -39,8 +37,7 @@ const Signup = ({ closeHandler, loginHandler }: any) => {
   });
 
   const signUpOne = useMutation({
-    mutationFn: async () =>
-      await userSignupOne(data.phone.value, data.name.value),
+    mutationFn: async () => await userSignupOne(data.phone.value, data.name.value),
     onSuccess: () => setStep(step + 1),
     onError: (error: AxiosError | unknown) => {
       if (error instanceof AxiosError) {

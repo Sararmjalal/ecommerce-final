@@ -2,19 +2,44 @@ import React, {useState} from "react";
 import Image from "next/image";
 import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
-import { Product } from "../../lib/interfaces";
+import { CartBody, Product } from "../../lib/interfaces";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { addToCart, myCart } from "../../apis";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../global-state/slice";
 
 const ProductCard = ({ product }: { product: Product }) => {
+
+  const thisUser = useSelector(selectUser);
   
   const [singleProductData, setSingleProductData] = useState({
     selectedImg: 0,
     selectedColor: product.variables.Color[0],
     selectedSize: product.variables.Size[0],
   });
-
+  
   const [quantity, setQuantity] = useState(1)
 
+  const { data } = useQuery({
+    queryFn: async () => await myCart(),
+    onSuccess: (res) => console.log(res)
+  })
 
+  const addCart = useMutation({
+    mutationFn: async (body: CartBody) => await addToCart(body),
+    onSuccess: (res) => console.log(res),
+    onError: (res) => console.log(res)
+  })
+
+  const onSubmit = () => {
+    addCart.mutate({
+      productId: product?._id,
+      userId: thisUser?._id
+    })
+  }
+
+console.log("PRODUCT",product)
+console.log("THIS USER",thisUser)
   return (
     <div className='grid grid-cols-2 md:grid-cols-1 gap-40 md:gap-8'>
       <div>
@@ -95,7 +120,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                   />
                 </div>
                 {product.isAvalible ? (
-                  <button className='btn-secondary border-[1px] py-3 border-grayish hover:border-primary md:px-2 xs:text-[10px]'>
+                  <button onClick={onSubmit} className='btn-secondary border-[1px] py-3 border-grayish hover:border-primary md:px-2 xs:text-[10px]'>
                     Add to cart
                   </button>
                 ) : (

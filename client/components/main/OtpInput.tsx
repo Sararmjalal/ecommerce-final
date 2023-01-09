@@ -1,14 +1,9 @@
-import React, {useMemo} from "react";
+import { useMemo } from "react";
+import { OtpProps } from "../../lib/interfaces";
 
-export type Props = {
-  value: string;
-  valueLength: number;
-  onChangeHandler: (value: string) => void;
-  onKeyDownFunction: () => void
-};
-
-const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Props) => {
+const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: OtpProps) => {
   const RE_DIGIT = new RegExp(/^\d+$/);
+
   const valueItems = useMemo(() => {
     const valueArray = value.split("");
     const items: Array<string> = [];
@@ -26,49 +21,31 @@ const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Pr
     return items;
   }, [value, valueLength]);
 
-  const inputOnChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    idx: number
-  ) => {
+  const inputOnChange = (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
     const target = e.target;
     let targetValue = target.value.trim();
     const isTargetValueDigit = RE_DIGIT.test(targetValue);
 
-    if (!isTargetValueDigit && targetValue !== "") {
-      return;
-    }
-
+    if (!isTargetValueDigit && targetValue !== "") return;
     const nextInputEl = target.nextElementSibling as HTMLInputElement | null;
 
     // only delete digit if next input element has no value
-    if (!isTargetValueDigit && nextInputEl && nextInputEl.value !== "") {
-      return;
-    }
-
+    if (!isTargetValueDigit && nextInputEl && nextInputEl.value !== "") return;
     targetValue = isTargetValueDigit ? targetValue : " ";
-
     const targetValueLength = targetValue.length;
 
     if (targetValueLength === 1) {
       const newValue =
         value.substring(0, idx) + targetValue + value.substring(idx + 1);
-
       onChangeHandler(newValue);
-
-      if (!isTargetValueDigit) {
-        return;
-      }
+      if (!isTargetValueDigit) return;
       focusToNextInput(target);
-
-      const nextElementSibling =
-        target.nextElementSibling as HTMLInputElement | null;
-
+      const nextElementSibling = target.nextElementSibling as HTMLInputElement | null;
       if (nextElementSibling) {
         nextElementSibling.focus();
       }
     } else if (targetValueLength === valueLength) {
       onChangeHandler(targetValue);
-
       target.blur();
     }
   };
@@ -76,9 +53,8 @@ const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Pr
   const inputOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const {key} = e;
     const target = e.target as HTMLInputElement;
-
     if (key === "Enter") return onKeyDownFunction()
-    
+
     if (key === "ArrowRight" || key === "ArrowDown") {
       e.preventDefault();
       return focusToNextInput(target);
@@ -88,53 +64,30 @@ const OtpInput = ({ value, valueLength, onChangeHandler, onKeyDownFunction }: Pr
       e.preventDefault();
       return focusToPrevInput(target);
     }
-
     const targetValue = target.value;
 
-    if (e.key !== "Backspace" || target.value !== "") {
-      return;
-    }
-
+    if (e.key !== "Backspace" || target.value !== "") return;
     focusToPrevInput(target);
-
     target.setSelectionRange(0, targetValue.length);
-    const previousElementSibling =
-      target.previousElementSibling as HTMLInputElement | null;
-
-    if (previousElementSibling) {
-      previousElementSibling.focus();
-    }
+    const previousElementSibling = target.previousElementSibling as HTMLInputElement | null;
+    if (previousElementSibling) previousElementSibling.focus(); 
   };
 
   const inputOnFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const {target} = e;
-
-    const prevInputEl =
-      target.previousElementSibling as HTMLInputElement | null;
-
-    if (prevInputEl && prevInputEl.value === "") {
-      return prevInputEl.focus();
-    }
-
+    const prevInputEl = target.previousElementSibling as HTMLInputElement | null;
+    if (prevInputEl && prevInputEl.value === "") return prevInputEl.focus();
     target.setSelectionRange(0, target.value.length);
   };
 
   const focusToNextInput = (target: HTMLElement) => {
-    const nextElementSibling =
-      target.nextElementSibling as HTMLInputElement | null;
-
-    if (nextElementSibling) {
-      nextElementSibling.focus();
-    }
+    const nextElementSibling = target.nextElementSibling as HTMLInputElement | null;
+    if (nextElementSibling) nextElementSibling.focus();
   };
 
   const focusToPrevInput = (target: HTMLElement) => {
-    const previousElementSibling =
-      target.previousElementSibling as HTMLInputElement | null;
-
-    if (previousElementSibling) {
-      previousElementSibling.focus();
-    }
+    const previousElementSibling = target.previousElementSibling as HTMLInputElement | null;
+    if (previousElementSibling) previousElementSibling.focus()
   };
 
   return (

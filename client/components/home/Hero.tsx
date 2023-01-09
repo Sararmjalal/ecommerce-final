@@ -1,11 +1,8 @@
-import React, {useState} from "react";
-import Image from "next/image";
-import PillCard from "./PillCard";
+import { BsFillArrowLeftSquareFill, BsFillArrowRightSquareFill } from "react-icons/bs";
 import {pillsProps} from "../../lib/staticData";
-import {
-  BsFillArrowLeftSquareFill,
-  BsFillArrowRightSquareFill,
-} from "react-icons/bs";
+import PillCard from "./PillCard";
+import {useState} from "react";
+import Image from "next/image";
 
 const Hero = () => {
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -31,14 +28,14 @@ const Hero = () => {
         style={{transform: `translateX(${-100 * sliderIndex}vw)`}}
         className='w-[300vw] h-screen flex transition-all object-cover'>
         {images.map((img, i) => (
-          <div key={i} className='relative w-[99.5vw] h-screen'>
-            <Image
-              fill
-              src={img}
-              alt='hero'
-              className='opacity-70 object-top object-cover'
-            />
-          </div>
+        <div key={i} className='relative w-[99.5vw] h-screen'>
+          <Image
+            className='opacity-70 object-top object-cover'
+            fill
+            src={img}
+            alt='hero'
+          />
+        </div>
         ))}
       </div>
       <div className='h-screen px-72 lg:px-9 absolute flex flex-col justify-center items-start gap-16 xl:gap-8 w-full'>

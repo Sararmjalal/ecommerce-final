@@ -1,21 +1,13 @@
-import React from "react";
-import Image from "next/image";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaInstagram,
-  FaYoutube,
-} from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube } from "react-icons/fa";
 import PreFooter from "./PreFooter";
+import Image from "next/image";
 
 const Footer = () => {
   return (
     <>
       <PreFooter />
       <div
-        className='main-container grid grid-cols-10 md:grid-cols-4 gap-11 w-full sm:text-center
-       bg-white border-b-[1px] border-grayborder mt-auto'>
+        className='main-container grid grid-cols-10 md:grid-cols-4 gap-11 w-full sm:text-center bg-white border-b-[1px] border-grayborder mt-auto'>
         <div className='col-span-4 md:col-span-4 '>
           <div className='flex flex-col justify-start gap-7'>
             <div className='flex items-center gap-6'>

@@ -1,4 +1,4 @@
-import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import { dehydrate, useQuery } from "@tanstack/react-query";
 import React, { useLayoutEffect, useState } from "react";
 import GuideLink from "../components/main/GuideLink";
 import FiltersSidebar from "../components/shop/FiltersSidebar";
@@ -8,11 +8,9 @@ import Head from "next/head";
 import { useTitle } from "../lib";
 import { allCategories, allProducts } from "../apis";
 import { FilterData, Product } from "../lib/interfaces";
-import { homeProductsProps } from "../lib/staticData";
+import { queryClient } from "./_app";
 
 export async function getStaticProps() {
-
-  const queryClient = new QueryClient()
   
   await queryClient.prefetchQuery(['categories'], allCategories)
   await queryClient.prefetchQuery(['products'], allProducts)

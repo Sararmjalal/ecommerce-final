@@ -1,11 +1,11 @@
-import {QueryClient, useQuery, dehydrate} from "@tanstack/react-query";
+import {useQuery, dehydrate} from "@tanstack/react-query";
 import {allProducts} from "../../../apis";
 import ListItem from "../../../components/admin-panel/ListItem";
 import Loading from "../../../components/main/Loading";
 import { Product } from "../../../lib/interfaces";
+import { queryClient } from "../../_app";
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient
   await queryClient.prefetchQuery(['products'], allProducts)
   return {
     props: {

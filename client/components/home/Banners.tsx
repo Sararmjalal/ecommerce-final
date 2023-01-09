@@ -1,6 +1,5 @@
-import React from "react";
-import BannerCard from "./BannerCard";
 import {bannersProps} from "../../lib/staticData";
+import BannerCard from "./BannerCard";
 
 const Banners = () => {
   return (

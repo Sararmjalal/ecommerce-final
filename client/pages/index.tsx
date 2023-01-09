@@ -8,10 +8,9 @@ import WhyChooseUs from "../components/home/WhyChooseUs";
 import { useTitle } from "../lib";
 import { topProducts, allProducts } from "../apis";
 import Loading from "../components/main/Loading";
+import { queryClient } from "./_app";
 
 export async function getStaticProps() {
-
-  const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery(['topProducts'], topProducts)
   

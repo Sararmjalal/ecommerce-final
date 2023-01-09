@@ -35,9 +35,9 @@ export const editAddress = async (addressId: string, data: AddressData) => await
 
 export const deleteAddress = async (addressId: string) => await postRequest("/address/delete", {_id: addressId}, "user");
 
-export const addToCart = async (productId: string, userId: string) => await postRequest("/cart/add", {productId, userId}, "user");
+export const addToCart = async (body: CartBody) => await postRequest("/cart/add", body, "user");
 
-export const removeFromCart = async (productId: string, userId: string) => await postRequest("/cart/remove", {productId, userId}, "user");
+export const removeFromCart = async (body: CartBody) => await postRequest("/cart/remove", body, "user");
 
 export const changeCart = async (body:CartBody) => await postRequest("/cart/change", body, "user")
 
@@ -47,4 +47,4 @@ export const submitComment = async (body: AddCommentBody) => await postRequest("
 
 export const submitRate = async (body: AddRateBody) => await postRequest("/rate/submit", body, "user"); 
 
-export const upload = async(formData: FormData) => await postRequest('/file/upload-reserve', formData, 'admin')
+export const upload = async (formData: FormData) => await postRequest('/file/upload-reserve', formData, 'admin')

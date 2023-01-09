@@ -3,9 +3,9 @@ import {allCategories} from "../../../apis";
 import ListItem from "../../../components/admin-panel/ListItem";
 import Loading from "../../../components/main/Loading";
 import { Category } from "../../../lib/interfaces";
+import { queryClient } from "../../_app";
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient
   await queryClient.prefetchQuery(['categories'], allCategories)
   return {
     props: {

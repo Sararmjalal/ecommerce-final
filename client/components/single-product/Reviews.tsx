@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../global-state/slice";
+import { queryClient } from "../../pages/_app";
 
 const Reviews = ({ product }: { product: Product }) => {
 
@@ -20,9 +21,9 @@ const Reviews = ({ product }: { product: Product }) => {
   })
 
   const thisUser = useSelector(selectUser);
-  console.log(thisUser)
 
-  const { data: allComments, refetch } = useQuery(['comments'],{
+  const { data: allComments } = useQuery({
+    queryKey:['comments', `${product._id}`],
     queryFn: async () => await comments(product._id),
   })
   
@@ -33,7 +34,7 @@ const Reviews = ({ product }: { product: Product }) => {
         const {msg} = error.response?.data;
         if (msg === "bad request: bad inputs") toast.error('Your Comment is empty!')
       }
-    }
+    },
   })
 
   const addRate = useMutation({
@@ -48,20 +49,22 @@ const Reviews = ({ product }: { product: Product }) => {
       text: commentsData.commentText
     },
       {
-        onSuccess: async () => {
-          await addRate.mutate({
+        onSuccess: () => {
+          addRate.mutate({
             productId: product._id,
             score: commentsData.score
           })
           toast.success('Your Comment Added Successfully!')
-          refetch()
+          queryClient.invalidateQueries({ queryKey: ['comments', `${product._id}`] })
       }})
   }
 
+  console.log(allComments)
+
   return (
     <div className='main-container '>
-      <div className='grid grid-cols-2 md:grid-cols-1 gap-32 xl:gap-24 md:gap-20 w-full flex-wrap'>
-        <div className='md:col-span-2 '>
+      <div className='grid grid-cols-3 md:grid-cols-1 gap-8 xl:gap-24 md:gap-20 w-full flex-wrap'>
+        <div className='md:col-span-3 col-span-1 '>
           <div className=' flex flex-col justify-center items-center'>
             <p className='text-6xl font-semibold'>{product.averageScore}</p>
             <ReactStars
@@ -101,7 +104,7 @@ const Reviews = ({ product }: { product: Product }) => {
             {!commentsData.openCommentSection && !thisUser && <p className="text-xs text-reddish">Only E-commerce users can submit comments!</p>} 
           </div>
         </div>
-        <div className='md:col-span-2 '>
+        <div className='md:col-span-3 col-span-2 '>
           {allComments?.length ? (
             allComments.map((comment: Comment) => (
               <CommentCard

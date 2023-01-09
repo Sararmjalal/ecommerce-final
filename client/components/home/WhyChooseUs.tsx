@@ -1,4 +1,3 @@
-import React from "react";
 import {whyChooseUsProps} from "../../lib/staticData";
 import WhyChooseUsCard from "./WhyChooseUsCard";
 

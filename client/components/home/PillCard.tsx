@@ -1,5 +1,5 @@
-import React from "react";
 import {Pill} from "../../lib/interfaces";
+import React from "react";
 
 const PillCard = (props: Pill) => {
   return (
