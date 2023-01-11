@@ -222,11 +222,11 @@ export interface VariablesFormProps extends OptionsFormProps {
 
 // PRODUCT TYPES ==============================================
 export interface AddProductDefaultValues{
-  title: "",
-  isAvailable: false,
+  title: string,
+  isAvailable: boolean,
   cats: [],
   thisCategory: {},
-  images: [] | {url:string}[],
+  images: [],
   openUpload: false,
   files: [],
   description: string
@@ -269,11 +269,13 @@ export interface ProductBodyForm {
   isAvailable: boolean;
   cats: ThisCategory[];
   images: {
-    url: string
+    id:number,
+    url: string,
+    dataUrl:string,
+    file: File | string
   }[]
   thisCategory: ThisCategory
   openUpload: boolean
-  files: File[]
   description: string
 }
 
@@ -296,12 +298,6 @@ export interface Product extends ProductBody {
   updatedAt: string;
 }
 
-export interface EdtiProductProps {
-  initialProduct: Product,
-  initialThisCategory: Category,
-  initialCategories: Category[]
-}
-
 export interface EditProductNewData {
   thisCategory: ThisCategory,
   thisProduct: ProductWithVars,
@@ -310,21 +306,28 @@ export interface EditProductNewData {
 
 export interface UploadBoxProps {
   removeImg: UseFieldArrayRemove
-  images: { url: unknown }[]
+  images: {
+    id:number,
+    url: string,
+    dataUrl:string,
+    file: File | string
+  }[]
   moveImg: UseFieldArrayMove
 }
 
 export interface UploadModalProps extends UploadBoxProps {
   setValue: UseFormSetValue<ProductBodyForm>
   closeHandler: () => void
-  files: File[]
 }
 
 export interface ReadAllFilesProps {
   files: FileList | null
   useFor: string
   images: {
-    url: unknown
+    id:number,
+    url: string,
+    dataUrl:string,
+    file: File | string
   }[]
   setImages: UseFormSetValue<ProductBodyForm>
 }
@@ -332,12 +335,14 @@ export interface ReadAllFilesProps {
 export interface ImagesBoxProps {
   useFor: string,
   images: {
-    url: unknown
-  }[],
+    id:number,
+    url: string,
+    dataUrl:string,
+    file: File | string
+  }[]
   title: string,
   handleOpenUpload: () => void,
   setValue: UseFormSetValue<ProductBodyForm>
-  files: File[]
 }
 
 export interface CatListProps {

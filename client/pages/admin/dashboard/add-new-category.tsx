@@ -89,6 +89,7 @@ const AddCategory = () => {
         <label className=' ml-1'>Variables:</label>
         {variables.map((variable, outerIndex) => (
           <VariableForm
+            key={`var${outerIndex}`}
             outerIndex={outerIndex}
             variables={variables}
             selectedTypes={selectedTypes}

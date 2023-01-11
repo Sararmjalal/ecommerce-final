@@ -2,14 +2,11 @@ import { VariablesFormProps } from '../../../lib/interfaces';
 import { MdRemoveCircle } from "react-icons/md";
 import * as IOIcons from "react-icons/io5";
 import OptionsForm from './OptionsForm'
-import TypesMenu from '../TypesMenu';
+import TypesMenu from './TypesMenu';
 
 const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelectedTypes, errors, register, types, variable, getValues, update}: VariablesFormProps) => {
-  
   return (
-    <div
-      key={`var${outerIndex}`}
-      className='flex md:flex-col gap-4 md:gap-0 mt-4 w-full'>
+    <div className='flex md:flex-col gap-4 md:gap-0 mt-4 w-full'>
       <div
         className={`mb-5 cursor-pointer mt-9 mr-2 flex hover:text-primary ${variables.length > 1 ? "block" : "hidden"}`}
         onClick={() => {
@@ -47,6 +44,7 @@ const VariablesForm = ({outerIndex, variables, selectedTypes, remove, setSelecte
             {variable.options.map((option, innerIndex:number) => {
               return (
                 <OptionsForm
+                  key={`opt${innerIndex}var${outerIndex}`}
                   errors={errors}
                   outerIndex={outerIndex}
                   innerIndex={innerIndex}

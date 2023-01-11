@@ -5,7 +5,7 @@ import { allCategories, allProducts, singleProduct } from "../../../../../apis"
 import AddEditProductForm from "../../../../../components/admin-panel/product/AddEditForm"
 import DashboardThisName from "../../../../../components/main/DashboardThisName"
 import Loading from "../../../../../components/main/Loading"
-import { Category, EditProductNewData, EdtiProductProps, Product, ProductWithVars, ThisCategory } from "../../../../../lib/interfaces"
+import { Category, EditProductNewData, Product, ProductWithVars, ThisCategory } from "../../../../../lib/interfaces"
 import {useState} from 'react'
 
 export async function getStaticPaths() {
@@ -22,9 +22,36 @@ export async function getStaticProps(context: GetStaticPropsContext) {
     const initialProduct = typeof (thisId) === 'string' ? await singleProduct(thisId) : {}
     const initialCategories = await allCategories()
     const initialThisCategory = initialCategories.find((cat: Category) => cat._id === initialProduct.categoryId)
+
+    const thisCatVars: {}[]  = []
+      Object.entries(initialThisCategory.variables).forEach(([key, val]:any) => {
+        thisCatVars.push({
+        name: key,
+        type: val.type,
+        isSelected: false,
+        options: val.type === 'text' ?
+          [{name: '', isSelected:false}] :
+          val.options?.map((opt:string) => ({
+            name: opt,
+            isSelected: false
+          }))
+        })
+      })
+    
+    initialThisCategory['isSelected'] = true
+    
+      const productVars: {}[]  = []
+      Object.entries(initialProduct.variables).forEach(([key, val]:any) => {
+        productVars.push({
+        name: key,
+        options: val.map((opt:string) => ({name:opt}))
+        })
+      })
+      
     
     return {
-    props: { initialProduct, initialThisCategory, initialCategories }
+      props: { initialProduct, initialThisCategory, initialCategories, thisCatVars, productVars },
+      revalidate: 1
     }
 
   } catch (error) {
@@ -34,57 +61,28 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   }
 }
 
-const EditProduct = ({ initialProduct, initialThisCategory, initialCategories }: EdtiProductProps) => {
+const EditProduct = ({ initialProduct, initialThisCategory, thisCatVars, productVars }: any) => {
   
   const [newData, setNewData] = useState<EditProductNewData>({
     thisCategory: initialThisCategory,
     thisProduct: initialProduct,
     status: ''
   })
-  
-   useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["categories"],
-    queryFn: async () => await allCategories(),
-    initialData: initialCategories,
-    onSuccess: (data) => {
-      const vars: {}[]  = []
-      const newThisCat = data.find((item: ThisCategory) => item._id === initialProduct.categoryId)
-        Object.entries(newData.thisCategory.variables).forEach(([key, val]) => {
-          vars.push({
-          name: key,
-          type: val.type,
-          isSelected: false,
-          options: val.type === 'text' ?
-            [{name: '', isSelected:false}] :
-            val.options?.map(opt => ({
-              name: opt,
-              isSelected: false
-            }))
-          })
-        })
-      newThisCat['vars'] = vars
-      setNewData({...newData, thisCategory:newThisCat})
-    }
-  })
-  
-  const { data:queryProduct } = useQuery({
-    queryKey: ['singleProduct'],
-    queryFn: async () => await singleProduct(initialProduct._id),
-    initialData: initialProduct,
-    enabled: !!newData?.thisCategory?.vars,
-    onSuccess: (data) => {
-        const vars: {}[]  = []
-        Object.entries(data.variables).forEach(([key, val]:any) => {
-          vars.push({
-          name: key,
-          options: val.map((opt:string) => ({name:opt}))
-          })
-        })
-      setNewData({...newData, thisProduct:{...data, vars}, status:'ready'})
-    }
-  })
 
+  useEffect(() => {
+    setNewData({
+      thisCategory: {
+        ...initialThisCategory,
+        vars: thisCatVars,
+      },
+      thisProduct: {
+        ...initialProduct,
+        vars: productVars
+      },
+      status:'ready'
+    })
+  }, [])
+  
   const generateData = () => {
     const { thisProduct: productClone, thisCategory: catClone } = newData
     if (!catClone.vars || !productClone.vars) return
@@ -112,18 +110,19 @@ const EditProduct = ({ initialProduct, initialThisCategory, initialCategories }:
       <AddEditProductForm
         useFor="Edit Product"
         defaultValues={{
-          title: queryProduct.title,
-          isAvailable: queryProduct.isAvailable,
-          price: queryProduct.price,
-          quantity: queryProduct.quantity,
+          title: initialProduct.title,
+          isAvailable: initialProduct.isAvailable,
+          price: initialProduct.price,
+          quantity: initialProduct.quantity,
           cats: [],
           thisCategory: newData.thisCategory,
-          images: queryProduct.images.map((img:string) => ({url: `${process.env.SERVER}/${img}`})),
+          images: initialProduct.images.map((img: string) => ({ url: img, dataUrl: '' })),
+          // defaultImages: [...initialProduct.images],
           openUpload: false,
           files: [],
-          description: queryProduct.description
+          description: initialProduct.description
         }}
-        productId={queryProduct._id}
+        productId={initialProduct._id}
       />
     </>
   )

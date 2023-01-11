@@ -20,8 +20,6 @@ const Products = () => {
     queryFn: async() => await allProducts(),
   });
 
-  console.log(products)
-
   if(isLoading) return <Loading />
   return (
     <div>

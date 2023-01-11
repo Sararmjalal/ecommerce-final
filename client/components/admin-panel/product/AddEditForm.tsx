@@ -5,7 +5,7 @@ import {Editor} from "@tinymce/tinymce-react";
 import {Editor as TinyMCEEditor} from "tinymce";
 import {allCategories, createProduct, upload, editProduct} from "../../../apis";
 import ImagesBox from "../../../components/admin-panel/product/ImagesBox";
-import {useMutation, useQuery, QueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import CatList from "../../../components/admin-panel/product/CatList";
 import VarList from "../../../components/admin-panel/product/VarList";
 import UploadModal from "../../../components/modals/Upload";
@@ -48,7 +48,7 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
     }
   })
 
-  const { register, control, handleSubmit, formState: { errors }, watch, getValues, setValue } = useForm<ProductBodyForm>({
+  const { register, control, handleSubmit, formState: { errors }, getValues, setValue } = useForm<ProductBodyForm>({
     defaultValues,
     mode: "onSubmit",
   });
@@ -97,7 +97,7 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
       queryClient.invalidateQueries({queryKey: ['products']})
       router.push('/admin/dashboard/products')
     },
-    onError: () => toast.error('You suck lool'),
+    onError: (error) => toast.error('You suck lool')
   }) 
 
   const editProductMutation = useMutation({
@@ -111,47 +111,47 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
   }) 
 
   const onSubmit = async (data: ProductBodyForm) => {
+
     if (!thisCategory._id) return toast.error('You must select a category')
     if (!thisCategory?.vars?.every(item => item.isSelected)) return toast.error('Put some vars in it lool')
+    if (!images[0]) return toast.error('You should pick an image')
+
+    const postFormData = (file: File | string, url:string) => 
+      new Promise(async (resolve, reject) => {
+        if (!file) return resolve({ url, dataUrl: '', file:''})
+        const formData = new FormData()
+        formData.append('reserve', file)
+        const res = await upload(formData)
+        resolve({
+          url: res.data.name,
+          dataUrl: '',
+          file:''
+        })
+      })
+    
+    const thisImages = []
+    for (let i = 0; i <images.length; i++) thisImages.push(postFormData(images[i]['file'], images[i]['url']))
+    const clone = await Promise.all(thisImages)
+    setValue('images', clone)
 
     const variables: ProductBodyVariables = {}
-    data?.thisCategory?.vars?.forEach(({ name, type, options }) => {
+    thisCategory?.vars?.forEach(({ name, type, options }) => {
       options.forEach((opt, i, ref) => ref[i].isSelected && (  
         variables[name] ? variables[name].push(opt.name) : variables[name] = [opt.name]
-        ))
+      ))
     })
-    
-    // return console.log(variables)
-      
-    if (getValues('files')[0]) {
-      const postFormData = (file:File) => {
-        if(!file) return
-        return new Promise((resolve, reject) => {
-          const formData = new FormData()
-          formData.append('reserve', file)
-          resolve(upload(formData))
-        })
-      }
-      
-      const thisImages = []
-      for (let i = 0; i < images.length; i++) thisImages.push(postFormData(getValues('files')[i]))
-      const imageValues = await Promise.all(thisImages)
-      setValue('images', imageValues.map((item: any) => item['data'] && {url: item?.data?.name}))
-    }
 
-    const newData = {
+    const newData: ProductBody = {
       title: data.title,
-      price: isAvailable ? Number(data.price) : 0,
-      quantity: isAvailable ? Number(data.quantity) : 0,
+      price: Number(data.price),
+      quantity: Number(data.quantity),
       isAvailable: data.isAvailable,
-      images: images[0] ? images.map(item => item.url) : ['default.svg'],
+      images: clone.map((item) => typeof(item['url'] === 'string') && item['url']),
       variables,
       categoryId: data.thisCategory._id,
-      description: editorRef.current?.getContent() ?? "No description provided yet."
+      description:  editorRef.current?.getContent() ?? "No description provided yet."
     }
-
-    // return console.log(newData)
-
+    
     useFor === 'Add Product' ? addProductMutation.mutate(newData) : editProductMutation.mutate(newData)
   }
   
@@ -167,10 +167,9 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
           className={`text-gray-600 w-full py-3 pl-2 bg-gray-100	rounded-xl outline-none mt-1 lg:mb-4 mb-8`}
           {...register('title', { required: true, maxLength: 50 })}
           />
-          {/* <Editor
+          <Editor
             onInit={(evt, editor) => (editorRef.current = editor)}
-            initialValue={getValues('description') ?? ''}
-            onChange={(e) => console.log(e.target.value)}
+            initialValue={getValues('description')}
             init={{
               placeholder: "Product Description...",
               height: 500,
@@ -183,7 +182,7 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
               'bold italic backcolor | alignleft aligncenter ' +
               'alignright alignjustify | bullist numlist outdent indent | ' +
               'removeformat | help',
-            }} /> */}
+            }} />
       </div>
       <div className='w-full border-[1px] border-gray-200 rounded-xl md:mr-0 mr-[1rem] mt-4 pb-6'>
         <div>
@@ -197,7 +196,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
               {isAvailable && <BsCheck fill='white' size='18px' />}
             </div>
           </div>
-          {isAvailable && (
               <div className='m-4 grid grid-cols-2 gap-3 w-1/2'>
                   <div className="col-span-1 lg:col-span-2">
                     {errors.quantity && (<p className='text-xs text-reddish ml-1'>Please enter quantity</p>)}
@@ -206,7 +204,7 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
                     className='w-full dashboard-input'
                     placeholder='Quantity'
                     type='number'
-                    {...register('quantity', {required: getValues('isAvailable'), maxLength: 10})}/>
+                    {...register('quantity', {required: true, maxLength: 10})}/>
                   </div>
                 <div className="col-span-1 lg:col-span-2">
                   {errors.price && (<p className='text-xs text-reddish ml-1'>Please enter price</p>)}
@@ -215,10 +213,9 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
                       placeholder='Price'
                       type='number'
                       className='w-full dashboard-input'
-                      {...register('price', {required: getValues('isAvailable'), maxLength: 50})}/>
+                      {...register('price', {required: true, maxLength: 50})}/>
                 </div>
             </div>
-          )}
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-1">
           <div className="flex-1 flex-col gap-2 items-start ml-4 my-4 lg:mx-4">
@@ -234,7 +231,13 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
                     thisCategory={thisCategory}
                     onCategorySelect={onCategorySelect}
                   />
-                )) : <p>No categories created yet.<Link href={'/admin/dashboard/categories'}> <p className="text-blueish font-semibold">Create one.</p></Link></p>
+                )) : <div>No categories created yet.
+                    <Link href={'/admin/dashboard/categories'}>
+                      <p className="text-blueish font-semibold">
+                        Create one.
+                      </p>
+                    </Link>
+                  </div>
               }
           </ul> 
           </div>
@@ -266,7 +269,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
               images={images}
               setValue={setValue}
               handleOpenUpload={() => setValue('openUpload', true)}
-              files={getValues('files')}
               />
           </div>
           <div className="col-span-2 md::col-span-1">
@@ -276,7 +278,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
               images={images}
               setValue={setValue}
               handleOpenUpload={() => setValue('openUpload', true)}
-              files={getValues('files')}
               />
           </div>
         </div>
@@ -291,7 +292,6 @@ const AddEditProductForm = ({ useFor, defaultValues, productId='' }: AddEditProd
           moveImg={moveImg}
           images={images}
           closeHandler={() => setValue('openUpload', false)}
-          files={getValues('files')}
         />
         }
     </div>

@@ -12,11 +12,11 @@ const UploadBox = ({ images, removeImg, moveImg }: UploadBoxProps) => {
         <div className="grid grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 gap-2 w-full">
           {images.map((img, index) => (
             <div className="relative shadow-md rounded-2xl overflow-hidden">
-              <img
-                className="aspect-square object-cover"
-                src={typeof (img['url']) === 'string' ? img['url'] : ""}
-                alt='product image'
-              />
+                <img
+                  src={img['dataUrl'] ? img['dataUrl'] : `${process.env.SERVER}/${img['url']}`}
+                  alt='product image'
+                  className="aspect-square object-cover"
+                />
               <AiFillCloseCircle
                 className="absolute top-3 left-3 xl:top-2 xl:left-2 cursor-pointer hover:scale-110 transition-all hover:text-primary"
                 fontSize={24}

@@ -12,7 +12,7 @@ const VarList = ({thisVariable, outerIndex, onOptionSelect, length, register} : 
               key={`opt${outerIndex}-${innerIndex}`}
               className='flex gap-1 items-center justify-center text-right mb-4 cursor-pointer'
               onClick={() => onOptionSelect(outerIndex, innerIndex, thisVariable.type)}>
-              {thisVariable.name === 'color' ?
+              {thisVariable.name.toLowerCase() === 'color' && option.name.includes('#') ?
                 <div className="w-5 h-5 rounded-2xl mr-1 shadow-md" style={{background: option.name}}></div>
                   :
                 thisVariable.type === 'text' ?

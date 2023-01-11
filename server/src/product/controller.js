@@ -21,7 +21,7 @@ export default {
 
       const thisProduct = await Product.create({ categoryId, variables, ...rest });
       
-      return res.status(201).json({
+      return res.status(200).json({
         msg: "successfully created this product",
         _id: thisProduct._id,
       });
