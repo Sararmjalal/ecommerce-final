@@ -19,7 +19,7 @@ router.post('/me', asyncHandler(UserController.me))
 
 router.post('/edit', asyncHandler(UserController.userEdit))
 
-router.post('/allusers', adminAuth, asyncHandler(UserController.userList))
+router.post('/allusers', asyncHandler(UserController.userList))
 
 // router.get('/', AdminController.home)
 

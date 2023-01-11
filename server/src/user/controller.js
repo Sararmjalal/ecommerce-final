@@ -122,9 +122,9 @@ export default {
   userList: async (req, res) => {
 
     try {
-      const thisAdmin = await AdminModel.authorizeAdmin(req.admin)
+      // const thisAdmin = await AdminModel.authorizeAdmin(req.admin)
 
-      if(!thisAdmin) throw new Error('unauthorized')
+      // if(!thisAdmin) throw new Error('unauthorized')
 
       const { page = 0, limit = 10 } = req.body;
 

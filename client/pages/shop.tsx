@@ -37,7 +37,7 @@ const Shop = () => {
 
   const [filteredData, setFilteredData] = useState<FilterData>({
     products,
-    selectedCategory: categories[0].name,
+    selectedCategory: categories[0]?.name,
     catFilterOpen: false,
     selectedSize: sizes[0],
     sizeFilterOpen: false,

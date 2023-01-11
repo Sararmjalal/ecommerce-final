@@ -282,10 +282,10 @@ export interface ProductBody {
   price: number;
   quantity: number;
   description: string;
-  isAvalible: boolean;
+  isAvailable: boolean;
   images: string[];
   categoryId: string;
-  variables: ProductBodyVariables;
+  variables: ProductBodyVariables | {}[];
 }
 
 export interface Product extends ProductBody {
@@ -368,6 +368,11 @@ export interface VarListProps {
   register: UseFormRegister<ProductBodyForm>
 }
 
+export interface SingleProductVars {
+  name: string,
+  vals: string[],
+  isSelected: boolean
+}
 
 // CART TYPES ==============================================
 export interface CartBody {

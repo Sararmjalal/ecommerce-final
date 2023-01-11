@@ -2,27 +2,29 @@ import React, {useState} from "react";
 import Image from "next/image";
 import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
-import { CartBody, Product } from "../../lib/interfaces";
+import { CartBody, Product, SingleProductVars } from "../../lib/interfaces";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addToCart, myCart } from "../../apis";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../global-state/slice";
+import ThirdVariable from "../admin-panel/categories/ThirdVariable";
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product, setProduct }: { product: Product }) => {
+  console.log(product.variables)
 
   const thisUser = useSelector(selectUser);
   
   const [singleProductData, setSingleProductData] = useState({
     selectedImg: 0,
-    selectedColor: product.variables.Color[0],
-    selectedSize: product.variables.Size[0],
+    selectedColor: '',
+    selectedSize: '',
   });
   
   const [quantity, setQuantity] = useState(1)
 
   const { data } = useQuery({
     queryFn: async () => await myCart(),
-    onSuccess: (res) => console.log(res)
+    // onSuccess: (res) => console.log(res)
   })
 
   const addCart = useMutation({
@@ -38,8 +40,8 @@ const ProductCard = ({ product }: { product: Product }) => {
     })
   }
 
-console.log("PRODUCT",product)
-console.log("THIS USER",thisUser)
+  console.log(product)
+
   return (
     <div className='grid grid-cols-2 md:grid-cols-1 gap-40 md:gap-8'>
       <div>
@@ -71,40 +73,71 @@ console.log("THIS USER",thisUser)
           <div className='flex justify-start items-center gap-6 text-3xl md:text-lg'>
             <p className=' text-grayish '>${product.price}</p>
           </div>
-          <div className='w-full border-[1px] border-grayborder p-6 mt-8'>
+          {product.variables.map((variable: any) => (
+            variable.name === 'color' ? (
+              <div className='w-full border-[1px] border-grayborder p-6 mt-8'>
             <p className='font-semibold text-sm mb-6'>COLOR</p>
             <div className='flex flex-col gap-5'>
               <div className='flex justify-center gap-3 items-center'>
-                {product.variables.Color.map((color: string) => (
-                  <ColorCard
-                    color={color}
-                    handleSelect={(selectedColor:string) => setSingleProductData({ ...singleProductData, selectedColor })}
-                    selectedColor={singleProductData.selectedColor}
-                  />
-                ))}
+          {variable.options.map((color: {name: string, isSelected: boolean}, index, ref) => (
+            <ColorCard
+             color={color.name}
+              handleSelect={(selectedColor: string) => setSingleProductData({ ...singleProductData, selectedColor })}
+              handleSelect={(selectedOption) => {
+                ref.forEach(element => {
+                  element.isSelected = element.name === selectedOption
+                })
+                setProduct({...product})
+              }}
+             selectedColor={singleProductData.selectedColor}
+             />
+            ))}
               </div>
             </div>
-          </div>
-          <div className='flex flex-col justify-start mt-8 text-sm font-light'>
-            <div className='w-full border-[1px] border-grayborder p-6'>
-              <p className='font-semibold text-sm mb-6'>SIZE</p>
-              <div className='flex flex-col gap-5'>
-                <div className='flex justify-center items-center overflow-y-auto'>
-                  {product.variables.Size.map((size) => (
-                    <div
-                      className={`w-10 h-10 flex flex-col items-center justify-center cursor-pointer
-                    ${
-                      singleProductData.selectedSize === size
-                        ? "bg-black text-white"
-                        : "bg-white border-[1px] border-grayborder"
-                    }`}
-                      onClick={() => setSingleProductData({...singleProductData, selectedSize:size})}>
-                      <p>{size}</p>
+              </div>
+            ) : (
+                variable.name === 'size' ? (
+                  <div className='w-full border-[1px] border-grayborder p-6'>
+                  <p className='font-semibold text-sm mb-6'>SIZE</p>
+                  <div className='flex flex-col gap-5'>
+                    <div className='flex justify-center items-center overflow-y-auto'>
+          {variable.options.map((size: {name: string, isSelected: boolean} ) => (
+                        <div
+                          className={`w-10 h-10 flex flex-col items-center justify-center cursor-pointer
+                        ${
+                          singleProductData.selectedSize === size.name
+                            ? "bg-black text-white"
+                            : "bg-white border-[1px] border-grayborder"
+                        }`}
+                          onClick={() => setSingleProductData({...singleProductData, selectedSize:size.name})}>
+                          <p>{size.name}</p>
+                        </div>
+                      ))} 
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+                ) : (
+                    variable.options.map((otherOption: {name: string, isSelected: boolean} ) => (
+                  <div className='w-full border-[1px] border-grayborder p-6'>
+                  <p className='font-semibold text-sm mb-6'>{otherOption.name.toUpperCase()}</p>
+                  <div className='flex flex-col gap-5'>
+                    <div className='flex justify-center items-center overflow-y-auto'>
+                    
+                    <ThirdVariable otherOption={otherOption} />
+                    </div>
+                  </div>
+                </div>
+                              ))
+
+                )
+            )
+                     
+            ))}
+         
+ 
+          <div className='flex flex-col justify-start mt-8 text-sm font-light'>
+
+    
             <div className='flex flex-col justify-start mt-8 text-sm font-light'>
               <p className=' mb-2'>Quantity:</p>
               <div className='flex justify-start items-center gap-4 w-full'>
@@ -119,7 +152,7 @@ console.log("THIS USER",thisUser)
                     onClick={() => setQuantity((prev) => prev === product.quantity? product.quantity : prev + 1)}
                   />
                 </div>
-                {product.isAvalible ? (
+                {product.isAvailable ? (
                   <button onClick={onSubmit} className='btn-secondary border-[1px] py-3 border-grayish hover:border-primary md:px-2 xs:text-[10px]'>
                     Add to cart
                   </button>

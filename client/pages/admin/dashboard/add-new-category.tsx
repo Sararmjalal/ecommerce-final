@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import {useRouter} from "next/router";
 import VariableForm from "../../../components/admin-panel/categories/VariablesForm";
 import { queryClient } from "../../_app";
+import ThirdVariable from "../../../components/admin-panel/categories/ThirdVariable";
 
 const AddCategory = () => {
   const types = [
