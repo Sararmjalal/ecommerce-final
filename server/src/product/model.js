@@ -64,7 +64,7 @@ class ProductSchema {
         title,
         price,
         quantity,
-        isAvailable: isAvailable ? isAvailable : false,
+        isAvailable,
         description,
         categoryId,
         variables,
