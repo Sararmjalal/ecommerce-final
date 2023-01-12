@@ -7,9 +7,9 @@ import {
 } from "fs";
 import path from "path";
 import UID from "lib/utils/UID";
+import ProductModel from "../product/model";
 
 const dbDirectory = path.join(process.cwd(), "/src/cart/db");
-const productDbDirectory = path.join(process.cwd(), "/src/product/db");
 
 if (!existsSync(dbDirectory)) {
   mkdirSync(dbDirectory)
@@ -23,7 +23,7 @@ class CartSchema {
     this.doesCacheneedsUpdate = true;
   }
 
-  async addToCart({ productId, userId }) {
+  async addToCart({ productId, userId, quantity, thisVariables }) {
     
     try {
       
@@ -31,9 +31,7 @@ class CartSchema {
       
       let thisCart = await this.findByUserId(userId)
 
-      if (!thisCart) {
-
-        thisCart =  {
+      if (!thisCart._id) thisCart = {
           _id: UID("ECC"),
           items: [],
           userId,
@@ -41,14 +39,32 @@ class CartSchema {
           updatedAt: new Date().toISOString(),
         }
 
-      }
-
-      const p = thisCart.items.findIndex(item => item.productId == productId)
+      const p = thisCart.items.findIndex(item => { item.productId == productId })
 
       if (p === -1) {
+        const thisProduct = await ProductModel.findById(productId)
+
+        if (!thisProduct.isAvailable) throw Error('Product not available')
+        if (thisProduct.quantity < quantity) throw Error('Not enough product!')
+        
+        const variableKeys = Object.keys(thisProduct.variables)
+        const keysRight = variableKeys.every(key => !!thisVariables[key])
+        
+        if (!keysRight) throw Error('Variable keys not right')
+
+        const variablesRight = variableKeys.every(key => {
+          const checkOptions = thisProduct.variables[key].some(item => {
+            return thisVariables[key][0] === item
+          })
+          return checkOptions
+        })
+
+        if (!variablesRight) throw Error('Variable options not right')
+        
         thisCart.items.push({
           productId,
-          quantity: 1
+          quantity,
+          thisVariables
         })
       }
 
@@ -96,7 +112,7 @@ class CartSchema {
   async findByUserId(userId) {
     try {
       const allCart = deepClone(await this.findAll())
-      return allCart.find(cart => cart.userId == userId) ?? []
+      return allCart.find(cart => cart.userId == userId) ?? {}
 
     } catch (error) {
       throw error
@@ -138,11 +154,15 @@ class CartSchema {
       
       const thisCart = deepClone(await this.findByUserId(userId))
 
-      if (!thisCart) throw new Error('wtf')
+      if (!thisCart._id) throw new Error('this cart doesnt seem to exist')
 
-      const p = thisCart.items.findIndex(item => item.productId == productId)
+      const p = thisCart.items.findIndex(item => item.productId == productId )
     
       if (p === -1) throw new Error('bad request: no such product exists')
+
+      const thisProduct = await ProductModel.findById(productId)
+      if (thisProduct.quantity < quantity) throw Error('Not enough product!')
+      if (quantity <= 0) throw Error('not allowed lool')
 
       thisCart.items[p].quantity = quantity
 

@@ -80,7 +80,7 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
         />
         <ProductCard
           product={pageData.product}
-          setProduct={(newValue) => setPageData(...pageData, product:newValue)}
+          setProduct={(newValue: Product) => setPageData({...pageData, product: newValue})}
         />
       </div>
       <div className='flex flex-col justify-start mt-28'>

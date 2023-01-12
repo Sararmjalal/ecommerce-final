@@ -2,22 +2,20 @@ import React, {useState} from "react";
 import Image from "next/image";
 import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
-import { CartBody, Product, SingleProductVars } from "../../lib/interfaces";
+import { CartBody, Product } from "../../lib/interfaces";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addToCart, myCart } from "../../apis";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../global-state/slice";
 import ThirdVariable from "../admin-panel/categories/ThirdVariable";
 
-const ProductCard = ({ product, setProduct }: { product: Product }) => {
+const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(newValue: Product)=> void }) => {
   console.log(product.variables)
 
   const thisUser = useSelector(selectUser);
   
   const [singleProductData, setSingleProductData] = useState({
     selectedImg: 0,
-    selectedColor: '',
-    selectedSize: '',
   });
   
   const [quantity, setQuantity] = useState(1)
@@ -36,9 +34,11 @@ const ProductCard = ({ product, setProduct }: { product: Product }) => {
   const onSubmit = () => {
     addCart.mutate({
       productId: product?._id,
-      userId: thisUser?._id
+      userId: thisUser?._id,
+      quantity
     })
   }
+
 
   console.log(product)
 
@@ -79,17 +79,16 @@ const ProductCard = ({ product, setProduct }: { product: Product }) => {
             <p className='font-semibold text-sm mb-6'>COLOR</p>
             <div className='flex flex-col gap-5'>
               <div className='flex justify-center gap-3 items-center'>
-          {variable.options.map((color: {name: string, isSelected: boolean}, index, ref) => (
+          {variable.options.map((color: {name: string, isSelected: boolean}, index: number, ref: {name: string, isSelected: boolean}[]) => (
             <ColorCard
              color={color.name}
-              handleSelect={(selectedColor: string) => setSingleProductData({ ...singleProductData, selectedColor })}
               handleSelect={(selectedOption) => {
                 ref.forEach(element => {
                   element.isSelected = element.name === selectedOption
                 })
                 setProduct({...product})
               }}
-             selectedColor={singleProductData.selectedColor}
+             selectedColor={color.isSelected}
              />
             ))}
               </div>
@@ -101,15 +100,20 @@ const ProductCard = ({ product, setProduct }: { product: Product }) => {
                   <p className='font-semibold text-sm mb-6'>SIZE</p>
                   <div className='flex flex-col gap-5'>
                     <div className='flex justify-center items-center overflow-y-auto'>
-          {variable.options.map((size: {name: string, isSelected: boolean} ) => (
+          {variable.options.map((size: {name: string, isSelected: boolean}, index: number, ref: {name: string, isSelected: boolean}[] ) => (
                         <div
                           className={`w-10 h-10 flex flex-col items-center justify-center cursor-pointer
                         ${
-                          singleProductData.selectedSize === size.name
+                          size.isSelected 
                             ? "bg-black text-white"
                             : "bg-white border-[1px] border-grayborder"
                         }`}
-                          onClick={() => setSingleProductData({...singleProductData, selectedSize:size.name})}>
+                          onClick={() => {
+                            ref.forEach((element : {name: string, isSelected: boolean}) => {
+                              element.isSelected = element.name === size.name
+                            })
+                            setProduct({...product})
+                          }}>
                           <p>{size.name}</p>
                         </div>
                       ))} 
@@ -117,27 +121,31 @@ const ProductCard = ({ product, setProduct }: { product: Product }) => {
                   </div>
                 </div>
                 ) : (
-                    variable.options.map((otherOption: {name: string, isSelected: boolean} ) => (
+                    variable.options.map((otherOption: {name: string, isSelected: boolean}, index: number , ref:{name: string, isSelected: boolean}[] ) => (
                   <div className='w-full border-[1px] border-grayborder p-6'>
                   <p className='font-semibold text-sm mb-6'>{otherOption.name.toUpperCase()}</p>
                   <div className='flex flex-col gap-5'>
                     <div className='flex justify-center items-center overflow-y-auto'>
-                    
-                    <ThirdVariable otherOption={otherOption} />
+                     <ThirdVariable
+                      otherOption={otherOption}
+                      handleSelect={(selectedOption: string ) => {
+                        ref.forEach((element: {name: string, isSelected: boolean}) => {
+                        element.isSelected = element.name === selectedOption
+                      })
+                      setProduct({...product})
+                    }}
+                            />
                     </div>
                   </div>
                 </div>
-                              ))
+                ))
 
-                )
-            )
-                     
+                 )
+               )     
             ))}
          
  
           <div className='flex flex-col justify-start mt-8 text-sm font-light'>
-
-    
             <div className='flex flex-col justify-start mt-8 text-sm font-light'>
               <p className=' mb-2'>Quantity:</p>
               <div className='flex justify-start items-center gap-4 w-full'>

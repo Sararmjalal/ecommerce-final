@@ -280,6 +280,14 @@ export interface ProductBodyForm {
   description: string
 }
 
+export interface SingleProductVars {
+  name: string
+  options: {
+    name: string,
+    isSelected: boolean
+  }[]
+}
+
 export interface ProductBody {
   title: string;
   price: number;
@@ -288,7 +296,7 @@ export interface ProductBody {
   isAvailable: boolean;
   images: string[];
   categoryId: string;
-  variables: ProductBodyVariables | {}[];
+  variables: ProductBodyVariables | {}[] | SingleProductVars[];
 }
 
 export interface Product extends ProductBody {
@@ -386,6 +394,7 @@ export interface SingleProductVars {
 export interface CartBody {
   productId: string,
   userId: string | undefined
+  quantity:number
 }
 
 export interface PaginationBody {

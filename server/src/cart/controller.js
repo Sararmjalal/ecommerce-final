@@ -21,7 +21,12 @@ export default {
 
     const thisUser = await UserModel.authorizeUser(req.user)
 
-    await Cart.addToCart({ productId: req.body.productId, userId: thisUser._id });
+    await Cart.addToCart({
+      productId: req.body.productId,
+      userId: thisUser._id,
+      quantity: req.body.quantity,
+      thisVariables: req.body.thisVariables
+    });
 
     return res.status(200).json({
       msg: "ok",
