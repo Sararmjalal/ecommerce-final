@@ -44,7 +44,7 @@ class AddressSchema {
       throw new Error('bad request: bad input')
     }
 
-    const validPhone = validatePhoneNumber(req.body.phone)
+    const validPhone = validatePhoneNumber(receiver.phone)
      
     const thisAddress = {
       _id: UID("ADR"),

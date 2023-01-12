@@ -11,7 +11,7 @@ export default {
     if (!req.body.location || !req.body.receiver) throw errs.badInputErr
     const thisUser = await UserModel.authorizeUser(req.user)
 
-    await AddressModel.create({ location, receiver, userId: thisUser._id })
+    await AddressModel.create({ location, receiver, userId: thisUser._id }) 
     
     return res.status(200).json({ msg: 'ok' })
     
@@ -22,6 +22,7 @@ export default {
     const thisUser = await UserModel.authorizeUser(req.user)
     const { location, receiver } = req.body.data
 
+    console.log(req.body.data)
 
     await AddressModel.findByIdAndUpdate(req.body._id, { location, receiver, userId: thisUser._id })
     

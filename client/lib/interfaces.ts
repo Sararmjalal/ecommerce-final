@@ -145,7 +145,8 @@ export type AddCategoryFormValues = {
 export type CategoryVariableObject = {
   name: {
     type: string;
-    options?: {[key: number]: string}[];
+    // options?: {[key: number]: string}[];
+    options: string[]
   };
 };
 
@@ -358,7 +359,9 @@ export interface DashboardListProps {
   isProduct?:boolean,
   isCategory?:boolean,
   isUser?:boolean,
-  img?: string
+  img?: string,
+  categories?: Category[]
+  users?: User[]
 }
   
 export interface VarListProps {
