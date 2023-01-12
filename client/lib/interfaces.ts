@@ -70,7 +70,9 @@ export interface User {
 }
 
 export interface GlobalState {
-  [key: string]: null | User;
+  currentAdmin: User | null
+  currentUser: User | null
+  currentCart: CartBody | null
 }
 
 export interface Form {
@@ -391,10 +393,20 @@ export interface SingleProductVars {
 }
 
 // CART TYPES ==============================================
-export interface CartBody {
+export interface CartItem {
   productId: string,
-  userId: string | undefined
-  quantity:number
+  quantity: number
+  thisVariables: {
+    [key:string]: string[]
+  }
+}
+export interface CartBody {
+  _id:string
+  userId: string
+  items: CartItem[],
+  createdAt: string
+  updatedAt: string
+  total: string
 }
 
 export interface PaginationBody {

@@ -6,9 +6,9 @@ import MainLayout from "./MainLayout";
 import { useRouter } from "next/router";
 import { useToken } from "../lib";
 import { useMutation } from "@tanstack/react-query";
-import { adminInfo, userInfo } from "../apis";
+import { adminInfo, userInfo, myCart } from "../apis";
 import { useDispatch } from "react-redux";
-import { setCurrentAdmin, setCurrentUser } from "../global-state/slice";
+import { setCurrentAdmin, setCurrentUser, setCurrentCart } from "../global-state/slice";
 
 const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   
@@ -48,8 +48,10 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
 
   const setUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
-    onSuccess: (res) => {
+    onSuccess: async(res) => {
       dispatch(setCurrentUser(res.data))
+      const thisCart = await myCart()
+      dispatch(setCurrentCart(thisCart.data))
     },
     onSettled: () => setLoading(false),
     onError: () => setLoading(false)

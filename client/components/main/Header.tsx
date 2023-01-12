@@ -1,5 +1,5 @@
 import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineMenu, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
-import { removeCurrentUser, selectAdmin, selectUser } from "../../global-state/slice";
+import { removeCurrentUser, selectAdmin, selectCart, selectUser } from "../../global-state/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import ConfirmModal from "../modals/Confirm";
@@ -28,6 +28,7 @@ const Header = ({ userMenu }: { userMenu: Object[] }) => {
   const router = useRouter();
   const thisUser = useSelector(selectUser);
   const thisAdmin = useSelector(selectAdmin)
+  const thisCart = useSelector(selectCart)
   const dispatch = useDispatch();
 
   const { data: categories } = useQuery({
@@ -96,7 +97,7 @@ const Header = ({ userMenu }: { userMenu: Object[] }) => {
             onClick={() => setHeaderHandler({ ...headerHandler, openCart: !headerHandler.openCart })}>
             <AiOutlineShoppingCart className='xs:text-lg text-2xl' />
             <div className="absolute bg-primary rounded-full h-[18px] w-[18px] text-xs flex items-center justify-center top-3 -right-[6px] font-semibold text-white">
-              5
+              {thisCart?.items ? thisCart.items.length : 0}
             </div>
           </div>
           {thisUser ? (
