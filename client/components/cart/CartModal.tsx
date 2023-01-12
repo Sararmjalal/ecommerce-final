@@ -1,12 +1,14 @@
 import React from "react";
 import {AiFillDelete} from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { selectCart } from "../../global-state/slice";
+import { selectCart, selectUser } from "../../global-state/slice";
 import CartItem from "./CartItem";
 
 const CartModal = ({ closeHandler }: { closeHandler: () => void }) => {
   
   const thisCart = useSelector(selectCart)
+
+  const thisUser = useSelector(selectUser)
 
   return (
     <>
@@ -16,25 +18,27 @@ const CartModal = ({ closeHandler }: { closeHandler: () => void }) => {
           Products in your cart
         </p>
           <div className="max-h-[300px] overflow-y-auto mb-4">
-            {thisCart?.items[0] ? 
-              <div>
+          {thisUser?._id && thisCart?.items[0] ? 
+            <>
+              <div className="px-2">
                 {
-              thisCart.items.map((item) => (
+                thisCart.items.map((item) => (
                 <CartItem
-                  productId={item.productId}
-                  thisAmount={item.quantity}
+                    productId={item.productId}
+                    userId={thisUser._id}
+                    thisAmount={item.quantity}
                 />
               ))}
               <div className='flex justify-between text-lg mb-5'>
-                <span className="font-semibold">Subtotal</span>
+                <span className="font-semibold">Subtotal:</span>
                 <span className="font-semibold">${thisCart.total}</span>
               </div>
-              <div className="flex justify-between">
-                <button className='btn-secondary py-2 mb-3 font-normal'>View Cart</button>
-                <button className='btn-primary py-2 mb-3'>Proceed to Checkout</button>
               </div>
-                <span className='underline text-xs cursor-pointer'>Reset Cart</span>
-            </div>
+              <div className="flex justify-between">
+                <button className='btn-secondary py-2 font-normal'>View Cart</button>
+                <button className='btn-primary py-2'>Proceed to Checkout</button>
+              </div>
+            </>
          :
           <p>There is no item in your cart.</p>
           }
