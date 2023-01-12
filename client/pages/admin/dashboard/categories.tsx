@@ -1,4 +1,4 @@
-import {QueryClient, useQuery, dehydrate} from "@tanstack/react-query";
+import {useQuery, dehydrate} from "@tanstack/react-query";
 import {allCategories} from "../../../apis";
 import ListItem from "../../../components/admin-panel/ListItem";
 import Loading from "../../../components/main/Loading";
@@ -33,6 +33,7 @@ const Categories = () => {
               title={category.name}
               _id={category._id}
               isCategory={true}
+              categories={categories}
             />
         ))
       }
