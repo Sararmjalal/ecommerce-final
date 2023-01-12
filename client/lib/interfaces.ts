@@ -72,7 +72,7 @@ export interface User {
 export interface GlobalState {
   currentAdmin: User | null
   currentUser: User | null
-  currentCart: CartBody | null
+  currentCart: Cart | null
 }
 
 export interface Form {
@@ -400,13 +400,28 @@ export interface CartItem {
     [key:string]: string[]
   }
 }
-export interface CartBody {
+export interface Cart {
   _id:string
   userId: string
   items: CartItem[],
   createdAt: string
   updatedAt: string
   total: string
+}
+
+export interface RemoveCartBody {
+  userId: string,
+  productId: string,
+}
+
+export interface ChangeCartBody extends RemoveCartBody {
+  quantity: string | number
+}
+
+export interface AddCartBody extends ChangeCartBody {
+  thisVariables: {
+    [key:string]: string[]
+  }
 }
 
 export interface PaginationBody {

@@ -120,7 +120,7 @@ class CartSchema {
       throw error
     }
   }
-
+ 
   async removeItem({ userId, productId }) {
     
     try {

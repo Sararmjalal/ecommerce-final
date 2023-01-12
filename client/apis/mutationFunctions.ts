@@ -1,5 +1,5 @@
 import {postRequest} from "./baseConfig";
-import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, CartBody, PaginationBody, AddressBody, AddCommentBody, AddRateBody} from "../lib/interfaces";
+import { Location, Receiver, AddressData, ProductBody, CreateCategoryBody, PaginationBody, AddressBody, AddCommentBody, AddRateBody, RemoveCartBody, AddCartBody, ChangeCartBody} from "../lib/interfaces";
 
 export const createAdmin = async (name: string, phone: string) => await postRequest("/admin/create", {name, phone}, "admin");
 
@@ -35,11 +35,11 @@ export const editAddress = async (addressId: string, data: AddressData) => await
 
 export const deleteAddress = async (addressId: string) => await postRequest("/address/delete", {_id: addressId}, "user");
 
-export const addToCart = async (body: CartBody) => await postRequest("/cart/add", body, "user");
+export const addToCart = async (body: AddCartBody) => await postRequest("/cart/add", body, "user");
 
-export const removeFromCart = async (body: CartBody) => await postRequest("/cart/remove", body, "user");
+export const removeFromCart = async (body: RemoveCartBody) => await postRequest("/cart/remove", body, "user");
 
-export const changeCart = async (body:CartBody) => await postRequest("/cart/change", body, "user")
+export const changeCart = async (body:ChangeCartBody) => await postRequest("/cart/change", body, "user")
 
 export const checkout = async () => await postRequest("/order/check-out", {}, "user");
 

@@ -51,7 +51,7 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
     onSuccess: async(res) => {
       dispatch(setCurrentUser(res.data))
       const thisCart = await myCart()
-      dispatch(setCurrentCart(thisCart.data))
+      dispatch(setCurrentCart(thisCart.cart))
     },
     onSettled: () => setLoading(false),
     onError: () => setLoading(false)
