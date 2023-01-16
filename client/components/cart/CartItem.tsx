@@ -19,7 +19,7 @@ const CartItem = ({ productId, thisAmount, userId }: CartItemProps) => {
     mutationFn: async () => await removeFromCart({ productId, userId }),
     onSuccess: async() => {
       const newCart = await myCart()
-      dispatch(setCurrentCart(newCart))
+      dispatch(setCurrentCart(newCart['cart']))
     }
   })
 

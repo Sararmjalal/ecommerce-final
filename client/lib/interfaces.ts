@@ -424,6 +424,12 @@ export interface AddCartBody extends ChangeCartBody {
   }
 }
 
+export interface CartItemProps {
+  productId: string,
+  thisAmount: number,
+  userId: string
+}
+
 export interface PaginationBody {
   page: number
   limit: number

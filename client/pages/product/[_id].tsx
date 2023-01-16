@@ -57,15 +57,17 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
       const newVars: {}[]  = []
       Object.entries(initialProduct.variables).forEach(([key, value]:any) => {
         newVars.push({
-          name: key.toLowerCase(),
-          options: value.map((opt:string) => (
+          name: key,
+          options: value.map((opt: string, index:number) => (
+            index === 0 ? { name: opt, isSelected: true }
+            :
             {name: opt, isSelected: false}
           ))
         }) 
       })  
       setPageData({...pageData, product:{...initialProduct, variables: newVars}})
     },
-    onError: (res) => console.log(res)
+    onError: (res) => console.log(res, 'TRRSFDSF')
   })
 
 
