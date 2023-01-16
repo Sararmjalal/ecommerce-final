@@ -10,6 +10,8 @@ import { GetStaticPropsContext } from "next";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Loading from "../../components/main/Loading";
+import Head from "next/head";
+import { useTitle } from "../../lib";
 
 interface SinglePageProps {
   secMode: string,
@@ -75,6 +77,10 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
   if(!pageData.product) return <Loading/>
   return (
     <div>
+      <Head>
+        <title>{useTitle(pageData.product.title)}</title>
+        <meta name='description' content='Developed by Hamidreza Hashemi and Sara Jalal' />
+      </Head>
       <div className='w-full flex flex-col justify-between items-start md:gap-5 gap-8 xs:gap-12 md:items-center'>
         <Header
           productTitle= {pageData.product.title}
