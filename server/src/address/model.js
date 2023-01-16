@@ -71,6 +71,7 @@ class AddressSchema {
       if (!this.doesCacheneedsUpdate && this.cache) return this.cache;
 
       const result = readdirSync(dbDirectory).map(item => {
+        
         return JSON.parse(readFileSync(path.join(dbDirectory, item), {
           encoding: "utf8",
         }))
@@ -78,7 +79,6 @@ class AddressSchema {
 
       this.cache = result;
       this.doesCacheneedsUpdate = false;
-
       return result;
       
     } catch (error) {

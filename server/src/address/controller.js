@@ -30,8 +30,11 @@ export default {
   },
   user_mylist: async (req, res) => {
     const thisUser = await UserModel.authorizeUser(req.user)
+    const addresses = deepClone((await AddressModel.findAll()).filter(item => !item.deleted && (item.userId == String(thisUser._id))))
+    // console.log(addresses,"ADDRESSSSSSES")
+    return res.status(200).json(addresses)
 
-    return (await AddressModel.findAll()).filter(item => !item.deleted && (item.userId == String(thisUser._id)))
+    // return (await AddressModel.findAll()).filter(item => !item.deleted && (item.userId == String(thisUser._id)))
   },
   adming_hislist: async (req, res) => {
     if (!req.body.userId) throw new Error("bad request: userId missing")
