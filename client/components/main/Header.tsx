@@ -1,5 +1,5 @@
 import { AiOutlineShoppingCart, AiOutlineUser, AiOutlineMenu, AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
-import { removeCurrentUser, selectAdmin, selectCart, selectUser } from "../../global-state/slice";
+import { removeCurrentCart, removeCurrentUser, selectAdmin, selectCart, selectUser } from "../../global-state/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import ConfirmModal from "../modals/Confirm";
@@ -162,6 +162,7 @@ const Header = ({ userMenu }: { userMenu: Object[] }) => {
           okHandler={() => {
             setHeaderHandler({ ...headerHandler, openConfirm: !headerHandler.openConfirm });
             dispatch(removeCurrentUser());
+            dispatch(removeCurrentCart())
             toast.info("You're out")
           }}
         />

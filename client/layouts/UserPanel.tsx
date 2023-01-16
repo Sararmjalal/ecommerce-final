@@ -6,7 +6,7 @@ import DashboardMenu from "../components/main/DashboardMenu"
 import DashboardThisName from "../components/main/DashboardThisName"
 import Header from "../components/main/Header"
 import Loading from "../components/main/Loading"
-import { removeCurrentUser, selectAdmin, selectUser } from "../global-state/slice"
+import { removeCurrentCart, removeCurrentUser, selectAdmin, selectUser } from "../global-state/slice"
 import { LayoutProps } from "../lib/interfaces"
 
 const UserPanel = ({ children, userMenu }: LayoutProps) => {
@@ -34,6 +34,7 @@ const UserPanel = ({ children, userMenu }: LayoutProps) => {
             menu={userMenu}
             logoutFunc={() => {
               dispatch(removeCurrentUser());
+              dispatch(removeCurrentCart())
             }}
           />
           <div className='ml-[330px] md:ml-0'>

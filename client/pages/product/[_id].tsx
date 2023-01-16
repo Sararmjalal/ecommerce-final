@@ -4,12 +4,14 @@ import Header from "../../components/single-product/Broadcamps";
 import ProductCard from "../../components/single-product/ProductCard";
 import Reviews from "../../components/single-product/Reviews";
 import TopProducts from "../../components/home/TopProducts";
-import { allProducts, singleProduct, submitComment } from "../../apis";
+import { allProducts, singleProduct, submitComment, topProducts } from "../../apis";
 import { AddCommentBody, Product } from "../../lib/interfaces";
 import { GetStaticPropsContext } from "next";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Loading from "../../components/main/Loading";
+import Head from "next/head";
+import { useTitle } from "../../lib";
 
 interface SinglePageProps {
   secMode: string,
@@ -29,9 +31,10 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   try {
     const thisId = context?.params?._id
     const initialProduct = typeof thisId === 'string' ? await singleProduct(thisId) : {}
+    const initialTopProducts = await topProducts()
 
     return {
-    props: { initialProduct }
+    props: { initialProduct, initialTopProducts }
     }
     
   } catch (error) {
@@ -41,7 +44,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   }
 }
 
-const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
+const SingleProduct = ({ initialProduct, initialTopProducts }: { initialProduct: Product, initialTopProducts: Product[] }) => {
   
   const [secMode, setSecMode] = useState("description");
   const [pageData, setPageData] = useState<SinglePageProps>({
@@ -66,16 +69,25 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
         }) 
       })  
       setPageData({...pageData, product:{...initialProduct, variables: newVars}})
-    },
-    onError: (res) => console.log(res, 'TRRSFDSF')
+    }
+  })
+
+  const { data:topProductsQuery, isLoading } = useQuery({
+    queryKey: ['topProducts'],
+    queryFn: async () => await topProducts(),
+    
   })
 
 
   console.log(pageData.product)
   
-  if(!pageData.product) return <Loading/>
+  if(!pageData.product || isLoading) return <Loading/>
   return (
     <div>
+      <Head>
+        <title>{useTitle(pageData.product.title)}</title>
+        <meta name='description' content='Developed by Hamidreza Hashemi and Sara Jalal' />
+      </Head>
       <div className='w-full flex flex-col justify-between items-start md:gap-5 gap-8 xs:gap-12 md:items-center'>
         <Header
           productTitle= {pageData.product.title}
@@ -115,7 +127,7 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
             product = {pageData.product}
           />}
       </div>
-      {/* <TopProducts /> */}
+      <TopProducts products={topProductsQuery} />
     </div>
 
   );

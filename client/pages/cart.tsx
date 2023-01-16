@@ -6,51 +6,21 @@ import {AiOutlineShoppingCart} from "react-icons/ai";
 import {MdOutlineLocalShipping} from "react-icons/md";
 import Head from "next/head";
 import { useTitle } from "../lib";
-import { dehydrate, useQuery, useMutation } from "@tanstack/react-query";
-import { myCart, changeCart } from "../apis";
-import { CartBody } from "../lib/interfaces";
-import { queryClient } from "./_app";
-
-
-export async function getStaticProps() {
-  await queryClient.prefetchQuery(['cart'], myCart)
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  }
-}
-
-
-const cartItems = [
-  {
-    id: 1,
-    image: "/assets/products/product-1.png",
-    title: "T-shirt Summer Vibes",
-    color: "White",
-    size: "XL",
-    ammount: 2,
-    price: 89.99,
-  },
-  {
-    id: 2,
-    image: "/assets/products/product-2.png",
-    title: "Basic Slim-Fit T-shirt",
-    color: "Black",
-    size: "XL",
-    ammount: 2,
-    price: 69.99,
-  },
-];
-
+import { useSelector } from "react-redux";
+import { selectCart } from "../global-state/slice";
+import { toast } from "react-toastify";
 
 const Cart = () => {
-  const { data: cart } = useQuery({ queryKey: ['cart'], queryFn: myCart })
 
   const [checkoutStep, setCheckoutStep] = useState("shoppingcart");
 
-  console.log(cart)
+  const thisCart = useSelector(selectCart)
+
+  const handleCheckout = () => {
+    if (!thisCart || !thisCart.items[0]) return toast.error('You cant go on without having an empty cart!')
+    setCheckoutStep('checkout')
+  }
+
   return (
     <div>
       <Head>
@@ -74,20 +44,28 @@ const Cart = () => {
           </p>
           <div className='flex items-center gap-4 md:mt-4'>
             <div
-              className={`${checkoutStep === "shoppingcart" ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer": "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"}`}
+              className={`${checkoutStep === "shoppingcart" ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer"
+                :
+                "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"}`}
                 onClick={() => setCheckoutStep("shoppingcart")}>
               <AiOutlineShoppingCart />
             </div>
-            <div className='w-16 h-[1px] bg-grayborder'></div>
-            <div
-              className={`${
-                checkoutStep === "checkout" ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer" : "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer" }`}
-                onClick={() => setCheckoutStep("checkout")}>
-              <MdOutlineLocalShipping />
-            </div>
+            {
+              thisCart && thisCart.items && thisCart.items[0] &&
+              <>
+                <div className='w-16 h-[1px] bg-grayborder'></div>
+                <div
+                  className={`${
+                    checkoutStep === "checkout" ? "flex items-center justify-center w-9 h-9 bg-primary rounded-full text-white cursor-pointer"
+                      : "flex items-center justify-center text-grayish  w-9 h-9 cursor-pointer"}`}
+                    onClick={handleCheckout}>
+                  <MdOutlineLocalShipping />
+                </div>
+              </>    
+            }
           </div>
         </div>
-        {checkoutStep === "shoppingcart" ? <ShoppingCart cartItems={cartItems} setCheckoutStep={setCheckoutStep} /> : <Checkout />}
+        {checkoutStep === "shoppingcart" ? <ShoppingCart handleCheckout={handleCheckout} /> : <Checkout />}
       </div>
     </div>
   );

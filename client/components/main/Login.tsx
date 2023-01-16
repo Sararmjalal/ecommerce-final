@@ -1,5 +1,5 @@
-import {userLoginOne, userLoginTwo, userInfo} from "../../apis";
-import {setCurrentUser} from "../../global-state/slice";
+import {userLoginOne, userLoginTwo, userInfo, myCart} from "../../apis";
+import {setCurrentCart, setCurrentUser} from "../../global-state/slice";
 import {handleEmptyFields, setToken} from "../../lib";
 import {useMutation} from "@tanstack/react-query";
 import {AiOutlineClose} from "react-icons/ai";
@@ -72,8 +72,10 @@ export default function Login({closeHandler, signUpHandler}: any) {
 
   const getUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
-    onSuccess: (res) => {
+    onSuccess: async(res) => {
       dispatch(setCurrentUser(res.data));
+      const thisCart = await myCart()
+      dispatch(setCurrentCart(thisCart['cart']))
       closeHandler();
       toast.success("You're in!")
       router.push('/dashboard')
