@@ -39,9 +39,9 @@ class CartSchema {
           updatedAt: new Date().toISOString(),
         }
 
-      const p = thisCart.items.findIndex(item => { item.productId == productId })
+      const thisItem = thisCart.items.find(item => item.productId === productId)
 
-      if (p === -1) {
+      if (!thisItem) {
         const thisProduct = await ProductModel.findById(productId)
 
         if (!thisProduct.isAvailable) throw Error('Product not available')
@@ -53,8 +53,9 @@ class CartSchema {
         if (!keysRight) throw Error('Variable keys not right')
 
         const variablesRight = variableKeys.every(key => {
-          const checkOptions = thisProduct.variables[key].some(item => {
-            return thisVariables[key][0] === item
+          const checkOptions = thisProduct.variables[key].some(thisOption => {
+            console.log('This OPRION', key)
+            return thisVariables[key] === thisOption
           })
           return checkOptions
         })
@@ -67,7 +68,12 @@ class CartSchema {
           thisVariables
         })
       }
-      
+
+      else {
+        thisItem.quantity = quantity
+        thisItem.thisVariables = thisVariables
+      }
+    
       thisCart['total'] = await this.calculateTotalPrice(userId)
 
       writeFileSync(

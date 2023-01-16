@@ -63,6 +63,8 @@ const StateProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) 
     else setLoading(false)
   }, [])
 
+  console.log(useToken('user'))
+
   if (loading) return <Loading />
   
   if (router.asPath === "/admin/login" || router.asPath === "/admin/create")

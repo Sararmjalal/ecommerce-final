@@ -1,5 +1,4 @@
 import React from "react";
-import {AiFillDelete} from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { selectCart, selectUser } from "../../global-state/slice";
 import CartItem from "./CartItem";
@@ -17,10 +16,11 @@ const CartModal = ({ closeHandler }: { closeHandler: () => void }) => {
         <p className='mb-7 text-grayish font-light text-2xl'>
           Products in your cart
         </p>
-          <div className="max-h-[300px] overflow-y-auto mb-4">
-          {thisUser?._id && thisCart?.items[0] ? 
+        <div className="mb-4">
+          {thisUser?._id && thisCart?.items && thisCart?.items[0] ? 
             <>
               <div className="px-2">
+                <div className=" max-h-[300px] overflow-y-auto scrollbar-thumb-gray-200 scrollbar-track-gray-100 scrollbar-thin pr-4 mb-4">
                 {
                 thisCart.items.map((item) => (
                 <CartItem
@@ -28,7 +28,8 @@ const CartModal = ({ closeHandler }: { closeHandler: () => void }) => {
                     userId={thisUser._id}
                     thisAmount={item.quantity}
                 />
-              ))}
+                ))}
+                </div>
               <div className='flex justify-between text-lg mb-5'>
                 <span className="font-semibold">Subtotal:</span>
                 <span className="font-semibold">${thisCart.total}</span>

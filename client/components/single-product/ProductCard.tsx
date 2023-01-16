@@ -2,45 +2,51 @@ import React, {useState} from "react";
 import Image from "next/image";
 import ColorCard from "./ColorCard";
 import {AiOutlinePlus, AiOutlineMinus, AiOutlineHeart} from "react-icons/ai";
-import { CartBody, Product } from "../../lib/interfaces";
+import { AddCartBody, Product } from "../../lib/interfaces";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addToCart, myCart } from "../../apis";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../global-state/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setCurrentCart } from "../../global-state/slice";
 import ThirdVariable from "../admin-panel/categories/ThirdVariable";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(newValue: Product)=> void }) => {
-  console.log(product.variables)
 
   const thisUser = useSelector(selectUser);
-  
+  const dispatch = useDispatch()
   const [singleProductData, setSingleProductData] = useState({
     selectedImg: 0,
   });
   
   const [quantity, setQuantity] = useState(1)
 
-  const { data } = useQuery({
-    queryFn: async () => await myCart(),
-    // onSuccess: (res) => console.log(res)
-  })
-
   const addCart = useMutation({
-    mutationFn: async (body: CartBody) => await addToCart(body),
-    onSuccess: (res) => console.log(res),
-    onError: (res) => console.log(res)
+    mutationFn: async (body: AddCartBody) => await addToCart(body),
+    onSuccess: async () => {
+      toast.success('Added to cart successfully')
+      const thisCart = await myCart()
+      dispatch(setCurrentCart(thisCart['cart']))
+    }
   })
 
   const onSubmit = () => {
-    addCart.mutate({
-      productId: product?._id,
-      userId: thisUser?._id,
-      quantity
-    })
+    if (!thisUser) return toast.error('Please login before shopping!')
+
+    const thisVariables: any = {}
+    Array.isArray(product.variables) &&
+      product.variables.forEach((variable: any) => {
+        variable.options.forEach((option: any) => {
+          if (option.isSelected) thisVariables[variable.name] = option.name
+        })
+      })
+    
+      addCart.mutate({
+        productId: product._id,
+        userId: thisUser._id,
+        quantity,
+        thisVariables,
+      })
   }
-
-
-  console.log(product)
 
   return (
     <div className='grid grid-cols-2 md:grid-cols-1 gap-40 md:gap-8'>
@@ -73,8 +79,9 @@ const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(ne
           <div className='flex justify-start items-center gap-6 text-3xl md:text-lg'>
             <p className=' text-grayish '>${product.price}</p>
           </div>
-          {product.variables.map((variable: any) => (
-            variable.name === 'color' ? (
+          {Array.isArray(product.variables) &&
+          product.variables.map((variable: any) => (
+            variable.name.toLowerCase() === 'color' ? (
               <div className='w-full border-[1px] border-grayborder p-6 mt-8'>
             <p className='font-semibold text-sm mb-6'>COLOR</p>
             <div className='flex flex-col gap-5'>
@@ -95,12 +102,12 @@ const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(ne
             </div>
               </div>
             ) : (
-                variable.name === 'size' ? (
+                variable.name.toLowerCase() === 'size' ? (
                   <div className='w-full border-[1px] border-grayborder p-6'>
                   <p className='font-semibold text-sm mb-6'>SIZE</p>
                   <div className='flex flex-col gap-5'>
                     <div className='flex justify-center items-center overflow-y-auto'>
-          {variable.options.map((size: {name: string, isSelected: boolean}, index: number, ref: {name: string, isSelected: boolean}[] ) => (
+                      {variable.options.map((size: {name: string, isSelected: boolean}, index: number, ref: {name: string, isSelected: boolean}[] ) => (
                         <div
                           className={`w-10 h-10 flex flex-col items-center justify-center cursor-pointer
                         ${
@@ -138,13 +145,10 @@ const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(ne
                     </div>
                   </div>
                 </div>
-                ))
-
-                 )
-               )     
-            ))}
-         
- 
+                    ))
+                ))     
+            ))
+          }
           <div className='flex flex-col justify-start mt-8 text-sm font-light'>
             <div className='flex flex-col justify-start mt-8 text-sm font-light'>
               <p className=' mb-2'>Quantity:</p>

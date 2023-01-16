@@ -96,7 +96,7 @@ class ProductSchema {
 
   async findAll() {
     try {
-      if (!this.doesCacheneedsUpdate || this.cache) return this.cache;
+      if (!this.doesCacheneedsUpdate && this.cache) return this.cache;
 
       const result = readdirSync(dbDirectory).map((item) => {
         const thisProduct = JSON.parse(
