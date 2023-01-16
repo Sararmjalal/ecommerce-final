@@ -66,8 +66,7 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
         }) 
       })  
       setPageData({...pageData, product:{...initialProduct, variables: newVars}})
-    },
-    onError: (res) => console.log(res, 'TRRSFDSF')
+    }
   })
 
 

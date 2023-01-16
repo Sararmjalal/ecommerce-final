@@ -397,8 +397,17 @@ export interface CartItem {
   productId: string,
   quantity: number
   thisVariables: {
-    [key:string]: string[]
+    [key:string]: string
   }
+}
+
+export interface CartItemCardProps {
+  thisProductId: string,
+  quantity: number,
+  thisVariables: {
+    [key:string]: string
+  },
+  userId:string
 }
 export interface Cart {
   _id:string

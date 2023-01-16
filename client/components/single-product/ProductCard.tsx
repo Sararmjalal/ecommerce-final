@@ -90,12 +90,12 @@ const ProductCard = ({ product, setProduct }: { product: Product, setProduct:(ne
             <ColorCard
              color={color.name}
               handleSelect={(selectedOption) => {
-                ref.forEach(element => {
-                  element.isSelected = element.name === selectedOption
+                ref.forEach(item => {
+                  if (selectedOption === color.name) return item.isSelected = true
+                  item.isSelected = false
                 })
-                setProduct({...product})
               }}
-             selectedColor={color.isSelected}
+              selectedColor={color.isSelected ? color.name : ''}
              />
             ))}
               </div>

@@ -26,8 +26,6 @@ const Shop = () => {
 
   const { data: products } = useQuery({ queryKey: ['products'], queryFn: allProducts })
   const { data: categories } = useQuery({ queryKey: ['categories'], queryFn: allCategories })
-  console.log('PRODUCTS',products)
-  console.log('CATS',categories)
 
   const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 

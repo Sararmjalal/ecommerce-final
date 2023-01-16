@@ -1,5 +1,5 @@
-import {selectUser, setCurrentUser} from "../../global-state/slice";
-import {userSignupOne, userSignupTwo, userInfo} from "../../apis";
+import {selectUser, setCurrentCart, setCurrentUser} from "../../global-state/slice";
+import {userSignupOne, userSignupTwo, userInfo, myCart} from "../../apis";
 import {handleEmptyFields, setToken} from "../../lib";
 import {useSelector, useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
@@ -76,8 +76,10 @@ const Signup = ({ closeHandler, loginHandler }: any) => {
 
   const getUserInfo = useMutation({
     mutationFn: async () => await userInfo(),
-    onSuccess: (res) => {
+    onSuccess: async(res) => {
       dispatch(setCurrentUser(res.data));
+      const thisCart = await myCart()
+      dispatch(setCurrentCart(thisCart['cart']))
       closeHandler();
       toast.success("You're in!")
       router.push('/dashboard')

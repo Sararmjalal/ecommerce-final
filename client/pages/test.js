@@ -4,6 +4,8 @@ import { useState } from "react";
 import { postRequest } from '../apis/baseConfig'
 import axios from "axios";
 import { useToken } from "../lib";
+import { useQuery } from "@tanstack/react-query";
+import {myAddresses} from '../apis'
 const App = () => {
   const [img, setImg] = useState('')
 
@@ -47,6 +49,13 @@ const App = () => {
       console.log('lol')
     }
   }
+
+  const { data } = useQuery({
+    queryKey: ['address'],
+    queryFn: async() => await myAddresses()
+  })
+
+  console.log(data)
 
   return (
     <div>
