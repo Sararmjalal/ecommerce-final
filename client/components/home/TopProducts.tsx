@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Product } from "../../lib/interfaces";
 import Carousel from "./Carousel";
 
@@ -7,7 +8,9 @@ const TopProducts = ({ products }: {products: Product[]}) => {
       <div className='flex justify-between items-center sm:justify-center mb-16 sm:mb-10'>
         <p className='text-2xl'>Top Products</p>
         <button className='btn-secondary py-[15px] px-[32px] sm:hidden font-semibold'>
-          SHOW MORE
+          <Link href='/shop'>
+            SHOW MORE
+          </Link>
         </button>
       </div>
       <Carousel products={products} />

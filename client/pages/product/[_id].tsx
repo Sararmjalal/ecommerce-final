@@ -4,7 +4,7 @@ import Header from "../../components/single-product/Broadcamps";
 import ProductCard from "../../components/single-product/ProductCard";
 import Reviews from "../../components/single-product/Reviews";
 import TopProducts from "../../components/home/TopProducts";
-import { allProducts, singleProduct, submitComment } from "../../apis";
+import { allProducts, singleProduct, submitComment, topProducts } from "../../apis";
 import { AddCommentBody, Product } from "../../lib/interfaces";
 import { GetStaticPropsContext } from "next";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -31,9 +31,10 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   try {
     const thisId = context?.params?._id
     const initialProduct = typeof thisId === 'string' ? await singleProduct(thisId) : {}
+    const initialTopProducts = await topProducts()
 
     return {
-    props: { initialProduct }
+    props: { initialProduct, initialTopProducts }
     }
     
   } catch (error) {
@@ -43,7 +44,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   }
 }
 
-const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
+const SingleProduct = ({ initialProduct, initialTopProducts }: { initialProduct: Product, initialTopProducts: Product[] }) => {
   
   const [secMode, setSecMode] = useState("description");
   const [pageData, setPageData] = useState<SinglePageProps>({
@@ -71,10 +72,16 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
     }
   })
 
+  const { data:topProductsQuery, isLoading } = useQuery({
+    queryKey: ['topProducts'],
+    queryFn: async () => await topProducts(),
+    
+  })
+
 
   console.log(pageData.product)
   
-  if(!pageData.product) return <Loading/>
+  if(!pageData.product || isLoading) return <Loading/>
   return (
     <div>
       <Head>
@@ -120,7 +127,7 @@ const SingleProduct = ({ initialProduct }: { initialProduct: Product }) => {
             product = {pageData.product}
           />}
       </div>
-      {/* <TopProducts /> */}
+      <TopProducts products={topProductsQuery} />
     </div>
 
   );
